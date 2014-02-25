@@ -1,0 +1,42 @@
+{
+  "name": "gulp-tslint",
+  "preferGlobal": false,
+  "version": "0.0.1",
+  "author": "Panu Horsmalahti <panu.horsmalahti@iki.fi>",
+  "description": "TypeScript linter Gulp plugin",
+  "contributors": [
+    {
+      "name": "Panu Horsmalahti",
+      "email": "panu.horsmalahti@iki.fi"
+    }
+  ],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/panuhorsmalahti/gulp-tslint.git"
+  },
+  "keywords": [
+    "gulp",
+    "typescript",
+    "plugin",
+    "ts",
+    "gulpplugin",
+    "gulpfriendly",
+    "tslint",
+    "linter",
+    "lint"
+  ],
+  "dependencies": {
+    "tslint": "~0.9.5",
+    "map-stream": "~0.1.0",
+    "gulp-util": "~2.2.14",
+    "rcloader": "~0.1.1",
+    "rcfinder": "~0.1.4"
+  },
+  "analyze": true,
+  "devDependencies": {},
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.10"
+  }
+}
