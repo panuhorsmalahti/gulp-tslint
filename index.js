@@ -12,16 +12,15 @@ var map = require('map-stream');
 
 // Load rc configs
 var rcloader = require('rcloader');
-var RcFinder = require('rcfinder');
 
 "use strict";
 
 
-var tslintPlugin = function(options) {
-    var loader = new RcFinder('tslint.json', options),
+var tslintPlugin = function(pluginOptions) {
+    var loader = new rcloader('tslint.json', pluginOptions),
         tslint;
 
-    return map(function (file, cb) {
+    return map(function(file, cb) {
         // Skip
         if (file.isNull()) {
             return cb(null, file);
@@ -34,17 +33,27 @@ var tslintPlugin = function(options) {
 
         // Finds the config file closest to the linted file
         loader.for(file.path, function(error, fileopts) {
+            // TSLint options
+            var options = {
+                formatter: "json",
+                configuration: fileopts,
+                rulesDirectory: null,
+                formattersDirectory: null
+            };
+
             if (error) {
                 return cb(error, undefined);
             }
+
+            tslint = new TSLint(path.basename(file.path), file.contents.toString('utf8'), options);
+            file.tslint = tslint.lint();
+
+            console.log(file.tslint);
+
+            cb(null, file);
         });
 
-        tslint = new TSLint(path.basename(file.path), file.contents.toString('utf8'), fileopts);
-        file.tslint = tslint.lint();
 
-        console.log(file.tslint);
-
-        cb(null, file);
     });
 };
 

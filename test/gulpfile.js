@@ -7,11 +7,18 @@ var tslint = require('../index');
 
 gulp.task('valid', function(){
       gulp.src('valid.ts')
-        .pipe(tslint({}));
+        .pipe(tslint());
 });
 
 
 gulp.task('invalid', function(){
       gulp.src('invalid.ts')
-        .pipe(tslint({}));
+        .pipe(tslint());
+});
+
+gulp.task('rules', function(){
+      gulp.src('invalid.ts')
+        .pipe(tslint({
+            
+        }));
 });
