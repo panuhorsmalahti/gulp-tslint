@@ -14,7 +14,7 @@ npm install --save-dev gulp-tslint
 
 Usage:
 ```javascript
-var tslint = require('../index');
+var tslint = require('gulp-tslint');
 
 gulp.task('tslint', function(){
       gulp.src('source.ts')
