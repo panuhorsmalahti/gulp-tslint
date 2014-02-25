@@ -32,8 +32,17 @@ var tslintPlugin = function(options) {
             return cb(new PluginError('gulp-tslint', 'Streaming not supported'));
         }
 
-        tslint = new TSLint(path.basename(file.path), file.contents.toString('utf8'), options);
+        // Finds the config file closest to the linted file
+        loader.for(file.path, function(error, fileopts) {
+            if (error) {
+                return cb(error, undefined);
+            }
+        });
+
+        tslint = new TSLint(path.basename(file.path), file.contents.toString('utf8'), fileopts);
         file.tslint = tslint.lint();
+
+        console.log(file.tslint);
 
         cb(null, file);
     });
