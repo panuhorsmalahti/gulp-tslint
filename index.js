@@ -17,8 +17,16 @@ var rcloader = require('rcloader');
 
 
 var tslintPlugin = function(pluginOptions) {
-    var loader = new rcloader('tslint.json', pluginOptions),
+    var loader,
         tslint;
+
+    // If user options are undefined, set an empty options object
+    if (!pluginOptions) {
+        pluginOptions = {};
+    }
+
+    // Create rcloader
+    loader = new rcloader('tslint.json', pluginOptions.configuration);
 
     return map(function(file, cb) {
         // Skip
@@ -33,12 +41,12 @@ var tslintPlugin = function(pluginOptions) {
 
         // Finds the config file closest to the linted file
         loader.for(file.path, function(error, fileopts) {
-            // TSLint options
+            // TSLint default options
             var options = {
-                formatter: "json",
+                formatter: pluginOptions.formatter || "prose",
                 configuration: fileopts,
-                rulesDirectory: null,
-                formattersDirectory: null
+                rulesDirectory: pluginOptions.formatter || null,
+                formattersDirectory: pluginOptions.formatter || null
             };
 
             if (error) {
@@ -48,7 +56,9 @@ var tslintPlugin = function(pluginOptions) {
             tslint = new TSLint(path.basename(file.path), file.contents.toString('utf8'), options);
             file.tslint = tslint.lint();
 
-            console.log(file.tslint);
+            if (file.tslint.output) {
+                console.log(file.tslint.output);
+            }
 
             cb(null, file);
         });

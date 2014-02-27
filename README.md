@@ -22,15 +22,38 @@ gulp.task('tslint', function(){
 });
 ```
 
-tslint.json can be supplied as a parameter
+By default, errors are printed to console.log using human-readable "prose" formatting.
+You can also specify "json" as the formatter. The output is added to file.tslint.output.
+
+tslint.json is attempted to be read from near the input file.
+
+tslint.json can be supplied as a parameter by setting the configuration property.
 ```javascript
-gulp.task('rules', function(){
+gulp.task('tslint-json', function(){
       gulp.src('invalid.ts')
         .pipe(tslint({
-              "rules": {
-                "class-name": true
+            formatter: 'json',
+            configuration: {
+              rules: {
+                "class-name": true,
                 // ...
               }
+            }
         }));
 });
 ```
+
+All default options
+```javascript
+var options = {
+    formatter: "prose",
+    configuration: {},
+    rulesDirectory: null,
+    formattersDirectory: null
+};
+```
+
+Development
+===========
+
+Fork this repository, run npm install and sent pull requests.

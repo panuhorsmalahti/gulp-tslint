@@ -16,9 +16,21 @@ gulp.task('invalid', function(){
         .pipe(tslint());
 });
 
-gulp.task('rules', function(){
+gulp.task('invalid-json', function(){
       gulp.src('invalid.ts')
         .pipe(tslint({
-            
+            formatter: 'json'
+        }));
+});
+
+gulp.task('invalid-json-rules', function(){
+      gulp.src('invalid.ts')
+        .pipe(tslint({
+            formatter: 'json',
+            configuration: {
+              rules: {
+                "class-name": true
+              }
+            }
         }));
 });
