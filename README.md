@@ -18,36 +18,63 @@ var tslint = require('gulp-tslint');
 
 gulp.task('tslint', function(){
       gulp.src('source.ts')
-        .pipe(tslint());
+        .pipe(tslint())
+        .pipe(tslint.report('verbose'));
+});
 });
 ```
 
-By default, errors are printed to console.log using human-readable 'prose' formatting.
-You can also specify 'json' as the formatter, which disables console.log output.
-The output is always added to file.tslint.output.
-
 tslint.json is attempted to be read from near the input file.
+
+The output (stringified JSON) is added to file.tslint.output.
+You can output the errors by using reporters.
+There are three default reporters: 'json', 'prose' and 'verbose'.
+'json' prints stringified JSON to console.log.
+'prose' prints short human-readable failures to console.log.
+'verbose' prints longer human-readable failures to console.log.
+
+You can use your own reporter by supplying a function.
+```javascript
+/* Output is in the following form:
+ * [{
+ *   "name": "invalid.ts",
+ *   "failure": "missing whitespace",
+ *   // Lines and characters start from 0
+ *   "startPosition": {"position": 8, "line": 0, "character": 8},
+ *   "endPosition": {"position": 9, "line": 0, "character": 9},
+ *   "ruleName": "one-line"
+ * }]
+ */
+var testReporter = function (output) {
+    console.log("Found " + output.length + " errors!");
+};
+
+gulp.task('invalid-custom', function(){
+      gulp.src('invalid.ts')
+        .pipe(tslint())
+        .pipe(tslint.report(testReporter));
+});
+```
 
 tslint.json can be supplied as a parameter by setting the configuration property.
 ```javascript
 gulp.task('tslint-json', function(){
       gulp.src('invalid.ts')
         .pipe(tslint({
-            formatter: 'json',
             configuration: {
               rules: {
                 "class-name": true,
                 // ...
               }
             }
-        }));
+        }))
+        .pipe(tslint.report('prose'));;
 });
 ```
 
 All default options
 ```javascript
 var options = {
-    formatter: "prose",
     configuration: {},
     rulesDirectory: null,
     formattersDirectory: null
