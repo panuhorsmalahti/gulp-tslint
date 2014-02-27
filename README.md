@@ -23,7 +23,8 @@ gulp.task('tslint', function(){
 ```
 
 By default, errors are printed to console.log using human-readable "prose" formatting.
-You can also specify "json" as the formatter. The output is added to file.tslint.output.
+You can also specify "json" as the formatter, which disables console.log output.
+The output is always added to file.tslint.output.
 
 tslint.json is attempted to be read from near the input file.
 

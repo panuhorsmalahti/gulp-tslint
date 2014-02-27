@@ -43,7 +43,7 @@ var tslintPlugin = function(pluginOptions) {
         loader.for(file.path, function(error, fileopts) {
             // TSLint default options
             var options = {
-                formatter: pluginOptions.formatter || "prose",
+                formatter: pluginOptions.formatter || 'prose',
                 configuration: fileopts,
                 rulesDirectory: pluginOptions.formatter || null,
                 formattersDirectory: pluginOptions.formatter || null
@@ -56,7 +56,7 @@ var tslintPlugin = function(pluginOptions) {
             tslint = new TSLint(path.basename(file.path), file.contents.toString('utf8'), options);
             file.tslint = tslint.lint();
 
-            if (file.tslint.output) {
+            if (file.tslint.output && options.formatter === 'prose') {
                 console.log(file.tslint.output);
             }
 
