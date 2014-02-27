@@ -31,6 +31,7 @@ There are three default reporters: 'json', 'prose' and 'verbose'.
 'json' prints stringified JSON to console.log.
 'prose' prints short human-readable failures to console.log.
 'verbose' prints longer human-readable failures to console.log.
+Reporters are executed only if there is at least one failure.
 
 You can use your own reporter by supplying a function.
 ```javascript
