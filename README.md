@@ -32,6 +32,7 @@ There are four default reporters:
 * 'prose' prints short human-readable failures to console.log.
 * 'verbose' prints longer human-readable failures to console.log.
 * 'full' is like verbose, but displays full path to the file
+
 Reporters are executed only if there is at least one failure.
 
 You can use your own reporter by supplying a function.
