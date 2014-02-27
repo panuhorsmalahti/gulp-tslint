@@ -98,6 +98,17 @@ var verboseReporter = function (failures) {
     });
 };
 
+// Like verbose, but prints full path
+var fullReporter = function (failures, file) {
+    failures.forEach(function (failure) {
+        console.log("(" + failure.ruleName + ") " + file.path
+            // +1 because TSLint's first line and character is 0
+            + "[" + (failure.startPosition.line + 1) + ", "
+            + (failure.startPosition.character + 1) +  "]: "
+            + failure.failure);
+    });
+};
+
 
 /* Output is in the following form:
  * [{
@@ -118,9 +129,11 @@ tslintPlugin.report = function (reporter) {
             } else if (reporter === 'prose') {
                 proseReporter(failures);
             } else if (reporter === 'verbose') {
-                verboseReporter(failures);                
+                verboseReporter(failures);
+            } else if (reporter === 'full') {
+                fullReporter(failures, file);    
             } else if (isFunction(reporter)) {
-                reporter(failures);
+                reporter(failures, file);
             }
         }
 

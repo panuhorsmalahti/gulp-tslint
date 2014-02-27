@@ -27,10 +27,11 @@ tslint.json is attempted to be read from near the input file.
 
 The output (stringified JSON) is added to file.tslint.output.
 You can output the errors by using reporters.
-There are three default reporters: 'json', 'prose' and 'verbose'.
-'json' prints stringified JSON to console.log.
-'prose' prints short human-readable failures to console.log.
-'verbose' prints longer human-readable failures to console.log.
+There are four default reporters:
+* 'json' prints stringified JSON to console.log.
+* 'prose' prints short human-readable failures to console.log.
+* 'verbose' prints longer human-readable failures to console.log.
+* 'full' is like verbose, but displays full path to the file
 Reporters are executed only if there is at least one failure.
 
 You can use your own reporter by supplying a function.
@@ -45,8 +46,9 @@ You can use your own reporter by supplying a function.
  *   "ruleName": "one-line"
  * }]
  */
-var testReporter = function (output) {
-    console.log("Found " + output.length + " errors!");
+var testReporter = function (output, file) {
+    // file is a reference to the vinyl File object
+    console.log("Found " + output.length + " errors in " + file.path);
 };
 
 gulp.task('invalid-custom', function(){

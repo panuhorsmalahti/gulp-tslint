@@ -22,6 +22,7 @@ gulp.task('invalid-all', function(){
         .pipe(tslint.report('json'))
         .pipe(tslint.report('prose'))
         .pipe(tslint.report('verbose'))
+        .pipe(tslint.report('full'))
         .pipe(tslint.report(testReporter));
 });
 
@@ -41,6 +42,12 @@ gulp.task('invalid-verbose', function(){
       gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report('verbose'));
+});
+
+gulp.task('invalid-full', function(){
+      gulp.src('invalid.ts')
+        .pipe(tslint())
+        .pipe(tslint.report('full'));
 });
 
 gulp.task('invalid-custom', function(){
