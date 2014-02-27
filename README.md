@@ -22,8 +22,8 @@ gulp.task('tslint', function(){
 });
 ```
 
-By default, errors are printed to console.log using human-readable "prose" formatting.
-You can also specify "json" as the formatter, which disables console.log output.
+By default, errors are printed to console.log using human-readable 'prose' formatting.
+You can also specify 'json' as the formatter, which disables console.log output.
 The output is always added to file.tslint.output.
 
 tslint.json is attempted to be read from near the input file.
@@ -57,4 +57,4 @@ var options = {
 Development
 ===========
 
-Fork this repository, run npm install and sent pull requests.
+Fork this repository, run npm install and send pull requests.
