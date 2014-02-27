@@ -21,7 +21,6 @@ gulp.task('tslint', function(){
         .pipe(tslint())
         .pipe(tslint.report('verbose'));
 });
-});
 ```
 
 tslint.json is attempted to be read from near the input file.
