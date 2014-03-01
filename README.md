@@ -1,8 +1,6 @@
 gulp-tslint
 =========
 
-Note: This is work in progress.
-
 TypeScript linter plugin for Gulp.
 
 
