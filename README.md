@@ -64,9 +64,10 @@ You can use your own reporter by supplying a function.
  *   "ruleName": "one-line"
  * }]
  */
-var testReporter = function (output, file) {
+var testReporter = function (output, file, options) {
     // file is a reference to the vinyl File object
     console.log("Found " + output.length + " errors in " + file.path);
+    // options is a reference to the reporter options, e.g. options.emitError
 };
 
 gulp.task('invalid-custom', function(){
