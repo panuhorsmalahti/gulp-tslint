@@ -33,6 +33,25 @@ There are four default reporters:
 
 Reporters are executed only if there is at least one failure.
 
+If there is at least one failure, by default a PluginError is
+thrown after execution of the reporter:
+```javascript
+[gulp] Error in plugin 'gulp-tslint': Failed to lint: invalid.ts
+```
+
+You can prevent throwing the error by setting emitError to false when you're
+invoking the reporter.
+
+```javascript
+gulp.task('invalid-noemit', function(){
+      gulp.src('invalid.ts')
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {
+          emitError: false
+        }));
+});
+```
+
 You can use your own reporter by supplying a function.
 ```javascript
 /* Output is in the following form:

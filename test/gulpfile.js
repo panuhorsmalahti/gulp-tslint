@@ -16,13 +16,35 @@ gulp.task('valid', function(){
         .pipe(tslint.report('json'));
 });
 
+gulp.task('invalid-emit', function(){
+      gulp.src('invalid.ts')
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {
+          emitError: true
+        }));
+});
+
+gulp.task('invalid-emptyoptions', function(){
+      gulp.src('invalid.ts')
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {}));
+});
+
+gulp.task('invalid-noemit', function(){
+      gulp.src('invalid.ts')
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {
+          emitError: false
+        }));
+});
+
 gulp.task('invalid-all', function(){
       gulp.src('invalid.ts')
         .pipe(tslint())
-        .pipe(tslint.report('json'))
-        .pipe(tslint.report('prose'))
-        .pipe(tslint.report('verbose'))
-        .pipe(tslint.report('full'))
+        .pipe(tslint.report('json', { emitError: false}))
+        .pipe(tslint.report('prose', { emitError: false}))
+        .pipe(tslint.report('verbose', { emitError: false}))
+        .pipe(tslint.report('full', { emitError: false}))
         .pipe(tslint.report(testReporter));
 });
 

@@ -120,20 +120,33 @@ var fullReporter = function (failures, file) {
  *   "ruleName": "one-line"
  * }]
  */
-tslintPlugin.report = function (reporter) {
+tslintPlugin.report = function (reporter, options) {
+    // Default options
+    if (!options) {
+        options = {};
+    }
+    if (options.emitError === undefined) {
+        options.emitError = true;
+    }
+
     return map(function(file, cb) {
         var failures = JSON.parse(file.tslint.output);
         if (failures.length > 0) {
             if (reporter === 'json') {
-                jsonReporter(failures);
+                jsonReporter(failures, file, options);
             } else if (reporter === 'prose') {
-                proseReporter(failures);
+                proseReporter(failures, file, options);
             } else if (reporter === 'verbose') {
-                verboseReporter(failures);
+                verboseReporter(failures, file, options);
             } else if (reporter === 'full') {
-                fullReporter(failures, file);    
+                fullReporter(failures, file, options);    
             } else if (isFunction(reporter)) {
-                reporter(failures, file);
+                reporter(failures, file, options);
+            }
+
+            // Throw error
+            if (options && options.emitError === true) {
+                return cb(new PluginError('gulp-tslint', 'Failed to lint: ' + path.basename(file.path)));
             }
         }
 
