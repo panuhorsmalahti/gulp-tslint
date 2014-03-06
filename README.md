@@ -34,7 +34,7 @@ There are four default reporters:
 Reporters are executed only if there is at least one failure.
 
 If there is at least one failure, by default a PluginError is
-thrown after execution of the reporter:
+thrown after execution of the reporters:
 ```javascript
 [gulp] Error in plugin 'gulp-tslint': Failed to lint: invalid.ts
 ```

@@ -17,7 +17,16 @@ gulp.task('valid', function(){
 });
 
 gulp.task('invalid-emit', function(){
-      gulp.src('invalid.ts')
+      gulp.src(['invalid.ts', 'invalid2.ts'])
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {
+          emitError: true
+        }));
+});
+
+// TODO: Find why this doesn't throw an error to the command line
+gulp.task('invalid-emit-return', function(){
+      return gulp.src(['invalid.ts', 'invalid2.ts'])
         .pipe(tslint())
         .pipe(tslint.report('prose', {
           emitError: true
@@ -45,7 +54,7 @@ gulp.task('invalid-all', function(){
         .pipe(tslint.report('prose', { emitError: false}))
         .pipe(tslint.report('verbose', { emitError: false}))
         .pipe(tslint.report('full', { emitError: false}))
-        .pipe(tslint.report(testReporter));
+        .pipe(tslint.report(testReporter, { emitError: true }));
 });
 
 gulp.task('invalid-json', function(){

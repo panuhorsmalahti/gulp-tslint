@@ -9,6 +9,7 @@ var TSLint = require('tslint');
 var gutil = require('gulp-util');
 var PluginError = gutil.PluginError;
 var map = require('map-stream');
+var through = require('through');
 
 // Load rc configs
 var Rcloader = require('rcloader');
@@ -129,9 +130,15 @@ tslintPlugin.report = function (reporter, options) {
         options.emitError = true;
     }
 
-    return map(function(file, cb) {
+    // Collect all files with errors
+    var errorFiles = [];
+
+    // Run the reporter for each file individually
+    var reportFailures = function (file) {
         var failures = JSON.parse(file.tslint.output);
         if (failures.length > 0) {
+            errorFiles.push(file);
+
             if (reporter === 'json') {
                 jsonReporter(failures, file, options);
             } else if (reporter === 'prose') {
@@ -143,16 +150,27 @@ tslintPlugin.report = function (reporter, options) {
             } else if (isFunction(reporter)) {
                 reporter(failures, file, options);
             }
-
-            // Throw error
-            if (options && options.emitError === true) {
-                return cb(new PluginError('gulp-tslint', 'Failed to lint: ' + path.basename(file.path)));
-            }
         }
 
-        // Pass
-        cb(null, file);
-    });
+        // Pass file
+        this.emit('data', file);
+    };
+
+    // After reporting on all files, throw theerror
+    var throwErrors = function () {
+        // Throw error
+        if (options && options.emitError === true && errorFiles.length > 0) {
+            return this.emit('error', new PluginError('gulp-tslint', 'Failed to lint: '
+                + errorFiles.map(function (file) {
+                    return path.basename(file.path);
+                }).join(', ') + '.'));
+        }
+
+        // Notify through that we're done
+        this.emit('end');
+    };
+
+    return through(reportFailures, throwErrors);
 };
 
 module.exports = tslintPlugin;
