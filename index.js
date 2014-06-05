@@ -53,8 +53,8 @@ var tslintPlugin = function(pluginOptions) {
             var options = {
                 formatter: 'json',
                 configuration: fileopts,
-                rulesDirectory: pluginOptions.formatter || null,
-                formattersDirectory: pluginOptions.formatter || null
+                rulesDirectory: pluginOptions.rulesDirectory || null,
+                formattersDirectory: null // not used, use reporters instead
             };
 
             if (error) {

@@ -97,8 +97,7 @@ All default options
 ```javascript
 var options = {
     configuration: {},
-    rulesDirectory: null,
-    formattersDirectory: null
+    rulesDirectory: null
 };
 ```
 
