@@ -156,7 +156,7 @@ tslintPlugin.report = function (reporter, options) {
         this.emit('data', file);
     };
 
-    // After reporting on all files, throw theerror
+    // After reporting on all files, throw the error
     var throwErrors = function () {
         // Throw error
         if (options && options.emitError === true && errorFiles.length > 0) {

@@ -87,6 +87,19 @@ gulp.task('invalid-custom', function(){
         .pipe(tslint.report(testReporter));
 });
 
+gulp.task('no-custom-rules-defined', function(){
+      gulp.src('customRule.ts')
+        .pipe(tslint())
+        .pipe(tslint.report('verbose'));
+});
+
+gulp.task('custom-rules-defined', function(){
+      gulp.src('customRule.ts')
+        .pipe(tslint({
+          rulesDirectory: 'rules/'
+        }))
+        .pipe(tslint.report('verbose'));
+});
 
 gulp.task('invalid-json-rules', function(){
       gulp.src('invalid.ts')
