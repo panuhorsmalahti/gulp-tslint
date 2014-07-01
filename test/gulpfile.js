@@ -24,6 +24,15 @@ gulp.task('invalid-emit', function(){
         }));
 });
 
+gulp.task('invalid-relative', function(){
+      gulp.src(['relative/invalid.ts'], {
+        base: __dirname
+      }).pipe(tslint())
+        .pipe(tslint.report('verbose', {
+          emitError: true
+        }));
+});
+
 // TODO: Find why this doesn't throw an error to the command line
 gulp.task('invalid-emit-return', function(){
       return gulp.src(['invalid.ts', 'invalid2.ts'])
