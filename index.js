@@ -61,7 +61,7 @@ var tslintPlugin = function(pluginOptions) {
                 return cb(error, undefined);
             }
 
-            tslint = new TSLint(path.basename(file.path), file.contents.toString('utf8'), options);
+            tslint = new TSLint(file.relative, file.contents.toString('utf8'), options);
             file.tslint = tslint.lint();
 
             // Pass file
