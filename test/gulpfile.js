@@ -16,6 +16,12 @@ gulp.task('valid', function(){
         .pipe(tslint.report('json'));
 });
 
+gulp.task('missing', function(){
+      gulp.src('missing_file.ts')
+        .pipe(tslint())
+        .pipe(tslint.report('json'));
+});
+
 gulp.task('invalid-emit', function(){
       gulp.src(['invalid.ts', 'invalid2.ts'])
         .pipe(tslint())
