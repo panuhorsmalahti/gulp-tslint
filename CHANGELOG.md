@@ -1,3 +1,10 @@
+<a name="1.4.0"></a>
+# 1.4.1 (2014-)
+
+## Changes
+
+- The PluginError exception now includes information about the failures
+
 <a name="1.3.1"></a>
 # 1.3.1 (2014-09-28)
 

@@ -1,3 +1,7 @@
+/*
+ * These test are run manually. For example, run 'gulp invalid-emit', and look at the output.
+ */
+
 // Simple Gulpfile
 var gulp = require('gulp');
 var gutil = require('gulp-util');
