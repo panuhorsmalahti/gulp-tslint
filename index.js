@@ -141,7 +141,7 @@ tslintPlugin.report = function(reporter, options) {
         var failures = JSON.parse(file.tslint.output);
         if (failures.length > 0) {
             errorFiles.push(file);
-            allFailures.push(failures);
+            Array.prototype.push.apply(allFailures, failures);
 
             if (reporter === 'json') {
                 jsonReporter(failures, file, options);
@@ -164,8 +164,8 @@ tslintPlugin.report = function(reporter, options) {
     var throwErrors = function() {
         // Throw error
         if (options && options.emitError === true && errorFiles.length > 0) {
-            return this.emit('error', new PluginError('gulp-tslint', 'Failed to lint: ' + errorFiles.map(function(file) {
-                return path.basename(file.path);
+            return this.emit('error', new PluginError('gulp-tslint', 'Failed to lint: ' + allFailures.map(function(failure) {
+                return proseErrorFormat(failure);
             }).join(', ') + '.'));
         }
 

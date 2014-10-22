@@ -97,7 +97,8 @@ All default options
 ```javascript
 var options = {
     configuration: {},
-    rulesDirectory: null
+    rulesDirectory: null,
+    emitError: true
 };
 ```
 
