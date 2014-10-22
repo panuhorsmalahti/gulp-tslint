@@ -21,7 +21,8 @@ gulp.task('tslint', function(){
 });
 ```
 
-tslint.json is attempted to be read from near the input file.
+**tslint.json** is attempted to be read from near the input file.
+It **must be available** or supplied directly through the options.
 
 The output (stringified JSON) is added to file.tslint.output.
 You can output the errors by using reporters.

@@ -24,15 +24,15 @@ function isFunction(f) {
  * Main plugin function
  */
 var tslintPlugin = function(pluginOptions) {
-    var loader,
-        tslint;
+    var loader;
+    var tslint;
 
     // If user options are undefined, set an empty options object
     if (!pluginOptions) {
         pluginOptions = {};
     }
 
-    // Create rcloader
+    // Create rcloader to load tslint.json
     loader = new Rcloader('tslint.json', pluginOptions.configuration);
 
     return map(function(file, cb) {
