@@ -120,6 +120,7 @@ gulp.task('custom-rules-defined', function(){
         .pipe(tslint.report('verbose'));
 });
 
+// Shouldn't report errors because invalid.ts doesn't break the class-name rule
 gulp.task('invalid-json-rules', function(){
       gulp.src('invalid.ts')
         .pipe(tslint({
