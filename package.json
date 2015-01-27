@@ -27,11 +27,11 @@
     "lint"
   ],
   "dependencies": {
-    "tslint": "~1.0.1",
-    "map-stream": "~0.1.0",
-    "through": "~2.3.6",
     "gulp-util": "~3.0.1",
-    "rcloader": "~0.1.2"
+    "map-stream": "~0.1.0",
+    "rcloader": "~0.1.2",
+    "through": "~2.3.6",
+    "tslint": "^1.2.0"
   },
   "analyze": true,
   "devDependencies": {},
