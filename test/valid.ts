@@ -1,1 +1,1 @@
-var test : string = "abc";
+var test : string|number = "abc";
