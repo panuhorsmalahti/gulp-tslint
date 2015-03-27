@@ -72,6 +72,14 @@ gulp.task('invalid-noemit', function(){
         }));
 });
 
+gulp.task('invalid-report-limit', function(){
+      gulp.src(['invalid.ts', 'invalid2.ts'])
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {
+            reportLimit: 2
+        }));
+});
+
 gulp.task('invalid-all', function(){
     gulp.src('invalid.ts')
         .pipe(tslint())

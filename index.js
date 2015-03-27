@@ -126,12 +126,18 @@ tslintPlugin.report = function(reporter, options) {
     if (options.emitError === undefined) {
         options.emitError = true;
     }
+    if (options.reportLimit === undefined) {
+        options.reportLimit = -1;
+    }
 
     // Collect all files with errors
     var errorFiles = [];
 
     // Collect all failures
     var allFailures = [];
+
+    // Track how many errors have been reported
+    var totalReported = 0;
 
     // Run the reporter for each file individually
     var reportFailures = function(file) {
@@ -140,16 +146,23 @@ tslintPlugin.report = function(reporter, options) {
             errorFiles.push(file);
             Array.prototype.push.apply(allFailures, failures);
 
-            if (reporter === 'json') {
-                jsonReporter(failures, file, options);
-            } else if (reporter === 'prose') {
-                proseReporter(failures, file, options);
-            } else if (reporter === 'verbose') {
-                verboseReporter(failures, file, options);
-            } else if (reporter === 'full') {
-                fullReporter(failures, file, options);
-            } else if (isFunction(reporter)) {
-                reporter(failures, file, options);
+            if (options.reportLimit >= 0 && options.reportLimit > totalReported) {
+                totalReported += failures.length;
+                if (reporter === 'json') {
+                    jsonReporter(failures, file, options);
+                } else if (reporter === 'prose') {
+                    proseReporter(failures, file, options);
+                } else if (reporter === 'verbose') {
+                    verboseReporter(failures, file, options);
+                } else if (reporter === 'full') {
+                    fullReporter(failures, file, options);
+                } else if (isFunction(reporter)) {
+                    reporter(failures, file, options);
+                }
+                
+                if (options.reportLimit >= 0 && options.reportLimit <= totalReported) {
+                    console.log("More than " + options.reportLimit + " failures reported. Turning off reporter.");
+                }
             }
         }
 
@@ -161,9 +174,16 @@ tslintPlugin.report = function(reporter, options) {
     var throwErrors = function() {
         // Throw error
         if (options && options.emitError === true && errorFiles.length > 0) {
-            return this.emit('error', new PluginError('gulp-tslint', 'Failed to lint: ' + allFailures.map(function(failure) {
+            var start = options.reportLimit >= 0 ? options.reportLimit : 0;
+            var ignoreCount = options.reportLimit >= 0 ? allFailures.length - options.reportLimit : 0;
+            var failuresToOutput = allFailures.splice(start, ignoreCount);
+
+            var failureOutput = allFailures.map(function(failure) {
                 return proseErrorFormat(failure);
             }).join(', ') + '.'));
+
+            var ignoreOutput = ignoreCount > 0 ? " (" + ignoreCount + " other errors not shown.)" : "" ;
+            return this.emit('error', new PluginError('gulp-tslint', 'Failed to lint: ' + failureOutput + '.' + ignoreOutput));
         }
 
         // Notify through that we're done

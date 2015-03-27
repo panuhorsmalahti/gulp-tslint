@@ -99,7 +99,8 @@ All default options
 var options = {
     configuration: {},
     rulesDirectory: null,
-    emitError: true
+    emitError: true,
+    reportLimit: -1
 };
 ```
 
