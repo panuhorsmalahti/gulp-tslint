@@ -127,7 +127,7 @@ tslintPlugin.report = function(reporter, options) {
         options.emitError = true;
     }
     if (options.reportLimit === undefined) {
-        options.reportLimit = -1;
+        options.reportLimit = 0; // 0 or less is unlimited
     }
 
     // Collect all files with errors
@@ -146,7 +146,7 @@ tslintPlugin.report = function(reporter, options) {
             errorFiles.push(file);
             Array.prototype.push.apply(allFailures, failures);
 
-            if (options.reportLimit >= 0 && options.reportLimit > totalReported) {
+            if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
                 totalReported += failures.length;
                 if (reporter === 'json') {
                     jsonReporter(failures, file, options);
@@ -160,7 +160,7 @@ tslintPlugin.report = function(reporter, options) {
                     reporter(failures, file, options);
                 }
                 
-                if (options.reportLimit >= 0 && options.reportLimit <= totalReported) {
+                if (options.reportLimit > 0 && options.reportLimit <= totalReported) {
                     console.log("More than " + options.reportLimit + " failures reported. Turning off reporter.");
                 }
             }
@@ -174,15 +174,22 @@ tslintPlugin.report = function(reporter, options) {
     var throwErrors = function() {
         // Throw error
         if (options && options.emitError === true && errorFiles.length > 0) {
-            var start = options.reportLimit >= 0 ? options.reportLimit : 0;
-            var ignoreCount = options.reportLimit >= 0 ? allFailures.length - options.reportLimit : 0;
-            var failuresToOutput = allFailures.splice(start, ignoreCount);
+            var failuresToOutput = allFailures;
+            var ignoreFailureCount = 0;
 
-            var failureOutput = allFailures.map(function(failure) {
+            if (options.reportLimit > 0) {
+                var ignoreFailureStart = options.reportLimit;
+                ignoreFailureCount = allFailures.length - options.reportLimit;
+
+                failuresToOutput = allFailures.splice(ignoreFailureStart, ignoreFailureCount)
+            }
+
+
+            var failureOutput = failuresToOutput.map(function(failure) {
                 return proseErrorFormat(failure);
-            }).join(', ') + '.'));
+            }).join(', ') + '.';
 
-            var ignoreOutput = ignoreCount > 0 ? " (" + ignoreCount + " other errors not shown.)" : "" ;
+            var ignoreOutput = ignoreFailureCount > 0 ? " (" + ignoreFailureCount + " other errors not shown.)" : "" ;
             return this.emit('error', new PluginError('gulp-tslint', 'Failed to lint: ' + failureOutput + '.' + ignoreOutput));
         }
 
