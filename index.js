@@ -178,16 +178,14 @@ tslintPlugin.report = function(reporter, options) {
             var ignoreFailureCount = 0;
 
             if (options.reportLimit > 0) {
-                var ignoreFailureStart = options.reportLimit;
                 ignoreFailureCount = allFailures.length - options.reportLimit;
-
-                failuresToOutput = allFailures.splice(ignoreFailureStart, ignoreFailureCount)
+                failuresToOutput = allFailures.slice(0, options.reportLimit)
             }
 
 
             var failureOutput = failuresToOutput.map(function(failure) {
                 return proseErrorFormat(failure);
-            }).join(', ') + '.';
+            }).join(', ');
 
             var ignoreOutput = ignoreFailureCount > 0 ? " (" + ignoreFailureCount + " other errors not shown.)" : "" ;
             return this.emit('error', new PluginError('gulp-tslint', 'Failed to lint: ' + failureOutput + '.' + ignoreOutput));
