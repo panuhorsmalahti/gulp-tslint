@@ -76,7 +76,7 @@ var tslintPlugin = function(pluginOptions) {
  * Convert a failure to the prose error format
  */
 var proseErrorFormat = function(failure) {
-    return failure.name + "[" + failure.startPosition.line + ", " + failure.startPosition.character + "]: " + failure.failure;
+    return failure.name + '[' + failure.startPosition.line + ', ' + failure.startPosition.character + ']: ' + failure.failure;
 };
 
 /*
@@ -94,16 +94,16 @@ var proseReporter = function(failures) {
 
 var verboseReporter = function(failures) {
     failures.forEach(function(failure) {
-        console.log("(" + failure.ruleName + ") " + failure.name +
-            "[" + failure.startPosition.line + ", " + failure.startPosition.character + "]: " + failure.failure);
+        console.log('(' + failure.ruleName + ') ' + failure.name +
+            '[' + failure.startPosition.line + ', ' + failure.startPosition.character + ']: ' + failure.failure);
     });
 };
 
 // Like verbose, but prints full path
 var fullReporter = function(failures, file) {
     failures.forEach(function(failure) {
-        console.log("(" + failure.ruleName + ") " + file.path +
-            "[" + failure.startPosition.line + ", " + failure.startPosition.character + "]: " + failure.failure);
+        console.log('(' + failure.ruleName + ') ' + file.path +
+            '[' + failure.startPosition.line + ', ' + failure.startPosition.character + ']: ' + failure.failure);
     });
 };
 
@@ -159,9 +159,9 @@ tslintPlugin.report = function(reporter, options) {
                 } else if (isFunction(reporter)) {
                     reporter(failures, file, options);
                 }
-                
+
                 if (options.reportLimit > 0 && options.reportLimit <= totalReported) {
-                    console.log("More than " + options.reportLimit + " failures reported. Turning off reporter.");
+                    console.log('More than ' + options.reportLimit + ' failures reported. Turning off reporter.');
                 }
             }
         }
@@ -177,18 +177,23 @@ tslintPlugin.report = function(reporter, options) {
             var failuresToOutput = allFailures;
             var ignoreFailureCount = 0;
 
+            // If error count is limited, calculate number of errors not shown and slice reportLimit
+            // number of errors to be included in the error.
             if (options.reportLimit > 0) {
                 ignoreFailureCount = allFailures.length - options.reportLimit;
-                failuresToOutput = allFailures.slice(0, options.reportLimit)
+                failuresToOutput = allFailures.slice(0, options.reportLimit);
             }
 
-
+            // Always use the proseErrorFormat for the error.
             var failureOutput = failuresToOutput.map(function(failure) {
                 return proseErrorFormat(failure);
             }).join(', ');
 
-            var ignoreOutput = ignoreFailureCount > 0 ? " (" + ignoreFailureCount + " other errors not shown.)" : "" ;
-            return this.emit('error', new PluginError('gulp-tslint', 'Failed to lint: ' + failureOutput + '.' + ignoreOutput));
+            var errorOutput = 'Failed to lint: ' + failureOutput + '.';
+            if (ignoreFailureCount > 0) {
+                errorOutput += ' (' + ignoreFailureCount + ' other errors not shown.)';
+            }
+            return this.emit('error', new PluginError('gulp-tslint', errorOutput));
         }
 
         // Notify through that we're done
