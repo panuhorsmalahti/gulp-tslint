@@ -1,5 +1,7 @@
 /*
  * These test are run manually. For example, run 'gulp invalid-emit', and look at the output.
+ * Specify what the output should be before the task.
+ * TODO: Make these into proper tests
  */
 
 // Simple Gulpfile
@@ -10,7 +12,7 @@ var gutil = require('gulp-util');
 var tslint = require('../index');
 
 var testReporter = function (output) {
-    console.log("Found " + output.length + " errors!");
+    console.log('Found ' + output.length + ' errors!');
 };
 
 // Prints nothing
@@ -32,6 +34,7 @@ gulp.task('template', function(){
         .pipe(tslint.report('prose'));
 });
 
+// Should emit the error
 gulp.task('invalid-emit', function(){
     gulp.src(['invalid.ts', 'invalid2.ts'])
         .pipe(tslint())
@@ -64,6 +67,7 @@ gulp.task('invalid-emptyoptions', function(){
         .pipe(tslint.report('prose', {}));
 });
 
+// Should not emit the error
 gulp.task('invalid-noemit', function(){
     gulp.src('invalid.ts')
         .pipe(tslint())
@@ -122,30 +126,35 @@ gulp.task('invalid-all', function(){
         .pipe(tslint.report(testReporter, { emitError: true }));
 });
 
+// Should use the json reporter
 gulp.task('invalid-json', function(){
     gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report('json'));
 });
 
+// Should use the prose repoterr
 gulp.task('invalid-prose', function(){
     gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report('prose'));
 });
 
+// Should use the verbose reporter
 gulp.task('invalid-verbose', function(){
     gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report('verbose'));
 });
 
+// Should use the full reporter
 gulp.task('invalid-full', function(){
     gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report('full'));
 });
 
+// Should use a custom reporter
 gulp.task('invalid-custom', function(){
     gulp.src('invalid.ts')
         .pipe(tslint())

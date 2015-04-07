@@ -94,7 +94,7 @@ gulp.task('tslint-json', function(){
 });
 ```
 
-You can specify a report limit that will turn off reporting for files after the limit has been reached. If the limit is 0 or less, the limit is ignored.
+You can optionally specify a report limit that will turn off reporting for files after the limit has been reached. If the limit is 0 or less, the limit is ignored, which is the default setting.
 
 All default options
 ```javascript
