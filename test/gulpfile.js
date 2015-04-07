@@ -72,11 +72,43 @@ gulp.task('invalid-noemit', function(){
         }));
 });
 
+// Unit test for the reportLimit setting.
+// Should report all the 8 errors for invalid.ts, then turn off reporting.
+// The emited error message should display reportLimit number of errors (2).
 gulp.task('invalid-report-limit', function(){
       gulp.src(['invalid.ts', 'invalid2.ts'])
         .pipe(tslint())
         .pipe(tslint.report('prose', {
             reportLimit: 2
+        }));
+});
+
+// reportLimit 0 means that there's no limit. Should report all errors.
+gulp.task('invalid-report-limit-zero', function(){
+      gulp.src(['invalid.ts', 'invalid2.ts'])
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {
+            reportLimit: 0
+        }));
+});
+
+// Should turn off reporter after processing one file and shouldn't emit an error.
+gulp.task('invalid-report-limit-one', function(){
+      gulp.src(['invalid2.ts', 'invalid.ts'])
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {
+            reportLimit: 1,
+            emitError: false
+        }));
+});
+
+// Should never reach the reportLimit
+gulp.task('invalid-report-limit-thousand', function(){
+      gulp.src(['invalid2.ts', 'invalid.ts'])
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {
+            reportLimit: 1000,
+            emitError: true
         }));
 });
 
