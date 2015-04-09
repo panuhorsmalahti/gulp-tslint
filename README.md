@@ -1,6 +1,8 @@
 gulp-tslint
 =========
 
+[![Build Status](https://travis-ci.org/panuhorsmalahti/gulp-tslint.svg?branch=master)](https://travis-ci.org/panuhorsmalahti/gulp-tslint)
+
 TypeScript linter plugin for Gulp.
 
 
