@@ -71,6 +71,12 @@ var tslintPlugin = function(pluginOptions) {
     });
 };
 
+var gulpTslintLog = console.log;
+
+var gutilLogger = function(message) {
+    var prefix = "[" + gutil.colors.cyan("gulp-tslint") + "]";
+    gutil.log(prefix, gutil.colors.red("error"), message);
+}
 
 /*
  * Convert a failure to the prose error format
@@ -83,18 +89,18 @@ var proseErrorFormat = function(failure) {
  * Define default reporters
  */
 var jsonReporter = function(failures) {
-    console.log(JSON.stringify(failures));
+    gulpTslintLog(JSON.stringify(failures));
 };
 
 var proseReporter = function(failures) {
     failures.forEach(function(failure) {
-        console.log(proseErrorFormat(failure));
+        gulpTslintLog(proseErrorFormat(failure));
     });
 };
 
 var verboseReporter = function(failures) {
     failures.forEach(function(failure) {
-        console.log('(' + failure.ruleName + ') ' + failure.name +
+        gulpTslintLog('(' + failure.ruleName + ') ' + failure.name +
             '[' + failure.startPosition.line + ', ' + failure.startPosition.character + ']: ' + failure.failure);
     });
 };
@@ -102,7 +108,7 @@ var verboseReporter = function(failures) {
 // Like verbose, but prints full path
 var fullReporter = function(failures, file) {
     failures.forEach(function(failure) {
-        console.log('(' + failure.ruleName + ') ' + file.path +
+        gulpTslintLog('(' + failure.ruleName + ') ' + file.path +
             '[' + failure.startPosition.line + ', ' + failure.startPosition.character + ']: ' + failure.failure);
     });
 };
@@ -128,6 +134,9 @@ tslintPlugin.report = function(reporter, options) {
     }
     if (options.reportLimit === undefined) {
         options.reportLimit = 0; // 0 or less is unlimited
+    }
+    if (options.logger !== undefined && options.logger === "gutil") {
+        gulpTslintLog = gutilLogger;
     }
 
     // Collect all files with errors
@@ -161,7 +170,7 @@ tslintPlugin.report = function(reporter, options) {
                 }
 
                 if (options.reportLimit > 0 && options.reportLimit <= totalReported) {
-                    console.log('More than ' + options.reportLimit + ' failures reported. Turning off reporter.');
+                    gulpTslintLog('More than ' + options.reportLimit + ' failures reported. Turning off reporter.');
                 }
             }
         }

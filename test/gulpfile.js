@@ -116,6 +116,24 @@ gulp.task('invalid-report-limit-thousand', function(){
         }));
 });
 
+gulp.task('invalid-logger-gutil', function(){
+      gulp.src(['invalid2.ts', 'invalid.ts'])
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {
+            logger: "gutil",
+            emitError: false
+        }));
+});
+
+gulp.task('invalid-logger-gutil-emit', function(){
+      gulp.src(['invalid2.ts', 'invalid.ts'])
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {
+            logger: "gutil",
+            emitError: true
+        }));
+});
+
 gulp.task('invalid-all', function(){
     gulp.src('invalid.ts')
         .pipe(tslint())
