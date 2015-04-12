@@ -15,12 +15,25 @@ var through = require('through');
 // Load rc configs
 var Rcloader = require('rcloader');
 
-// Helper function
-function isFunction(f) {
-    return Object.prototype.toString.call(f) === '[object Function]';
+// Helper function to check if a value is a function
+function isFunction(value) {
+    return Object.prototype.toString.call(value) === '[object Function]';
 }
 
-/*
+/**
+ * Log an event or error using gutil.log.
+ */
+function log(message, level) {
+    var prefix = "[" + gutil.colors.cyan("gulp-tslint") + "]";
+
+    if (level === "error") {
+        gutil.log(prefix, gutil.colors.red("error"), message);
+    } else {
+        gutil.log(prefix, message);
+    }
+}
+
+/**
  * Main plugin function
  */
 var tslintPlugin = function(pluginOptions) {
@@ -79,31 +92,31 @@ var proseErrorFormat = function(failure) {
     return failure.name + '[' + failure.startPosition.line + ', ' + failure.startPosition.character + ']: ' + failure.failure;
 };
 
-/*
+/**
  * Define default reporters
  */
 var jsonReporter = function(failures) {
-    console.log(JSON.stringify(failures));
+    log(JSON.stringify(failures), "error");
 };
 
 var proseReporter = function(failures) {
     failures.forEach(function(failure) {
-        console.log(proseErrorFormat(failure));
+        log(proseErrorFormat(failure), "error");
     });
 };
 
 var verboseReporter = function(failures) {
     failures.forEach(function(failure) {
-        console.log('(' + failure.ruleName + ') ' + failure.name +
-            '[' + failure.startPosition.line + ', ' + failure.startPosition.character + ']: ' + failure.failure);
+        log('(' + failure.ruleName + ') ' + failure.name +
+            '[' + failure.startPosition.line + ', ' + failure.startPosition.character + ']: ' + failure.failure, "error");
     });
 };
 
 // Like verbose, but prints full path
 var fullReporter = function(failures, file) {
     failures.forEach(function(failure) {
-        console.log('(' + failure.ruleName + ') ' + file.path +
-            '[' + failure.startPosition.line + ', ' + failure.startPosition.character + ']: ' + failure.failure);
+        log('(' + failure.ruleName + ') ' + file.path +
+            '[' + failure.startPosition.line + ', ' + failure.startPosition.character + ']: ' + failure.failure, "error");
     });
 };
 
@@ -161,7 +174,7 @@ tslintPlugin.report = function(reporter, options) {
                 }
 
                 if (options.reportLimit > 0 && options.reportLimit <= totalReported) {
-                    console.log('More than ' + options.reportLimit + ' failures reported. Turning off reporter.');
+                    log('More than ' + options.reportLimit + ' failures reported. Turning off reporter.');
                 }
             }
         }
