@@ -5,8 +5,6 @@
 // Requires
 var path = require('path');
 var TSLint = require('tslint');
-
-// Gulp
 var gutil = require('gulp-util');
 var PluginError = gutil.PluginError;
 var map = require('map-stream');
@@ -15,13 +13,19 @@ var through = require('through');
 // Load rc configs
 var Rcloader = require('rcloader');
 
-// Helper function to check if a value is a function
+/**
+ * Helper function to check if a value is a function
+ * @param {any} value to check whether or not it is a function.
+ * @returns {boolean} Returns true if the value is a function.
+ */
 function isFunction(value) {
     return Object.prototype.toString.call(value) === '[object Function]';
 }
 
 /**
  * Log an event or error using gutil.log.
+ * @param {string} message the log message.
+ * @param {string} level can be "error". Leave empty for the default logging type.
  */
 function log(message, level) {
     var prefix = "[" + gutil.colors.cyan("gulp-tslint") + "]";
@@ -35,6 +39,7 @@ function log(message, level) {
 
 /**
  * Main plugin function
+ * @param {Object} pluginOptions contains the options for gulp-tslint.
  */
 var tslintPlugin = function(pluginOptions) {
     var loader;
@@ -84,9 +89,10 @@ var tslintPlugin = function(pluginOptions) {
     });
 };
 
-
 /*
- * Convert a failure to the prose error format
+ * Convert a failure to the prose error format.
+ * @param {Object} failure
+ * @returns {string} The failure in the prose error formar.
  */
 var proseErrorFormat = function(failure) {
     return failure.name + '[' + failure.startPosition.line + ', ' + failure.startPosition.character + ']: ' + failure.failure;
@@ -95,16 +101,29 @@ var proseErrorFormat = function(failure) {
 /**
  * Define default reporters
  */
+
+ /**
+  * JSON error reporter.
+  * @param {Array<object>} failures
+  */
 var jsonReporter = function(failures) {
     log(JSON.stringify(failures), "error");
 };
 
+ /**
+  * Prose error reporter.
+  * @param {Array<object>} failures
+  */
 var proseReporter = function(failures) {
     failures.forEach(function(failure) {
         log(proseErrorFormat(failure), "error");
     });
 };
 
+ /**
+  * Verbose error reporter.
+  * @param {Array<object>} failures
+  */
 var verboseReporter = function(failures) {
     failures.forEach(function(failure) {
         log('(' + failure.ruleName + ') ' + failure.name +
@@ -112,14 +131,16 @@ var verboseReporter = function(failures) {
     });
 };
 
-// Like verbose, but prints full path
+ /**
+  * Full error reporter. Like verbose, but prints full path.
+  * @param {Array<object>} failures
+  */
 var fullReporter = function(failures, file) {
     failures.forEach(function(failure) {
         log('(' + failure.ruleName + ') ' + file.path +
             '[' + failure.startPosition.line + ', ' + failure.startPosition.character + ']: ' + failure.failure, "error");
     });
 };
-
 
 /* Output is in the following form:
  * [{
@@ -140,7 +161,8 @@ tslintPlugin.report = function(reporter, options) {
         options.emitError = true;
     }
     if (options.reportLimit === undefined) {
-        options.reportLimit = 0; // 0 or less is unlimited
+        // 0 or less is unlimited
+        options.reportLimit = 0;
     }
 
     // Collect all files with errors
@@ -183,7 +205,9 @@ tslintPlugin.report = function(reporter, options) {
         this.emit('data', file);
     };
 
-    // After reporting on all files, throw the error
+    /**
+     * After reporting on all files, throw the error.
+     */
     var throwErrors = function() {
         // Throw error
         if (options && options.emitError === true && errorFiles.length > 0) {

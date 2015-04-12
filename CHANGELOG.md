@@ -1,3 +1,10 @@
+<a name="2.0.0"></a>
+# 2.0.0 (2015-04-12)
+
+## Changes
+
+- Gulp util's logging used for printing errors.
+
 <a name="1.4.0"></a>
 # 1.4.1 (2014-11-13)
 

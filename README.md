@@ -57,7 +57,7 @@ gulp.task('invalid-noemit', function(){
 
 You can use your own reporter by supplying a function.
 ```javascript
-/* Output is in the following form:
+/* output is in the following form:
  * [{
  *   "name": "invalid.ts",
  *   "failure": "missing whitespace",
