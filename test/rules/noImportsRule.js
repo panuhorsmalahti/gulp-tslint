@@ -15,7 +15,7 @@ function NoImportsWalker() {
 NoImportsWalker.prototype = Object.create(Lint.RuleWalker.prototype);
 NoImportsWalker.prototype.visitImportDeclaration = function (node) {
     // create a failure at the current position
-    this.addFailure(this.createFailure(node.getStart(), node.width(), "import statement forbidden"));
+    this.addFailure(this.createFailure(node.importClause.getStart(), node.importClause.getWidth(), "import statement forbidden"));
 
     // call the base version of this visitor to actually parse this node
     Lint.RuleWalker.prototype.visitImportDeclaration.call(this, node);
