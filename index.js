@@ -95,7 +95,9 @@ var tslintPlugin = function(pluginOptions) {
  * @returns {string} The failure in the prose error formar.
  */
 var proseErrorFormat = function(failure) {
-    return failure.name + '[' + failure.startPosition.line + ', ' + failure.startPosition.character + ']: ' + failure.failure;
+    // line + 1 because TSLint's first line and character is 0
+    return failure.name + '[' + (failure.startPosition.line + 1) + ', ' +
+        (failure.startPosition.character + 1) + ']: ' + failure.failure;
 };
 
 /**
@@ -126,8 +128,11 @@ var proseReporter = function(failures) {
   */
 var verboseReporter = function(failures) {
     failures.forEach(function(failure) {
+        // line + 1 because TSLint's first line and character is 0
         log('(' + failure.ruleName + ') ' + failure.name +
-            '[' + failure.startPosition.line + ', ' + failure.startPosition.character + ']: ' + failure.failure, "error");
+            '[' + (failure.startPosition.line + 1) + ', ' +
+            (failure.startPosition.character + 1) + ']: ' +
+            failure.failure, "error");
     });
 };
 
@@ -137,8 +142,11 @@ var verboseReporter = function(failures) {
   */
 var fullReporter = function(failures, file) {
     failures.forEach(function(failure) {
+        // line + 1 because TSLint's first line and character is 0
         log('(' + failure.ruleName + ') ' + file.path +
-            '[' + failure.startPosition.line + ', ' + failure.startPosition.character + ']: ' + failure.failure, "error");
+            '[' + (failure.startPosition.line + 1) + ', ' +
+            (failure.startPosition.character + 1) + ']: ' +
+            failure.failure, "error");
     });
 };
 
@@ -146,9 +154,9 @@ var fullReporter = function(failures, file) {
  * [{
  *   "name": "invalid.ts",
  *   "failure": "missing whitespace",
- *   // Lines and characters start from 1
- *   "startPosition": {"position": 8, "line": 1, "character": 9},
- *   "endPosition": {"position": 9, "line": 1, "character": 10},
+ *   // Lines and characters start from 0
+ *   "startPosition": {"position": 8, "line": 0, "character": 8},
+ *   "endPosition": {"position": 9, "line": 0, "character": 9},
  *   "ruleName": "one-line"
  * }]
  */

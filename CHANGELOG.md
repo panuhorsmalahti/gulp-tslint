@@ -1,3 +1,12 @@
+<a name="3.0.0-beta"></a>
+# 3.0.0-beta (2015-05-11)
+
+## Changes
+
+- Update tslint to use the TypeScript 1.5.0-beta compiler
+- Due to changes to the typescript compiler API, old custom rules may no longer work and may need to be rewritten
+- the JSON formatter's line and character positions are now back to being 0-indexed instead of 1-indexed
+
 <a name="2.0.0"></a>
 # 2.0.0 (2015-04-12)
 
@@ -27,4 +36,3 @@
 
 - Fix rulesDirectory
 - Remove formattersDirectory
-
