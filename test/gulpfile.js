@@ -175,6 +175,12 @@ gulp.task('custom-rules-defined', function(){
         .pipe(tslint.report('verbose'));
 });
 
+gulp.task('forof', function(){
+    gulp.src('forof.ts')
+        .pipe(tslint())
+        .pipe(tslint.report('prose'));
+});
+
 // Shouldn't report errors because invalid.ts doesn't break the class-name rule
 gulp.task('invalid-json-rules', function(){
     gulp.src('invalid.ts')
