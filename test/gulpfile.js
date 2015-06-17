@@ -17,26 +17,26 @@ var testReporter = function (output) {
 
 // Prints nothing
 gulp.task('valid', function(){
-    gulp.src('valid.ts')
+    return gulp.src('valid.ts')
         .pipe(tslint())
         .pipe(tslint.report('json'));
 });
 
 gulp.task('missing', function(){
-    gulp.src('missing_file.ts')
+    return gulp.src('missing_file.ts')
         .pipe(tslint())
         .pipe(tslint.report('json'));
 });
 
 gulp.task('template', function(){
-    gulp.src('template-strings.ts')
+    return gulp.src('template-strings.ts')
         .pipe(tslint())
         .pipe(tslint.report('prose'));
 });
 
 // Should emit the error
 gulp.task('invalid-emit', function(){
-    gulp.src(['invalid.ts', 'invalid2.ts'])
+    return gulp.src(['invalid.ts', 'invalid2.ts'])
         .pipe(tslint())
         .pipe(tslint.report('prose', {
           emitError: true
@@ -44,7 +44,7 @@ gulp.task('invalid-emit', function(){
 });
 
 gulp.task('invalid-relative', function(){
-    gulp.src(['relative/invalid.ts'], {
+    return gulp.src(['relative/invalid.ts'], {
         base: __dirname
     }).pipe(tslint())
       .pipe(tslint.report('verbose', {
@@ -62,14 +62,14 @@ gulp.task('invalid-emit-return', function(){
 });
 
 gulp.task('invalid-emptyoptions', function(){
-      gulp.src('invalid.ts')
+    return gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report('prose', {}));
 });
 
 // Should not emit the error
 gulp.task('invalid-noemit', function(){
-    gulp.src('invalid.ts')
+    return gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report('prose', {
             emitError: false
@@ -80,7 +80,7 @@ gulp.task('invalid-noemit', function(){
 // Should report all the 8 errors for invalid.ts, then turn off reporting.
 // The emited error message should display reportLimit number of errors (2).
 gulp.task('invalid-report-limit', function(){
-      gulp.src(['invalid.ts', 'invalid2.ts'])
+    return gulp.src(['invalid.ts', 'invalid2.ts'])
         .pipe(tslint())
         .pipe(tslint.report('prose', {
             reportLimit: 2
@@ -98,7 +98,7 @@ gulp.task('invalid-report-limit-zero', function(){
 
 // Should turn off reporter after processing one file and shouldn't emit an error.
 gulp.task('invalid-report-limit-one', function(){
-      gulp.src(['invalid2.ts', 'invalid.ts'])
+    return gulp.src(['invalid2.ts', 'invalid.ts'])
         .pipe(tslint())
         .pipe(tslint.report('prose', {
             reportLimit: 1,
@@ -117,7 +117,7 @@ gulp.task('invalid-report-limit-thousand', function(){
 });
 
 gulp.task('invalid-all', function(){
-    gulp.src('invalid.ts')
+    return gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report('json', { emitError: false}))
         .pipe(tslint.report('prose', { emitError: false}))
@@ -128,47 +128,47 @@ gulp.task('invalid-all', function(){
 
 // Should use the json reporter
 gulp.task('invalid-json', function(){
-    gulp.src('invalid.ts')
+    return gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report('json'));
 });
 
 // Should use the prose repoterr
 gulp.task('invalid-prose', function(){
-    gulp.src('invalid.ts')
+    return gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report('prose'));
 });
 
 // Should use the verbose reporter
 gulp.task('invalid-verbose', function(){
-    gulp.src('invalid.ts')
+    return gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report('verbose'));
 });
 
 // Should use the full reporter
 gulp.task('invalid-full', function(){
-    gulp.src('invalid.ts')
+    return gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report('full'));
 });
 
 // Should use a custom reporter
 gulp.task('invalid-custom', function(){
-    gulp.src('invalid.ts')
+    return gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report(testReporter));
 });
 
 gulp.task('no-custom-rules-defined', function(){
-    gulp.src('customRule.ts')
+    return gulp.src('customRule.ts')
         .pipe(tslint())
         .pipe(tslint.report('verbose'));
 });
 
 gulp.task('custom-rules-defined', function(){
-    gulp.src('customRule.ts')
+    return gulp.src('customRule.ts')
         .pipe(tslint({
             rulesDirectory: 'rules/'
         }))
@@ -176,14 +176,14 @@ gulp.task('custom-rules-defined', function(){
 });
 
 gulp.task('forof', function(){
-    gulp.src('forof.ts')
+    return gulp.src('forof.ts')
         .pipe(tslint())
         .pipe(tslint.report('prose'));
 });
 
 // Shouldn't report errors because invalid.ts doesn't break the class-name rule
 gulp.task('invalid-json-rules', function(){
-    gulp.src('invalid.ts')
+    return gulp.src('invalid.ts')
         .pipe(tslint({
             configuration: {
                 rules: {

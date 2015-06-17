@@ -14,10 +14,10 @@ npm install --save-dev gulp-tslint
 
 Usage:
 ```javascript
-var tslint = require('gulp-tslint');
+const tslint = require('gulp-tslint');
 
 gulp.task('tslint', function(){
-      gulp.src('source.ts')
+      return gulp.src('source.ts')
         .pipe(tslint())
         .pipe(tslint.report('verbose'));
 });
@@ -36,18 +36,18 @@ There are four default reporters:
 
 Reporters are executed only if there is at least one failure.
 
-If there is at least one failure, by default a PluginError is
-thrown after execution of the reporters:
+If there is at least one failure a PluginError is
+emitted after execution of the reporters:
 ```javascript
 [gulp] Error in plugin 'gulp-tslint': Failed to lint: invalid.ts
 ```
 
-You can prevent throwing the error by setting emitError to false when you're
+You can prevent emiting the error by setting emitError to false when you're
 invoking the reporter.
 
 ```javascript
 gulp.task('invalid-noemit', function(){
-      gulp.src('invalid.ts')
+    return gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report('prose', {
           emitError: false
@@ -67,14 +67,14 @@ You can use your own reporter by supplying a function.
  *   "ruleName": "one-line"
  * }]
  */
-var testReporter = function (output, file, options) {
+const testReporter = function (output, file, options) {
     // file is a reference to the vinyl File object
     console.log("Found " + output.length + " errors in " + file.path);
     // options is a reference to the reporter options, e.g. options.emitError
 };
 
 gulp.task('invalid-custom', function(){
-      gulp.src('invalid.ts')
+    return gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report(testReporter));
 });
@@ -83,7 +83,7 @@ gulp.task('invalid-custom', function(){
 tslint.json can be supplied as a parameter by setting the configuration property.
 ```javascript
 gulp.task('tslint-json', function(){
-      gulp.src('invalid.ts')
+    return gulp.src('invalid.ts')
         .pipe(tslint({
             configuration: {
               rules: {
@@ -100,7 +100,7 @@ You can optionally specify a report limit that will turn off reporting for files
 
 All default options
 ```javascript
-var options = {
+const options = {
     configuration: {},
     rulesDirectory: null,
     emitError: true,
