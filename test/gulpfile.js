@@ -52,7 +52,6 @@ gulp.task('invalid-relative', function(){
       }));
 });
 
-// TODO: Find why this doesn't throw an error to the command line
 gulp.task('invalid-emit-return', function(){
     return gulp.src(['invalid.ts', 'invalid2.ts'])
         .pipe(tslint())
@@ -175,6 +174,7 @@ gulp.task('custom-rules-defined', function(){
         .pipe(tslint.report('verbose'));
 });
 
+// Shouldn't report errors
 gulp.task('forof', function(){
     return gulp.src('forof.ts')
         .pipe(tslint())
