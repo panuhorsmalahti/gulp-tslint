@@ -30,8 +30,10 @@
     "gulp-util": "~3.0.4",
     "map-stream": "~0.1.0",
     "rcloader": "~0.1.4",
-    "through": "~2.3.7",
-    "tslint": "~2.4.2"
+    "through": "~2.3.7"
+  },
+  "peerDependencies": {
+    "tslint": "^2.4.2"
   },
   "analyze": true,
   "devDependencies": {},
