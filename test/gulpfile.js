@@ -75,6 +75,46 @@ gulp.task('invalid-noemit', function(){
         }));
 });
 
+// Should not emit errors
+gulp.task('custom-tslint-no-errors', function(){
+    return gulp.src('invalid.ts')
+        .pipe(tslint({
+            // A mocked tslint module
+            tslint: function() {
+                this.lint = function() {
+                    return {
+                        output: "[]"
+                    }
+                }
+            }
+        }))
+        .pipe(tslint.report('prose'));
+});
+
+// Should emit errors
+gulp.task('custom-tslint-errors', function(){
+    return gulp.src('invalid.ts')
+        .pipe(tslint({
+            // A mocked tslint module
+            tslint: function() {
+                this.lint = function() {
+                    return {
+                        output: JSON.stringify([{
+                            name: "name",
+                            ruleName: "ruleName",
+                            startPosition: {
+                                line: 0,
+                                character: 0
+                            },
+                            failure: "failure"
+                        }])
+                    }
+                }
+            }
+        }))
+        .pipe(tslint.report('prose'));
+});
+
 // Unit test for the reportLimit setting.
 // Should report all the 8 errors for invalid.ts, then turn off reporting.
 // The emited error message should display reportLimit number of errors (2).

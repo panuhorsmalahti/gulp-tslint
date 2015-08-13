@@ -23,6 +23,18 @@ function isFunction(value) {
 }
 
 /**
+ * Returns the TSLint from the options, or if not set, the default TSLint.
+ * @param {Object} options
+ * @returns {Object} TSLint module
+ */
+function getTslint(options) {
+    if (options && options.tslint) {
+        return options.tslint;
+    }
+    return TSLint;
+}
+
+/**
  * Log an event or error using gutil.log.
  * @param {string} message the log message.
  * @param {string} level can be "error". Leave empty for the default logging type.
@@ -78,14 +90,13 @@ var tslintPlugin = function(pluginOptions) {
                 return cb(error, undefined);
             }
 
-            tslint = new TSLint(file.relative, file.contents.toString('utf8'), options);
+            var linter = getTslint(pluginOptions);
+            tslint = new linter(file.relative, file.contents.toString('utf8'), options);
             file.tslint = tslint.lint();
 
             // Pass file
             cb(null, file);
         });
-
-
     });
 };
 

@@ -1,3 +1,10 @@
+<a name="3.2.0"></a>
+# 3.2.0 (2015-08-13)
+
+## Changes
+
+- Add the tslint option to supply a custom tslint module
+
 <a name="3.0.0-beta"></a>
 # 3.0.0-beta (2015-05-11)
 

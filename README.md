@@ -1,5 +1,5 @@
 gulp-tslint
-=========
+===========
 
 [![Build Status](https://travis-ci.org/panuhorsmalahti/gulp-tslint.svg?branch=master)](https://travis-ci.org/panuhorsmalahti/gulp-tslint)
 [![Dependency Status](https://david-dm.org/panuhorsmalahti/gulp-tslint.svg)](https://david-dm.org/panuhorsmalahti/gulp-tslint)
@@ -40,15 +40,14 @@ Reporters are executed only if there is at least one failure.
 If there is at least one failure a PluginError is
 emitted after execution of the reporters:
 ```javascript
-[gulp] Error in plugin 'gulp-tslint': Failed to lint: invalid.ts
+[gulp] Error in plugin 'gulp-tslint': Failed to lint: input.ts
 ```
 
-You can prevent emiting the error by setting emitError to false when you're
-invoking the reporter.
+You can prevent emiting the error by setting emitError in report options to false.
 
 ```javascript
 gulp.task('invalid-noemit', function(){
-    return gulp.src('invalid.ts')
+    return gulp.src('input.ts')
         .pipe(tslint())
         .pipe(tslint.report('prose', {
           emitError: false
@@ -71,11 +70,11 @@ You can use your own reporter by supplying a function.
 const testReporter = function (output, file, options) {
     // file is a reference to the vinyl File object
     console.log("Found " + output.length + " errors in " + file.path);
-    // options is a reference to the reporter options, e.g. options.emitError
+    // options is a reference to the reporter options, e.g. including the emitError boolean
 };
 
 gulp.task('invalid-custom', function(){
-    return gulp.src('invalid.ts')
+    return gulp.src('input.ts')
         .pipe(tslint())
         .pipe(tslint.report(testReporter));
 });
@@ -84,7 +83,7 @@ gulp.task('invalid-custom', function(){
 tslint.json can be supplied as a parameter by setting the configuration property.
 ```javascript
 gulp.task('tslint-json', function(){
-    return gulp.src('invalid.ts')
+    return gulp.src('input.ts')
         .pipe(tslint({
             configuration: {
               rules: {
@@ -97,13 +96,52 @@ gulp.task('tslint-json', function(){
 });
 ```
 
-You can optionally specify a report limit that will turn off reporting for files after the limit has been reached. If the limit is 0 or less, the limit is ignored, which is the default setting.
+Report limits
+-------------
 
-All default options
+You can optionally specify a report limit in the .report options that will turn off reporting for files after the limit has been reached. If the limit is 0 or less, the limit is ignored, which is the default setting.
+
 ```javascript
-const options = {
+gulp.task('tslint', function(){
+    return gulp.src(['input.ts',])
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {
+            reportLimit: 2
+        }));
+});
+```
+
+Specifying the tslint module
+----------------------------
+
+If you want to use a different version of tslint, you can supply it with the `tslint` option.
+
+```bash
+npm install tslint@next
+```
+
+```javascript
+const options {
+    tslint: require('tslint')
+};
+```
+
+All default tslint options
+--------------------------
+
+```javascript
+const tslintOptions = {
     configuration: {},
     rulesDirectory: null,
+    tslint: null
+};
+```
+
+All default report options
+--------------------------
+
+```javascript
+const reportOptions = {
     emitError: true,
     reportLimit: 0
 };
