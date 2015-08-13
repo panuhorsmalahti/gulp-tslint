@@ -121,9 +121,9 @@ npm install tslint@next
 ```
 
 ```javascript
-const options {
+.pipe(tslint({
     tslint: require('tslint')
-};
+}))
 ```
 
 All default tslint options
