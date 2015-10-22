@@ -75,6 +75,15 @@ gulp.task('invalid-noemit', function(){
         }));
 });
 
+// Should summarize failures
+gulp.task('invalid-summarize', function(){
+    return gulp.src('invalid.ts')
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {
+            summarizeFailureOutput: true
+        }));
+});
+
 // Should not emit errors
 gulp.task('custom-tslint-no-errors', function(){
     return gulp.src('invalid.ts')
