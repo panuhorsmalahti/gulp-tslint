@@ -183,6 +183,9 @@ tslintPlugin.report = function(reporter, options) {
         // 0 or less is unlimited
         options.reportLimit = 0;
     }
+    if (options.summarizeFailureOutput === undefined){
+        options.summarizeFailureOutput = false;
+    }
 
     // Collect all files with errors
     var errorFiles = [];
@@ -245,7 +248,13 @@ tslintPlugin.report = function(reporter, options) {
                 return proseErrorFormat(failure);
             }).join(', ');
 
-            var errorOutput = 'Failed to lint: ' + failureOutput + '.';
+            var errorOutput = 'Failed to lint: ';
+            if (options.summarizeFailureOutput) {
+                errorOutput += failuresToOutput.length + ' errors.';
+            }
+            else {
+                errorOutput += failureOutput + '.';
+            }
             if (ignoreFailureCount > 0) {
                 errorOutput += ' (' + ignoreFailureCount + ' other errors not shown.)';
             }

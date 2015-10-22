@@ -55,6 +55,18 @@ gulp.task('invalid-noemit', function(){
 });
 ```
 
+You can summarize the gulp error message to the number of errors by setting summarizeFailureOutput in report options.
+
+```javascript
+gulp.task('invalid-noemit', function(){
+    return gulp.src('input.ts')
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {
+          summarizeFailureOutput: true
+        }));
+});
+```
+
 You can use your own reporter by supplying a function.
 ```javascript
 /* output is in the following form:
@@ -143,7 +155,8 @@ All default report options
 ```javascript
 const reportOptions = {
     emitError: true,
-    reportLimit: 0
+    reportLimit: 0,
+    summarizeFailureOutput: false
 };
 ```
 
