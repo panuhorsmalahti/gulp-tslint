@@ -27,7 +27,7 @@
     "lint"
   ],
   "dependencies": {
-    "gulp-util": "~3.0.6",
+    "gulp-util": "~3.0.7",
     "map-stream": "~0.1.0",
     "rcloader": "~0.1.4",
     "through": "~2.3.8",
