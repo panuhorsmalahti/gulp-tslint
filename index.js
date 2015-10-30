@@ -166,10 +166,10 @@ var fullReporter = function(failures, file) {
   * @param {Array<object>} failures
   */
 var msbuildReporter = function(failures, file) {
-	failures.forEach(function(failure) {
-		var positionTuple = "(" + (failure.startPosition.line + 1) + "," + (failure.startPosition.character + 1) + ")";
-		console.log(file.path + positionTuple + ": warning " + failure.ruleName + ": " + failure.failure);
-	});
+    failures.forEach(function(failure) {
+        var positionTuple = "(" + (failure.startPosition.line + 1) + "," + (failure.startPosition.character + 1) + ")";
+        console.log(file.path + positionTuple + ": warning " + failure.ruleName + ": " + failure.failure);
+    });
 };
 
 /* Output is in the following form:
