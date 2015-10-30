@@ -29,11 +29,12 @@ It **must be available** or supplied directly through the options.
 
 The output (stringified JSON) is added to file.tslint.output.
 You can output the errors by using reporters.
-There are four default reporters:
+There are five default reporters:
 * 'json' prints stringified JSON to console.log.
 * 'prose' prints short human-readable failures to console.log.
 * 'verbose' prints longer human-readable failures to console.log.
 * 'full' is like verbose, but displays full path to the file
+* 'msbuild' for Visual Studio
 
 Reporters are executed only if there is at least one failure.
 
