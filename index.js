@@ -172,6 +172,9 @@ var msbuildReporter = function(failures, file) {
     });
 };
 
+// Export proseErrorFormat function
+tslintPlugin.proseErrorFormat = proseErrorFormat;
+
 /* Output is in the following form:
  * [{
  *   "name": "invalid.ts",

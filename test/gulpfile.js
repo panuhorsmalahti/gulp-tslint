@@ -8,6 +8,10 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 
+// File output example
+var map = require('map-stream');
+var concat = require('gulp-concat');
+
 // Gulp plugins
 var tslint = require('../index');
 
@@ -73,6 +77,28 @@ gulp.task('invalid-noemit', function(){
         .pipe(tslint.report('prose', {
             emitError: false
         }));
+});
+
+// Example on output to file
+gulp.task('output-to-file', function(){
+    return gulp.src(['invalid.ts', 'invalid2.ts'])
+        .pipe(tslint())
+        .pipe(map(function(file, done) {
+            // Add the tslint errors in prose format
+            if (file.tslint.output) {
+                file.contents = new Buffer(
+                    JSON.parse(file.tslint.output)
+                        .map(tslint.proseErrorFormat).join('\n')
+                );
+            } else {
+                file.contents = new Buffer("");
+            }
+
+            done(null, file);
+        }))
+        // Concat and save the errors
+        .pipe(concat('tslint-report.txt'))
+        .pipe(gulp.dest('./'));
 });
 
 // Should summarize failures
