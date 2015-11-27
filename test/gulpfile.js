@@ -32,6 +32,7 @@ gulp.task('missing', function(){
         .pipe(tslint.report('json'));
 });
 
+// Should print no errors
 gulp.task('template', function(){
     return gulp.src('template-strings.ts')
         .pipe(tslint())

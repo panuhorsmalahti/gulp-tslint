@@ -1,3 +1,11 @@
+<a name="4.0.0"></a>
+# 4.0.0 (2015-11-27)
+
+## Changes
+
+- **breaking change**: Update tslint to 3.0.0
+- **breaking change**: tslint is now a peer dependency
+
 <a name="3.2.0"></a>
 # 3.2.0 (2015-08-13)
 

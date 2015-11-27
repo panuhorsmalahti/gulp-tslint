@@ -12,6 +12,9 @@ First install gulp-tslint
 npm install --save-dev gulp-tslint
 ```
 
+##### Peer dependencies
+
+The `tslint` module is a peer dependency of `gulp-tslint`, which allows you to update tslint independently from gulp-tslint.
 
 Usage:
 ```javascript
