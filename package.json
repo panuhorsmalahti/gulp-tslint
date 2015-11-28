@@ -39,9 +39,6 @@
     "tslint": "~3.0.0",
     "typescript": "latest"
   },
-  "peerDependencies": {
-    "tslint": ">=3.0.0"
-  },
   "license": "MIT",
   "engines": {
     "node": ">=0.10"
