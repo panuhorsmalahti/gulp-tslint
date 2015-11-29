@@ -102,11 +102,22 @@ gulp.task('output-to-file', function(){
         .pipe(gulp.dest('./'));
 });
 
-// Should summarize failures
+// Should summarize failures with emitError: true
 gulp.task('invalid-summarize', function(){
     return gulp.src('invalid.ts')
         .pipe(tslint())
         .pipe(tslint.report('prose', {
+            emitError: true,
+            summarizeFailureOutput: true
+        }));
+});
+
+// Should summarize failures with emitError: false
+gulp.task('invalid-summarize-no-emit', function(){
+    return gulp.src('invalid.ts')
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {
+            emitError: false,
             summarizeFailureOutput: true
         }));
 });
@@ -164,7 +175,7 @@ gulp.task('invalid-report-limit', function(){
 
 // reportLimit 0 means that there's no limit. Should report all errors.
 gulp.task('invalid-report-limit-zero', function(){
-      gulp.src(['invalid.ts', 'invalid2.ts'])
+      return gulp.src(['invalid.ts', 'invalid2.ts'])
         .pipe(tslint())
         .pipe(tslint.report('prose', {
             reportLimit: 0

@@ -248,7 +248,7 @@ tslintPlugin.report = function(reporter, options) {
      */
     var throwErrors = function() {
         // Throw error
-        if (options && options.emitError === true && errorFiles.length > 0) {
+        if (options && errorFiles.length > 0) {
             var failuresToOutput = allFailures;
             var ignoreFailureCount = 0;
 
@@ -274,7 +274,12 @@ tslintPlugin.report = function(reporter, options) {
             if (ignoreFailureCount > 0) {
                 errorOutput += ' (' + ignoreFailureCount + ' other errors not shown.)';
             }
-            return this.emit('error', new PluginError('gulp-tslint', errorOutput));
+
+            if (options.emitError === true) {
+                return this.emit('error', new PluginError('gulp-tslint', errorOutput));
+            } else if (options.summarizeFailureOutput) {
+                log(errorOutput);
+            }
         }
 
         // Notify through that we're done

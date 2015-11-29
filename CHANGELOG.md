@@ -1,3 +1,10 @@
+<a name="4.1.0"></a>
+# 4.1.0 (2015-11-29)
+
+## Changes
+
+- summarizeFailureOutput now works with emitError: false
+
 <a name="4.0.0"></a>
 # 4.0.0 (2015-11-27)
 
