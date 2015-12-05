@@ -20,11 +20,11 @@ Usage:
 ```javascript
 const tslint = require('gulp-tslint');
 
-gulp.task('tslint', function(){
-      return gulp.src('source.ts')
+gulp.task('tslint', () =>
+    gulp.src('source.ts')
         .pipe(tslint())
-        .pipe(tslint.report('verbose'));
-});
+        .pipe(tslint.report('verbose'))
+);
 ```
 
 **tslint.json** is attempted to be read from near the input file.
@@ -50,25 +50,25 @@ emitted after execution of the reporters:
 You can prevent emiting the error by setting emitError in report options to false.
 
 ```javascript
-gulp.task('invalid-noemit', function(){
-    return gulp.src('input.ts')
+gulp.task('invalid-noemit', () =>
+    gulp.src('input.ts')
         .pipe(tslint())
         .pipe(tslint.report('prose', {
           emitError: false
-        }));
-});
+        }))
+);
 ```
 
 You can summarize the gulp error message to the number of errors by setting summarizeFailureOutput in report options.
 
 ```javascript
-gulp.task('invalid-noemit', function(){
-    return gulp.src('input.ts')
+gulp.task('invalid-noemit', () =>
+    gulp.src('input.ts')
         .pipe(tslint())
         .pipe(tslint.report('prose', {
           summarizeFailureOutput: true
-        }));
-});
+        }))
+);
 ```
 
 You can use your own reporter by supplying a function.
@@ -89,17 +89,17 @@ const testReporter = function (output, file, options) {
     // options is a reference to the reporter options, e.g. including the emitError boolean
 };
 
-gulp.task('invalid-custom', function(){
-    return gulp.src('input.ts')
+gulp.task('invalid-custom', () =>
+    gulp.src('input.ts')
         .pipe(tslint())
-        .pipe(tslint.report(testReporter));
-});
+        .pipe(tslint.report(testReporter))
+);
 ```
 
 tslint.json can be supplied as a parameter by setting the configuration property.
 ```javascript
-gulp.task('tslint-json', function(){
-    return gulp.src('input.ts')
+gulp.task('tslint-json', () =>
+    gulp.src('input.ts')
         .pipe(tslint({
             configuration: {
               rules: {
@@ -108,8 +108,8 @@ gulp.task('tslint-json', function(){
               }
             }
         }))
-        .pipe(tslint.report('prose'));;
-});
+        .pipe(tslint.report('prose'))
+);
 ```
 
 Report limits
@@ -139,7 +139,7 @@ npm install tslint@next
 ```javascript
 .pipe(tslint({
     tslint: require('tslint')
-}))
+}));
 ```
 
 All default tslint options
