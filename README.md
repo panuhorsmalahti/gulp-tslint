@@ -118,13 +118,13 @@ Report limits
 You can optionally specify a report limit in the .report options that will turn off reporting for files after the limit has been reached. If the limit is 0 or less, the limit is ignored, which is the default setting.
 
 ```javascript
-gulp.task('tslint', function(){
-    return gulp.src(['input.ts',])
+gulp.task('tslint', () =>
+    gulp.src(['input.ts',])
         .pipe(tslint())
         .pipe(tslint.report('prose', {
             reportLimit: 2
-        }));
-});
+        }))
+);
 ```
 
 Specifying the tslint module
