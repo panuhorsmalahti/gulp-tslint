@@ -32,9 +32,9 @@ export interface Reporter {
     (failures: Failure[], file?: TslintFile, options?: ReportOptions): void;
 }
 export interface TslintPlugin {
-    (pluginOptions: PluginOptions): any;
+    (pluginOptions?: PluginOptions): any;
     proseErrorFormat: (failure: Failure) => string;
-    report: (reporter: string | Reporter, options: ReportOptions) => any;
+    report: (reporter: string | Reporter, options?: ReportOptions) => any;
 }
 declare const tslintPlugin: TslintPlugin;
 export default tslintPlugin;

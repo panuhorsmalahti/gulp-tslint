@@ -58,9 +58,9 @@ export interface Reporter {
 }
 
 export interface TslintPlugin {
-    (pluginOptions: PluginOptions): any
+    (pluginOptions?: PluginOptions): any
     proseErrorFormat: (failure: Failure) => string;
-    report: (reporter: string | Reporter, options: ReportOptions) => any
+    report: (reporter: string | Reporter, options?: ReportOptions) => any
 }
 
 /**
@@ -74,8 +74,8 @@ function isFunction(value: any) {
 
 /**
  * Returns the TSLint from the options, or if not set, the default TSLint.
- * @param {Object} options
- * @returns {Object} TSLint module
+ * @param {PluginOptions} options
+ * @returns {any} TSLint module
  */
 function getTslint(options: PluginOptions) {
     if (options && options.tslint) {
@@ -114,9 +114,11 @@ const proseErrorFormat = function(failure: Failure) {
 
 /**
  * Main plugin function
- * @param {Object} pluginOptions contains the options for gulp-tslint.
+ * @param {PluginOptions} pluginOptions contains the options for gulp-tslint.
+ * Optional.
+ * @returns {any}
  */
-const tslintPlugin = <TslintPlugin> function(pluginOptions: PluginOptions) {
+const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
     let loader: any;
     let tslint: any;
 
@@ -172,7 +174,7 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions: PluginOptions) {
 
  /**
   * JSON error reporter.
-  * @param {Array<object>} failures
+  * @param {Array<Failure>} failures
   */
 const jsonReporter = function(failures: Failure[]) {
     log(JSON.stringify(failures), "error");
@@ -205,6 +207,7 @@ const verboseReporter = function(failures: Failure[]) {
  /**
   * Full error reporter. Like verbose, but prints full path.
   * @param {Array<Failure>} failures
+  * @param {TslintFile} file
   */
 const fullReporter = function(failures: Failure[], file: TslintFile) {
     failures.forEach(function(failure) {
@@ -218,7 +221,8 @@ const fullReporter = function(failures: Failure[], file: TslintFile) {
 
  /**
   * MsBuild Format error reporter.
-  * @param {Array<object>} failures
+  * @param {Array<Failure>} failures
+  * @param {TslintFile} file
   */
 const msbuildReporter = function(failures: Failure[], file: TslintFile) {
     failures.forEach(function(failure) {
@@ -242,7 +246,7 @@ tslintPlugin.proseErrorFormat = proseErrorFormat;
  * }]
  */
 tslintPlugin.report = function(reporter: string | Reporter,
-        options: ReportOptions) {
+        options?: ReportOptions) {
 
     // Default options
     if (!options) {

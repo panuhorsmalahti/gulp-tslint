@@ -17,8 +17,12 @@ npm install --save-dev gulp-tslint
 The `tslint` module is a peer dependency of `gulp-tslint`, which allows you to update tslint independently from gulp-tslint.
 
 Usage:
-```javascript
-const tslint = require('gulp-tslint');
+```typescript
+// Importing in ES6
+import tslint from "gulp-tslint";
+
+// or requiring in ES5
+var tslint = require('gulp-tslint');
 
 gulp.task('tslint', () =>
     gulp.src('source.ts')
@@ -26,6 +30,8 @@ gulp.task('tslint', () =>
         .pipe(tslint.report('verbose'))
 );
 ```
+
+Types should work automatically with TypeScript 1.6 or newer when used in TypeScript.
 
 **tslint.json** is attempted to be read from near the input file.
 It **must be available** or supplied directly through the options.
@@ -167,4 +173,4 @@ const reportOptions = {
 Development
 ===========
 
-Fork this repository, run npm install and send pull requests.
+Fork this repository, run npm install and send pull requests. The project can be build with ``gulp`` command. 
