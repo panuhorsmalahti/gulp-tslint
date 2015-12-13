@@ -1,5 +1,9 @@
 /node_modules
-/test/invalid.ts
-/test/valid.ts
+/test/**/*.js
+*.map
 
+# Ignore from package:
 /test
+/types
+index.ts
+.travis.yml
