@@ -1,3 +1,11 @@
+<a name="4.2.0"></a>
+# 4.2.0 (2015-12-13)
+
+## Changes
+
+- Added "typings" support, now gulp-tslint types are automatically enabled in TypeScript
+- Converted to TypeScript
+
 <a name="4.1.0"></a>
 # 4.1.0 (2015-11-29)
 

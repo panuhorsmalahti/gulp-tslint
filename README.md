@@ -173,4 +173,4 @@ const reportOptions = {
 Development
 ===========
 
-Fork this repository, run npm install and send pull requests. The project can be build with ``gulp`` command. 
+Fork this repository, run npm install and send pull requests. The project can be build with ``gulp`` command.

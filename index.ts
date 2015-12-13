@@ -3,7 +3,6 @@
 "use strict";
 
 // Requires
-import * as path from "path";
 import * as TSLint from "tslint";
 import * as vinyl from "vinyl";
 const gutil = require('gulp-util');
