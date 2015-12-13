@@ -353,5 +353,6 @@ tslintPlugin.report = function(reporter: string | Reporter,
 
 export default tslintPlugin;
 
-// ES5 fallback
+// ES5/ES6 fallbacks
 module.exports = tslintPlugin;
+module.exports.default = tslintPlugin;
