@@ -10,11 +10,11 @@ export interface ReportOptions {
 }
 export interface TslintFile {
     tslint: any;
-    isStream(): boolean;
-    isNull(): boolean;
     path: string;
     relative: string;
     contents: Buffer | any;
+    isStream(): boolean;
+    isNull(): boolean;
 }
 export interface Position {
     position: number;

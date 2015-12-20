@@ -4,7 +4,7 @@
 
 // Requires
 import * as TSLint from "tslint";
-import * as vinyl from "vinyl";
+// import * as vinyl from "vinyl";
 import * as through from "through";
 const gutil = require("gulp-util");
 const PluginError = gutil.PluginError;
@@ -27,14 +27,14 @@ export interface ReportOptions {
 
 export interface TslintFile /* extends vinyl.File */ {
     tslint: any;
+    path: string;
+    relative: string;
+    contents: Buffer | any;
 
     // The following are copied from vinyl.File. vinyl.File is not used
     // since the typings .d.ts shouldn't include ambient external declarations..
     isStream(): boolean;
     isNull(): boolean;
-    path: string;
-    relative: string;
-    contents: Buffer | any;
 }
 
 export interface Position {
@@ -57,9 +57,9 @@ export interface Reporter {
 }
 
 export interface TslintPlugin {
-    (pluginOptions?: PluginOptions): any
+    (pluginOptions?: PluginOptions): any;
     proseErrorFormat: (failure: Failure) => string;
-    report: (reporter: string | Reporter, options?: ReportOptions) => any
+    report: (reporter: string | Reporter, options?: ReportOptions) => any;
 }
 
 /**
@@ -146,11 +146,11 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
         loader.for(file.path, function(error: any, fileOptions: any) {
             // TSLint default options
             const options = {
-                formatter: "json",
                 configuration: fileOptions,
-                rulesDirectory: pluginOptions.rulesDirectory || null,
+                formatter: "json",
                 // not used, use reporters instead
-                formattersDirectory: <string> null
+                formattersDirectory: <string> null,
+                rulesDirectory: pluginOptions.rulesDirectory || null
             };
 
             if (error) {
@@ -259,7 +259,7 @@ tslintPlugin.report = function(reporter: string | Reporter,
         // 0 or less is unlimited
         options.reportLimit = 0;
     }
-    if (options.summarizeFailureOutput === undefined){
+    if (options.summarizeFailureOutput === undefined) {
         options.summarizeFailureOutput = false;
     }
 
@@ -332,8 +332,7 @@ tslintPlugin.report = function(reporter: string | Reporter,
             let errorOutput = "Failed to lint: ";
             if (options.summarizeFailureOutput) {
                 errorOutput += failuresToOutput.length + " errors.";
-            }
-            else {
+            } else {
                 errorOutput += failureOutput + ".";
             }
             if (ignoreFailureCount > 0) {

@@ -3,6 +3,7 @@
 "use strict";
 // Requires
 var TSLint = require("tslint");
+// import * as vinyl from "vinyl";
 var through = require("through");
 var gutil = require("gulp-util");
 var PluginError = gutil.PluginError;
@@ -81,11 +82,11 @@ var tslintPlugin = function (pluginOptions) {
         loader.for(file.path, function (error, fileOptions) {
             // TSLint default options
             var options = {
-                formatter: "json",
                 configuration: fileOptions,
-                rulesDirectory: pluginOptions.rulesDirectory || null,
+                formatter: "json",
                 // not used, use reporters instead
-                formattersDirectory: null
+                formattersDirectory: null,
+                rulesDirectory: pluginOptions.rulesDirectory || null
             };
             if (error) {
                 return cb(error, undefined);
