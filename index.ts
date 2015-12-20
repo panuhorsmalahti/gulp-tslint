@@ -5,13 +5,13 @@
 // Requires
 import * as TSLint from "tslint";
 import * as vinyl from "vinyl";
-const gutil = require('gulp-util');
+import * as through from "through";
+const gutil = require("gulp-util");
 const PluginError = gutil.PluginError;
-const map = require('map-stream');
-const through = require('through');
+const map = require("map-stream");
 
 // Load rc configs
-const Rcloader = require('rcloader');
+const Rcloader = require("rcloader");
 
 export interface PluginOptions {
     configuration?: any;
@@ -68,7 +68,7 @@ export interface TslintPlugin {
  * @returns {boolean} Returns true if the value is a function.
  */
 function isFunction(value: any) {
-    return Object.prototype.toString.call(value) === '[object Function]';
+    return Object.prototype.toString.call(value) === "[object Function]";
 }
 
 /**
@@ -107,8 +107,8 @@ function log(message: string, level?: string) {
  */
 const proseErrorFormat = function(failure: Failure) {
     // line + 1 because TSLint's first line and character is 0
-    return failure.name + '[' + (failure.startPosition.line + 1) + ', ' +
-        (failure.startPosition.character + 1) + ']: ' + failure.failure;
+    return failure.name + "[" + (failure.startPosition.line + 1) + ", " +
+        (failure.startPosition.character + 1) + "]: " + failure.failure;
 };
 
 /**
@@ -127,7 +127,7 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
     }
 
     // Create rcloader to load tslint.json
-    loader = new Rcloader('tslint.json', pluginOptions.configuration);
+    loader = new Rcloader("tslint.json", pluginOptions.configuration);
 
     return map(function(file: TslintFile,
             cb: (error: any, file?: TslintFile) => void) {
@@ -139,14 +139,14 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
 
         // Stream is not supported
         if (file.isStream()) {
-            return cb(new PluginError('gulp-tslint', 'Streaming not supported'));
+            return cb(new PluginError("gulp-tslint", "Streaming not supported"));
         }
 
         // Finds the config file closest to the linted file
         loader.for(file.path, function(error: any, fileOptions: any) {
             // TSLint default options
             const options = {
-                formatter: 'json',
+                formatter: "json",
                 configuration: fileOptions,
                 rulesDirectory: pluginOptions.rulesDirectory || null,
                 // not used, use reporters instead
@@ -158,7 +158,7 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
             }
 
             const linter = getTslint(pluginOptions);
-            tslint = new linter(file.relative, file.contents.toString('utf8'), options);
+            tslint = new linter(file.relative, file.contents.toString("utf8"), options);
             file.tslint = tslint.lint();
 
             // Pass file
@@ -196,9 +196,9 @@ const proseReporter = function(failures: Failure[]) {
 const verboseReporter = function(failures: Failure[]) {
     failures.forEach(function(failure) {
         // line + 1 because TSLint's first line and character is 0
-        log('(' + failure.ruleName + ') ' + failure.name +
-            '[' + (failure.startPosition.line + 1) + ', ' +
-            (failure.startPosition.character + 1) + ']: ' +
+        log("(" + failure.ruleName + ") " + failure.name +
+            "[" + (failure.startPosition.line + 1) + ", " +
+            (failure.startPosition.character + 1) + "]: " +
             failure.failure, "error");
     });
 };
@@ -211,9 +211,9 @@ const verboseReporter = function(failures: Failure[]) {
 const fullReporter = function(failures: Failure[], file: TslintFile) {
     failures.forEach(function(failure) {
         // line + 1 because TSLint's first line and character is 0
-        log('(' + failure.ruleName + ') ' + file.path +
-            '[' + (failure.startPosition.line + 1) + ', ' +
-            (failure.startPosition.character + 1) + ']: ' +
+        log("(" + failure.ruleName + ") " + file.path +
+            "[" + (failure.startPosition.line + 1) + ", " +
+            (failure.startPosition.character + 1) + "]: " +
             failure.failure, "error");
     });
 };
@@ -227,7 +227,8 @@ const msbuildReporter = function(failures: Failure[], file: TslintFile) {
     failures.forEach(function(failure) {
         const positionTuple = "(" + (failure.startPosition.line + 1) + "," +
             (failure.startPosition.character + 1) + ")";
-        console.log(file.path + positionTuple + ": warning " + failure.ruleName + ": " + failure.failure);
+        console.log(file.path + positionTuple + ": warning " +
+            failure.ruleName + ": " + failure.failure);
     });
 };
 
@@ -280,28 +281,31 @@ tslintPlugin.report = function(reporter: string | Reporter,
 
             if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
                 totalReported += failures.length;
-                if (reporter === 'json') {
+                if (reporter === "json") {
                     jsonReporter(failures);
-                } else if (reporter === 'prose') {
+                } else if (reporter === "prose") {
                     proseReporter(failures);
-                } else if (reporter === 'verbose') {
+                } else if (reporter === "verbose") {
                     verboseReporter(failures);
-                } else if (reporter === 'full') {
+                } else if (reporter === "full") {
                     fullReporter(failures, file);
-                } else if (reporter === 'msbuild') {
+                } else if (reporter === "msbuild") {
                     msbuildReporter(failures, file);
                 } else if (isFunction(reporter)) {
                     (<Reporter> reporter)(failures, file, options);
                 }
 
-                if (options.reportLimit > 0 && options.reportLimit <= totalReported) {
-                    log('More than ' + options.reportLimit + ' failures reported. Turning off reporter.');
+                if (options.reportLimit > 0 &&
+                        options.reportLimit <= totalReported) {
+
+                    log("More than " + options.reportLimit
+                        + " failures reported. Turning off reporter.");
                 }
             }
         }
 
         // Pass file
-        this.emit('data', file);
+        this.emit("data", file);
     };
 
     /**
@@ -323,28 +327,30 @@ tslintPlugin.report = function(reporter: string | Reporter,
             // Always use the proseErrorFormat for the error.
             const failureOutput = failuresToOutput.map(function(failure) {
                 return proseErrorFormat(failure);
-            }).join(', ');
+            }).join(", ");
 
-            let errorOutput = 'Failed to lint: ';
+            let errorOutput = "Failed to lint: ";
             if (options.summarizeFailureOutput) {
-                errorOutput += failuresToOutput.length + ' errors.';
+                errorOutput += failuresToOutput.length + " errors.";
             }
             else {
-                errorOutput += failureOutput + '.';
+                errorOutput += failureOutput + ".";
             }
             if (ignoreFailureCount > 0) {
-                errorOutput += ' (' + ignoreFailureCount + ' other errors not shown.)';
+                errorOutput += " (" + ignoreFailureCount
+                    + " other errors not shown.)";
             }
 
             if (options.emitError === true) {
-                return this.emit('error', new PluginError('gulp-tslint', errorOutput));
+                return this.emit("error", new PluginError("gulp-tslint",
+                    errorOutput));
             } else if (options.summarizeFailureOutput) {
                 log(errorOutput);
             }
         }
 
         // Notify through that we're done
-        this.emit('end');
+        this.emit("end");
     };
 
     return through(reportFailures, throwErrors);

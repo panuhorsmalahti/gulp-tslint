@@ -3,7 +3,7 @@
 // Definitions by: vvakame <https://github.com/vvakame/>, jedmao <https://github.com/jedmao>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
-/// <reference path="../node/node-0.12.d.ts" />
+/// <reference path="../node/node.d.ts" />
 
 declare module 'vinyl' {
 

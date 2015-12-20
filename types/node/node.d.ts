@@ -1,11 +1,11 @@
-// Type definitions for Node.js v0.12.0
+// Type definitions for Node.js v4.x
 // Project: http://nodejs.org/
 // Definitions by: Microsoft TypeScript <http://typescriptlang.org>, DefinitelyTyped <https://github.com/borisyankov/DefinitelyTyped>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
 /************************************************
 *                                               *
-*               Node.js v0.12.0 API             *
+*               Node.js v4.x API                *
 *                                               *
 ************************************************/
 
@@ -405,8 +405,18 @@ declare module "buffer" {
 }
 
 declare module "querystring" {
-    export function stringify(obj: any, sep?: string, eq?: string): string;
-    export function parse(str: string, sep?: string, eq?: string, options?: { maxKeys?: number; }): any;
+    export interface StringifyOptions {
+        encodeURIComponent?: Function;
+    }
+
+    export interface ParseOptions {
+        maxKeys?: number;
+        decodeURIComponent?: Function;
+    }
+
+    export function stringify<T>(obj: T, sep?: string, eq?: string, options?: StringifyOptions): string;
+    export function parse(str: string, sep?: string, eq?: string, options?: ParseOptions): any;
+    export function parse<T extends {}>(str: string, sep?: string, eq?: string, options?: ParseOptions): T;
     export function escape(str: string): string;
     export function unescape(str: string): string;
 }
@@ -430,6 +440,21 @@ declare module "http" {
     import * as events from "events";
     import * as net from "net";
     import * as stream from "stream";
+
+    export interface RequestOptions {
+        protocol?: string;
+        host?: string;
+        hostname?: string;
+        family?: number;
+        port?: number
+        localAddress?: string;
+        socketPath?: string;
+        method?: string;
+        path?: string;
+        headers?: { [key: string]: any };
+        auth?: string;
+        agent?: Agent;
+    }
 
     export interface Server extends events.EventEmitter {
         listen(port: number, hostname?: string, backlog?: number, callback?: Function): Server;
@@ -568,7 +593,7 @@ declare module "http" {
     };
     export function createServer(requestListener?: (request: IncomingMessage, response: ServerResponse) =>void ): Server;
     export function createClient(port?: number, host?: string): any;
-    export function request(options: any, callback?: (res: IncomingMessage) => void): ClientRequest;
+    export function request(options: RequestOptions, callback?: (res: IncomingMessage) => void): ClientRequest;
     export function get(options: any, callback?: (res: IncomingMessage) => void): ClientRequest;
     export var globalAgent: Agent;
 }
@@ -683,7 +708,29 @@ declare module "zlib" {
 }
 
 declare module "os" {
+    export interface CpuInfo {
+        model: string;
+        speed: number;
+        times: {
+            user: number;
+            nice: number;
+            sys: number;
+            idle: number;
+            irq: number;
+        }
+    }
+
+    export interface NetworkInterfaceInfo {
+        address: string;
+        netmask: string;
+        family: string;
+        mac: string;
+        internal: boolean;
+    }
+
     export function tmpdir(): string;
+    export function homedir(): string;
+    export function endianness(): string;
     export function hostname(): string;
     export function type(): string;
     export function platform(): string;
@@ -693,8 +740,8 @@ declare module "os" {
     export function loadavg(): number[];
     export function totalmem(): number;
     export function freemem(): number;
-    export function cpus(): { model: string; speed: number; times: { user: number; nice: number; sys: number; idle: number; irq: number; }; }[];
-    export function networkInterfaces(): any;
+    export function cpus(): CpuInfo[];
+    export function networkInterfaces(): {[index: string]: NetworkInterfaceInfo[]};
     export var EOL: string;
 }
 
@@ -718,15 +765,7 @@ declare module "https" {
         SNICallback?: (servername: string) => any;
     }
 
-    export interface RequestOptions {
-        host?: string;
-        hostname?: string;
-        port?: number;
-        path?: string;
-        method?: string;
-        headers?: any;
-        auth?: string;
-        agent?: any;
+    export interface RequestOptions extends http.RequestOptions{
         pfx?: any;
         key?: any;
         passphrase?: string;
@@ -734,6 +773,7 @@ declare module "https" {
         ca?: any;
         ciphers?: string;
         rejectUnauthorized?: boolean;
+        secureProtocol?: string;
     }
 
     export interface Agent {
@@ -758,7 +798,7 @@ declare module "punycode" {
     export function toASCII(domain: string): string;
     export var ucs2: ucs2;
     interface ucs2 {
-        decode(string: string): string;
+        decode(string: string): number[];
         encode(codePoints: number[]): string;
     }
     export var version: any;
@@ -1667,7 +1707,7 @@ declare module "crypto" {
 declare module "stream" {
     import * as events from "events";
 
-    export interface Stream extends events.EventEmitter {
+    export class Stream extends events.EventEmitter {
         pipe<T extends NodeJS.WritableStream>(destination: T, options?: { end?: boolean; }): T;
     }
 
@@ -1800,6 +1840,8 @@ declare module "assert" {
         export function notDeepEqual(acutal: any, expected: any, message?: string): void;
         export function strictEqual(actual: any, expected: any, message?: string): void;
         export function notStrictEqual(actual: any, expected: any, message?: string): void;
+        export function deepStrictEqual(actual: any, expected: any, message?: string): void;
+        export function notDeepStrictEqual(actual: any, expected: any, message?: string): void;
         export var throws: {
             (block: Function, message?: string): void;
             (block: Function, error: Function, message?: string): void;

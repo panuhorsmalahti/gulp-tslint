@@ -16,7 +16,8 @@
         "node_modules"
     ],
     "files": [
-        "./types/node/node-0.12.d.ts",
+        "./types/node/node.d.ts",
+        "./types/through/through.d.ts",
         "./types/vinyl/vinyl.d.ts",
         "./index.ts"
     ],
