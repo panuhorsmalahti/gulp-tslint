@@ -22,12 +22,12 @@ Usage:
 import tslint from "gulp-tslint";
 
 // or requiring in ES5
-var tslint = require('gulp-tslint');
+var tslint = require("gulp-tslint");
 
-gulp.task('tslint', () =>
-    gulp.src('source.ts')
+gulp.task("tslint", () =>
+    gulp.src("source.ts")
         .pipe(tslint())
-        .pipe(tslint.report('verbose'))
+        .pipe(tslint.report("verbose"))
 );
 ```
 
@@ -39,11 +39,11 @@ It **must be available** or supplied directly through the options.
 The output (stringified JSON) is added to file.tslint.output.
 You can output the errors by using reporters.
 There are five default reporters:
-* 'json' prints stringified JSON to console.log.
-* 'prose' prints short human-readable failures to console.log.
-* 'verbose' prints longer human-readable failures to console.log.
-* 'full' is like verbose, but displays full path to the file
-* 'msbuild' for Visual Studio
+* "json" prints stringified JSON to console.log.
+* "prose" prints short human-readable failures to console.log.
+* "verbose" prints longer human-readable failures to console.log.
+* "full" is like verbose, but displays full path to the file
+* "msbuild" for Visual Studio
 
 Reporters are executed only if there is at least one failure.
 
@@ -56,10 +56,10 @@ emitted after execution of the reporters:
 You can prevent emiting the error by setting emitError in report options to false.
 
 ```javascript
-gulp.task('invalid-noemit', () =>
-    gulp.src('input.ts')
+gulp.task("invalid-noemit", () =>
+    gulp.src("input.ts")
         .pipe(tslint())
-        .pipe(tslint.report('prose', {
+        .pipe(tslint.report("prose", {
           emitError: false
         }))
 );
@@ -68,10 +68,10 @@ gulp.task('invalid-noemit', () =>
 You can summarize the gulp error message to the number of errors by setting summarizeFailureOutput in report options.
 
 ```javascript
-gulp.task('invalid-noemit', () =>
-    gulp.src('input.ts')
+gulp.task("invalid-noemit", () =>
+    gulp.src("input.ts")
         .pipe(tslint())
-        .pipe(tslint.report('prose', {
+        .pipe(tslint.report("prose", {
           summarizeFailureOutput: true
         }))
 );
@@ -95,8 +95,8 @@ const testReporter = function (output, file, options) {
     // options is a reference to the reporter options, e.g. including the emitError boolean
 };
 
-gulp.task('invalid-custom', () =>
-    gulp.src('input.ts')
+gulp.task("invalid-custom", () =>
+    gulp.src("input.ts")
         .pipe(tslint())
         .pipe(tslint.report(testReporter))
 );
@@ -104,8 +104,8 @@ gulp.task('invalid-custom', () =>
 
 tslint.json can be supplied as a parameter by setting the configuration property.
 ```javascript
-gulp.task('tslint-json', () =>
-    gulp.src('input.ts')
+gulp.task("tslint-json", () =>
+    gulp.src("input.ts")
         .pipe(tslint({
             configuration: {
               rules: {
@@ -114,7 +114,7 @@ gulp.task('tslint-json', () =>
               }
             }
         }))
-        .pipe(tslint.report('prose'))
+        .pipe(tslint.report("prose"))
 );
 ```
 
@@ -124,10 +124,10 @@ Report limits
 You can optionally specify a report limit in the .report options that will turn off reporting for files after the limit has been reached. If the limit is 0 or less, the limit is ignored, which is the default setting.
 
 ```javascript
-gulp.task('tslint', () =>
-    gulp.src(['input.ts',])
+gulp.task("tslint", () =>
+    gulp.src(["input.ts",])
         .pipe(tslint())
-        .pipe(tslint.report('prose', {
+        .pipe(tslint.report("prose", {
             reportLimit: 2
         }))
 );
@@ -144,7 +144,7 @@ npm install tslint@next
 
 ```javascript
 .pipe(tslint({
-    tslint: require('tslint')
+    tslint: require("tslint")
 }));
 ```
 

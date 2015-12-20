@@ -8,3 +8,4 @@
 index.ts
 .travis.yml
 gulpfile.js
+tslint.json
