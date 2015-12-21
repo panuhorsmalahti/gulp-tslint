@@ -56,7 +56,7 @@ var proseErrorFormat = function (failure) {
 };
 /**
  * Main plugin function
- * @param {PluginOptions} pluginOptions contains the options for gulp-tslint.
+ * @param {PluginOptions} [pluginOptions] contains the options for gulp-tslint.
  * Optional.
  * @returns {any}
  */
