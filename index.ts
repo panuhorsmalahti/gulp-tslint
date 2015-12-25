@@ -11,7 +11,7 @@ const PluginError = gutil.PluginError;
 const map = require("map-stream");
 
 // Load rc configs
-const Rcloader = require("rcloader");
+import Rcloader = require("rcloader");
 
 export interface PluginOptions {
     configuration?: any;
