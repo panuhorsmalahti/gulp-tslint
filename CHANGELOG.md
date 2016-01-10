@@ -1,3 +1,10 @@
+<a name="4.3.0"></a>
+# 4.3.0 (2016-01-11)
+
+## Changes
+
+- Updated rcloader fixing overriding configuration keys: https://github.com/spalger/rcloader/issues/10
+
 <a name="4.2.0"></a>
 # 4.2.0 (2015-12-13)
 
