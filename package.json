@@ -41,7 +41,7 @@
     "typescript": "latest"
   },
   "peerDependencies": {
-    "tslint": "^3 || >=3.1.0-dev || >=3.2.0-dev"
+    "tslint": "^3 || >=3.1.0-dev || >=3.2.0-dev || >=3.2.1-dev"
   },
   "license": "MIT",
   "engines": {
