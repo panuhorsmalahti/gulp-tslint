@@ -1,7 +1,7 @@
 {
   "name": "gulp-tslint",
   "preferGlobal": false,
-  "version": "4.3.2",
+  "version": "4.3.3",
   "author": "Panu Horsmalahti <panu.horsmalahti@iki.fi>",
   "description": "TypeScript linter Gulp plugin",
   "contributors": [
@@ -41,7 +41,7 @@
     "typescript": "latest"
   },
   "peerDependencies": {
-    "tslint": "^3 || >=3.1.0-dev || >=3.2.0-dev || >=3.2.1-dev || >= 3.2.2-dev || >= 3.3.0-dev || >= 3.4.0-dev"
+    "tslint": "^3 || >=3.1.0-dev || >=3.2.0-dev || >=3.2.1-dev || >= 3.2.2-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev"
   },
   "license": "MIT",
   "engines": {
