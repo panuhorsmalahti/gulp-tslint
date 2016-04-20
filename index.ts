@@ -10,9 +10,6 @@ const gutil = require("gulp-util");
 const PluginError = gutil.PluginError;
 const map = require("map-stream");
 
-// Load rc configs
-import Rcloader = require("rcloader");
-
 export interface PluginOptions {
     configuration?: any;
     rulesDirectory?: string;
@@ -72,6 +69,16 @@ function isFunction(value: any) {
 }
 
 /**
+ * Helper function to check if a value is a string
+ * @param {any} value to check whether or not it is a string
+ * @returns {boolean} Returns true if the value is a string.
+ */
+function isString(value: any) {
+    return typeof value === 'string' ||
+      (!Array.isArray(value) && typeof value === 'object' && Object.prototype.toString.call(value) === '[object String]');
+}
+
+/**
  * Returns the TSLint from the options, or if not set, the default TSLint.
  * @param {PluginOptions} options
  * @returns {any} TSLint module
@@ -126,9 +133,6 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
         pluginOptions = {};
     }
 
-    // Create rcloader to load tslint.json
-    loader = new Rcloader("tslint.json", pluginOptions.configuration);
-
     return map(function(file: TslintFile,
             cb: (error: any, file?: TslintFile) => void) {
 
@@ -142,28 +146,25 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
             return cb(new PluginError("gulp-tslint", "Streaming not supported"));
         }
 
-        // Finds the config file closest to the linted file
-        loader.for(file.path, function(error: any, fileOptions: any) {
-            // TSLint default options
-            const options = {
-                configuration: fileOptions,
-                formatter: "json",
-                // not used, use reporters instead
-                formattersDirectory: <string> null,
-                rulesDirectory: pluginOptions.rulesDirectory || null
-            };
+        // TSLint default options
+        const options = {
+            configuration: pluginOptions.configuration,
+            formatter: "json",
+            // not used, use reporters instead
+            formattersDirectory: <string> null,
+            rulesDirectory: pluginOptions.rulesDirectory || null
+        };
 
-            if (error) {
-                return cb(error, undefined);
-            }
+        const linter = getTslint(pluginOptions);
+        if (pluginOptions.configuration == null || isString(pluginOptions.configuration)) {
+            options.configuration = linter.findConfiguration(pluginOptions.configuration, file.path);
+        }
 
-            const linter = getTslint(pluginOptions);
-            tslint = new linter(file.relative, file.contents.toString("utf8"), options);
-            file.tslint = tslint.lint();
+        tslint = new linter(file.relative, file.contents.toString("utf8"), options);
+        file.tslint = tslint.lint();
 
-            // Pass file
-            cb(null, file);
-        });
+        // Pass file
+        cb(null, file);
     });
 };
 
