@@ -10,8 +10,8 @@ var PluginError = gutil.PluginError;
 var map = require("map-stream");
 /**
  * Helper function to check if a value is a function
- * @param {any} value to check whether or not it is a function.
- * @returns {boolean} Returns true if the value is a function.
+ * @param {any} value to check whether or not it is a function
+ * @returns {boolean} Returns true if the value is a function
  */
 function isFunction(value) {
     return Object.prototype.toString.call(value) === "[object Function]";
@@ -19,11 +19,10 @@ function isFunction(value) {
 /**
  * Helper function to check if a value is a string
  * @param {any} value to check whether or not it is a string
- * @returns {boolean} Returns true if the value is a string.
+ * @returns {boolean} Returns true if the value is a string
  */
 function isString(value) {
-    return typeof value === 'string' ||
-        (!Array.isArray(value) && typeof value === 'object' && Object.prototype.toString.call(value) === '[object String]');
+    return Object.prototype.toString.call(value) === "[object String]";
 }
 /**
  * Returns the TSLint from the options, or if not set, the default TSLint.
@@ -92,8 +91,11 @@ var tslintPlugin = function (pluginOptions) {
             rulesDirectory: pluginOptions.rulesDirectory || null
         };
         var linter = getTslint(pluginOptions);
-        if (pluginOptions.configuration == null || isString(pluginOptions.configuration)) {
-            options.configuration = linter.findConfiguration(pluginOptions.configuration, file.path);
+        if (pluginOptions.configuration === null ||
+            pluginOptions.configuration === undefined
+            || isString(pluginOptions.configuration)) {
+            // configuration can be a file path or null, if it's unknown
+            options.configuration = linter.findConfiguration(pluginOptions.configuration || null, file.path);
         }
         tslint = new linter(file.relative, file.contents.toString("utf8"), options);
         file.tslint = tslint.lint();

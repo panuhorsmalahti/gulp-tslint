@@ -1,3 +1,10 @@
+<a name="5.0.0"></a>
+# 5.0.0 (2016-04-24)
+
+## Changes
+
+- support for extends property
+
 <a name="4.3.0"></a>
 # 4.3.0 (2016-01-11)
 

@@ -36,11 +36,5 @@ export interface TslintPlugin {
     proseErrorFormat: (failure: Failure) => string;
     report: (reporter: string | Reporter, options?: ReportOptions) => any;
 }
-/**
- * Main plugin function
- * @param {PluginOptions} [pluginOptions] contains the options for gulp-tslint.
- * Optional.
- * @returns {any}
- */
 declare const tslintPlugin: TslintPlugin;
 export default tslintPlugin;

@@ -118,6 +118,16 @@ gulp.task("tslint-json", () =>
 );
 ```
 
+You can also supply a file path to the configuration option, and the file name
+doesn't need to be tslint.json.
+
+```javascript
+.pipe(tslint({
+    // contains rules in the tslint.json format
+    configuration: "source/settings.json"
+}))
+```
+
 Report limits
 -------------
 
