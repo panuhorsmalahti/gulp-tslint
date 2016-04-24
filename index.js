@@ -8,8 +8,6 @@ var through = require("through");
 var gutil = require("gulp-util");
 var PluginError = gutil.PluginError;
 var map = require("map-stream");
-// Load rc configs
-var Rcloader = require("rcloader");
 /**
  * Helper function to check if a value is a function
  * @param {any} value to check whether or not it is a function.
@@ -17,6 +15,15 @@ var Rcloader = require("rcloader");
  */
 function isFunction(value) {
     return Object.prototype.toString.call(value) === "[object Function]";
+}
+/**
+ * Helper function to check if a value is a string
+ * @param {any} value to check whether or not it is a string
+ * @returns {boolean} Returns true if the value is a string.
+ */
+function isString(value) {
+    return typeof value === 'string' ||
+        (!Array.isArray(value) && typeof value === 'object' && Object.prototype.toString.call(value) === '[object String]');
 }
 /**
  * Returns the TSLint from the options, or if not set, the default TSLint.
@@ -67,8 +74,6 @@ var tslintPlugin = function (pluginOptions) {
     if (!pluginOptions) {
         pluginOptions = {};
     }
-    // Create rcloader to load tslint.json
-    loader = new Rcloader("tslint.json", pluginOptions.configuration);
     return map(function (file, cb) {
         // Skip
         if (file.isNull()) {
@@ -78,25 +83,22 @@ var tslintPlugin = function (pluginOptions) {
         if (file.isStream()) {
             return cb(new PluginError("gulp-tslint", "Streaming not supported"));
         }
-        // Finds the config file closest to the linted file
-        loader.for(file.path, function (error, fileOptions) {
-            // TSLint default options
-            var options = {
-                configuration: fileOptions,
-                formatter: "json",
-                // not used, use reporters instead
-                formattersDirectory: null,
-                rulesDirectory: pluginOptions.rulesDirectory || null
-            };
-            if (error) {
-                return cb(error, undefined);
-            }
-            var linter = getTslint(pluginOptions);
-            tslint = new linter(file.relative, file.contents.toString("utf8"), options);
-            file.tslint = tslint.lint();
-            // Pass file
-            cb(null, file);
-        });
+        // TSLint default options
+        var options = {
+            configuration: pluginOptions.configuration,
+            formatter: "json",
+            // not used, use reporters instead
+            formattersDirectory: null,
+            rulesDirectory: pluginOptions.rulesDirectory || null
+        };
+        var linter = getTslint(pluginOptions);
+        if (pluginOptions.configuration == null || isString(pluginOptions.configuration)) {
+            options.configuration = linter.findConfiguration(pluginOptions.configuration, file.path);
+        }
+        tslint = new linter(file.relative, file.contents.toString("utf8"), options);
+        file.tslint = tslint.lint();
+        // Pass file
+        cb(null, file);
     });
 };
 /**

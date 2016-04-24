@@ -29,7 +29,6 @@
   "dependencies": {
     "gulp-util": "~3.0.7",
     "map-stream": "~0.1.0",
-    "rcloader": "~0.2.0",
     "through": "~2.3.8"
   },
   "analyze": true,
@@ -37,11 +36,11 @@
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-typescript": "^2.11.0",
-    "tslint": "^3",
+    "tslint": "3.8.0",
     "typescript": "latest"
   },
   "peerDependencies": {
-    "tslint": "^3 || >=3.1.0-dev || >=3.2.0-dev || >=3.2.1-dev || >= 3.2.2-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.7.0-dev"
+    "tslint": "^3.7.3 || 3.7.0-dev.5 || >=3.8.0-dev || >=3.9.0-dev || >=3.10.0-dev || >=3.11.0-dev"
   },
   "license": "MIT",
   "engines": {
