@@ -5,8 +5,10 @@ var tsProject = ts.createProject("tsconfig.json");
 
 gulp.task("default", function() {
     var tsResult = tsProject.src()
-        .pipe(tslint())
-        .pipe(tslint.report("prose", {
+        .pipe(tslint({
+            formatter: "prose"
+        }))
+        .pipe(tslint.report({
             emitError: false
         }))
         .pipe(ts(tsProject));

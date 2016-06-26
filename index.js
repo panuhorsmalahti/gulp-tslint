@@ -52,13 +52,16 @@ function log(message, level) {
 }
 /*
  * Convert a failure to the prose error format.
- * @param {Failure} failure
+ * @param {Lint.RuleFailure} failure
  * @returns {string} The failure in the prose error formar.
  */
 var proseErrorFormat = function (failure) {
-    // line + 1 because TSLint's first line and character is 0
-    return failure.name + "[" + (failure.startPosition.line + 1) + ", " +
-        (failure.startPosition.character + 1) + "]: " + failure.failure;
+    var fileName = failure.getFileName();
+    var failureString = failure.getFailure();
+    var lineAndCharacter = failure.getStartPosition().getLineAndCharacter();
+    var line = lineAndCharacter.line + 1;
+    var character = lineAndCharacter.character + 1;
+    return fileName + " [" + line + ", " + character + "]: " + failureString;
 };
 /**
  * Main plugin function
@@ -85,15 +88,14 @@ var tslintPlugin = function (pluginOptions) {
         // TSLint default options
         var options = {
             configuration: pluginOptions.configuration,
-            formatter: "json",
-            // not used, use reporters instead
-            formattersDirectory: null,
+            formatter: pluginOptions.formatter || "prose",
+            formattersDirectory: pluginOptions.formattersDirectory || null,
             rulesDirectory: pluginOptions.rulesDirectory || null
         };
         var linter = getTslint(pluginOptions);
         if (pluginOptions.configuration === null ||
-            pluginOptions.configuration === undefined
-            || isString(pluginOptions.configuration)) {
+            pluginOptions.configuration === undefined ||
+            isString(pluginOptions.configuration)) {
             // configuration can be a file path or null, if it's unknown
             options.configuration = linter.findConfiguration(pluginOptions.configuration || null, file.path);
         }
@@ -103,78 +105,7 @@ var tslintPlugin = function (pluginOptions) {
         cb(null, file);
     });
 };
-/**
- * Define default reporters
- */
-/**
- * JSON error reporter.
- * @param {Array<Failure>} failures
- */
-var jsonReporter = function (failures) {
-    log(JSON.stringify(failures), "error");
-};
-/**
- * Prose error reporter.
- * @param {Array<Failure>} failures
- */
-var proseReporter = function (failures) {
-    failures.forEach(function (failure) {
-        log(proseErrorFormat(failure), "error");
-    });
-};
-/**
- * Verbose error reporter.
- * @param {Array<Failure>} failures
- */
-var verboseReporter = function (failures) {
-    failures.forEach(function (failure) {
-        // line + 1 because TSLint's first line and character is 0
-        log("(" + failure.ruleName + ") " + failure.name +
-            "[" + (failure.startPosition.line + 1) + ", " +
-            (failure.startPosition.character + 1) + "]: " +
-            failure.failure, "error");
-    });
-};
-/**
- * Full error reporter. Like verbose, but prints full path.
- * @param {Array<Failure>} failures
- * @param {TslintFile} file
- */
-var fullReporter = function (failures, file) {
-    failures.forEach(function (failure) {
-        // line + 1 because TSLint's first line and character is 0
-        log("(" + failure.ruleName + ") " + file.path +
-            "[" + (failure.startPosition.line + 1) + ", " +
-            (failure.startPosition.character + 1) + "]: " +
-            failure.failure, "error");
-    });
-};
-/**
- * MsBuild Format error reporter.
- * @param {Array<Failure>} failures
- * @param {TslintFile} file
- */
-var msbuildReporter = function (failures, file) {
-    failures.forEach(function (failure) {
-        var positionTuple = "(" + (failure.startPosition.line + 1) + "," +
-            (failure.startPosition.character + 1) + ")";
-        console.log(file.path + positionTuple + ": warning " +
-            failure.ruleName + ": " + failure.failure);
-    });
-};
-// Export proseErrorFormat function
-tslintPlugin.proseErrorFormat = proseErrorFormat;
-/* Output is in the following form:
- * [{
- *   "name": "invalid.ts",
- *   "failure": "missing whitespace",
- *   // Lines and characters start from 0
- *   "startPosition": {"position": 8, "line": 0, "character": 8},
- *   "endPosition": {"position": 9, "line": 0, "character": 9},
- *   "ruleName": "one-line"
- * }]
- */
-tslintPlugin.report = function (reporter, options) {
+tslintPlugin.report = function (options) {
     // Default options
     if (!options) {
         options = {};
@@ -195,32 +126,15 @@ tslintPlugin.report = function (reporter, options) {
     var allFailures = [];
     // Track how many errors have been reported
     var totalReported = 0;
-    // Run the reporter for each file individually
+    // Log formatted output for each file individually
     var reportFailures = function (file) {
-        var failures = JSON.parse(file.tslint.output);
-        if (failures.length > 0) {
+        var failureCount = file.tslint.failureCount;
+        if (failureCount > 0) {
             errorFiles.push(file);
-            Array.prototype.push.apply(allFailures, failures);
+            Array.prototype.push.apply(allFailures, file.tslint.failures);
             if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
-                totalReported += failures.length;
-                if (reporter === "json") {
-                    jsonReporter(failures);
-                }
-                else if (reporter === "prose") {
-                    proseReporter(failures);
-                }
-                else if (reporter === "verbose") {
-                    verboseReporter(failures);
-                }
-                else if (reporter === "full") {
-                    fullReporter(failures, file);
-                }
-                else if (reporter === "msbuild") {
-                    msbuildReporter(failures, file);
-                }
-                else if (isFunction(reporter)) {
-                    reporter(failures, file, options);
-                }
+                console.log(file.tslint.output);
+                totalReported += failureCount;
                 if (options.reportLimit > 0 &&
                     options.reportLimit <= totalReported) {
                     log("More than " + options.reportLimit
