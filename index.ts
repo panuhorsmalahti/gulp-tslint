@@ -4,6 +4,7 @@
 
 // Requires
 import * as TSLint from "tslint";
+import * as Lint from "tslint/lib/lint";
 // import * as vinyl from "vinyl";
 import * as through from "through";
 const gutil = require("gulp-util");
@@ -12,6 +13,8 @@ const map = require("map-stream");
 
 export interface PluginOptions {
     configuration?: any;
+    formatter?: string;
+    formattersDirectory?: string;
     rulesDirectory?: string;
     tslint?: any;
 }
@@ -34,29 +37,9 @@ export interface TslintFile /* extends vinyl.File */ {
     isNull(): boolean;
 }
 
-export interface Position {
-    // Lines and characters start from 0
-    position: number;
-    line: number;
-    character: number;
-}
-
-export interface Failure {
-    name: string;
-    failure: string;
-    startPosition: Position;
-    endPosition: Position;
-    ruleName: string;
-}
-
-export interface Reporter {
-    (failures: Failure[], file?: TslintFile, options?: ReportOptions): void;
-}
-
 export interface TslintPlugin {
     (pluginOptions?: PluginOptions): any;
-    proseErrorFormat: (failure: Failure) => string;
-    report: (reporter: string | Reporter, options?: ReportOptions) => any;
+    report: (options?: ReportOptions) => any;
 }
 
 /**
@@ -108,13 +91,17 @@ function log(message: string, level?: string) {
 
 /*
  * Convert a failure to the prose error format.
- * @param {Failure} failure
+ * @param {Lint.RuleFailure} failure
  * @returns {string} The failure in the prose error formar.
  */
-const proseErrorFormat = function(failure: Failure) {
-    // line + 1 because TSLint's first line and character is 0
-    return failure.name + "[" + (failure.startPosition.line + 1) + ", " +
-        (failure.startPosition.character + 1) + "]: " + failure.failure;
+const proseErrorFormat = function(failure: Lint.RuleFailure) {
+    const fileName = failure.getFileName();
+    const failureString = failure.getFailure();
+    const lineAndCharacter = failure.getStartPosition().getLineAndCharacter();
+    const line = lineAndCharacter.line + 1;
+    const character = lineAndCharacter.character + 1;
+
+    return `${fileName} [${line}, ${character}]: ${failureString}`;
 };
 
 /**
@@ -148,16 +135,15 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
         // TSLint default options
         const options = {
             configuration: pluginOptions.configuration,
-            formatter: "json",
-            // not used, use reporters instead
-            formattersDirectory: <string> null,
+            formatter: pluginOptions.formatter || "prose",
+            formattersDirectory: pluginOptions.formattersDirectory || null,
             rulesDirectory: pluginOptions.rulesDirectory || null
         };
 
         const linter = getTslint(pluginOptions);
         if (pluginOptions.configuration === null ||
-                pluginOptions.configuration === undefined
-                || isString(pluginOptions.configuration)) {
+            pluginOptions.configuration === undefined ||
+            isString(pluginOptions.configuration)) {
 
             // configuration can be a file path or null, if it's unknown
             options.configuration = linter.findConfiguration(
@@ -174,86 +160,7 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
     });
 };
 
-/**
- * Define default reporters
- */
-
- /**
-  * JSON error reporter.
-  * @param {Array<Failure>} failures
-  */
-const jsonReporter = function(failures: Failure[]) {
-    log(JSON.stringify(failures), "error");
-};
-
- /**
-  * Prose error reporter.
-  * @param {Array<Failure>} failures
-  */
-const proseReporter = function(failures: Failure[]) {
-    failures.forEach(function(failure) {
-        log(proseErrorFormat(failure), "error");
-    });
-};
-
- /**
-  * Verbose error reporter.
-  * @param {Array<Failure>} failures
-  */
-const verboseReporter = function(failures: Failure[]) {
-    failures.forEach(function(failure) {
-        // line + 1 because TSLint's first line and character is 0
-        log("(" + failure.ruleName + ") " + failure.name +
-            "[" + (failure.startPosition.line + 1) + ", " +
-            (failure.startPosition.character + 1) + "]: " +
-            failure.failure, "error");
-    });
-};
-
- /**
-  * Full error reporter. Like verbose, but prints full path.
-  * @param {Array<Failure>} failures
-  * @param {TslintFile} file
-  */
-const fullReporter = function(failures: Failure[], file: TslintFile) {
-    failures.forEach(function(failure) {
-        // line + 1 because TSLint's first line and character is 0
-        log("(" + failure.ruleName + ") " + file.path +
-            "[" + (failure.startPosition.line + 1) + ", " +
-            (failure.startPosition.character + 1) + "]: " +
-            failure.failure, "error");
-    });
-};
-
- /**
-  * MsBuild Format error reporter.
-  * @param {Array<Failure>} failures
-  * @param {TslintFile} file
-  */
-const msbuildReporter = function(failures: Failure[], file: TslintFile) {
-    failures.forEach(function(failure) {
-        const positionTuple = "(" + (failure.startPosition.line + 1) + "," +
-            (failure.startPosition.character + 1) + ")";
-        console.log(file.path + positionTuple + ": warning " +
-            failure.ruleName + ": " + failure.failure);
-    });
-};
-
-// Export proseErrorFormat function
-tslintPlugin.proseErrorFormat = proseErrorFormat;
-
-/* Output is in the following form:
- * [{
- *   "name": "invalid.ts",
- *   "failure": "missing whitespace",
- *   // Lines and characters start from 0
- *   "startPosition": {"position": 8, "line": 0, "character": 8},
- *   "endPosition": {"position": 9, "line": 0, "character": 9},
- *   "ruleName": "one-line"
- * }]
- */
-tslintPlugin.report = function(reporter: string | Reporter,
-        options?: ReportOptions) {
+tslintPlugin.report = function(options?: ReportOptions) {
 
     // Default options
     if (!options) {
@@ -274,37 +181,25 @@ tslintPlugin.report = function(reporter: string | Reporter,
     const errorFiles: TslintFile[] = [];
 
     // Collect all failures
-    const allFailures: Failure[] = [];
+    const allFailures: Lint.RuleFailure[] = [];
 
     // Track how many errors have been reported
     let totalReported = 0;
 
-    // Run the reporter for each file individually
+    // Log formatted output for each file individually
     const reportFailures = function(file: TslintFile) {
-        const failures = JSON.parse(file.tslint.output);
-        if (failures.length > 0) {
+        const failureCount = file.tslint.failureCount;
+
+        if (failureCount > 0) {
             errorFiles.push(file);
-            Array.prototype.push.apply(allFailures, failures);
+            Array.prototype.push.apply(allFailures, file.tslint.failures);
 
             if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
-                totalReported += failures.length;
-                if (reporter === "json") {
-                    jsonReporter(failures);
-                } else if (reporter === "prose") {
-                    proseReporter(failures);
-                } else if (reporter === "verbose") {
-                    verboseReporter(failures);
-                } else if (reporter === "full") {
-                    fullReporter(failures, file);
-                } else if (reporter === "msbuild") {
-                    msbuildReporter(failures, file);
-                } else if (isFunction(reporter)) {
-                    (<Reporter> reporter)(failures, file, options);
-                }
+                console.log(file.tslint.output);
+                totalReported += failureCount;
 
                 if (options.reportLimit > 0 &&
-                        options.reportLimit <= totalReported) {
-
+                    options.reportLimit <= totalReported) {
                     log("More than " + options.reportLimit
                         + " failures reported. Turning off reporter.");
                 }

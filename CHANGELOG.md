@@ -1,3 +1,10 @@
+<a name="6.0.0"></a>
+# 6.0.0 (2016-06-28)
+
+## Changes
+
+- **breaking change**: Add support for custom TSLint formatters, gulp-tslint reporters have been removed.
+
 <a name="5.0.0"></a>
 # 5.0.0 (2016-04-24)
 
