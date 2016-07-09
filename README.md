@@ -47,7 +47,6 @@ The available formatters include:
 * "json" prints stringified JSON to console.log.
 * "prose" prints short human-readable failures to console.log.
 * "verbose" prints longer human-readable failures to console.log.
-* "full" is like verbose, but displays full path to the file
 * "msbuild" for Visual Studio
 * "vso" outputs failures in a format that can be integrated with Visual Studio Online.
 * "checkstyle" for the Checkstyle development tool
