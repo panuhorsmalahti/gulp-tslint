@@ -1,5 +1,7 @@
 export interface PluginOptions {
     configuration?: any;
+    formatter?: string;
+    formattersDirectory?: string;
     rulesDirectory?: string;
     tslint?: any;
 }
@@ -16,25 +18,15 @@ export interface TslintFile {
     isStream(): boolean;
     isNull(): boolean;
 }
-export interface Position {
-    position: number;
-    line: number;
-    character: number;
-}
-export interface Failure {
-    name: string;
-    failure: string;
-    startPosition: Position;
-    endPosition: Position;
-    ruleName: string;
-}
-export interface Reporter {
-    (failures: Failure[], file?: TslintFile, options?: ReportOptions): void;
-}
 export interface TslintPlugin {
     (pluginOptions?: PluginOptions): any;
-    proseErrorFormat: (failure: Failure) => string;
-    report: (reporter: string | Reporter, options?: ReportOptions) => any;
+    report: (options?: ReportOptions) => any;
 }
+/**
+ * Main plugin function
+ * @param {PluginOptions} [pluginOptions] contains the options for gulp-tslint.
+ * Optional.
+ * @returns {any}
+ */
 declare const tslintPlugin: TslintPlugin;
 export default tslintPlugin;

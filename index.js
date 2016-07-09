@@ -106,6 +106,11 @@ var tslintPlugin = function (pluginOptions) {
     });
 };
 tslintPlugin.report = function (options) {
+    // Notify the user that the old interface is used, this can be removed at some point
+    if (isString(options)) {
+        throw new Error("Deprecated interface used! See 6.0.0 changelog " +
+            "https://github.com/panuhorsmalahti/gulp-tslint/blob/master/CHANGELOG.md");
+    }
     // Default options
     if (!options) {
         options = {};

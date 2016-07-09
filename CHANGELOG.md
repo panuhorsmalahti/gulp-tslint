@@ -1,9 +1,37 @@
 <a name="6.0.0"></a>
-# 6.0.0 (2016-06-28)
+# 6.0.0 (2016-07-09)
 
 ## Changes
 
 - **breaking change**: Add support for custom TSLint formatters, gulp-tslint reporters have been removed.
+- **breaking change**: The signature for `tslintPlugin.report` has changed to `tslintPlugin.report(options?: ReportOptions)`.
+  This requires e.g. the following to be changed from
+  ```javascript
+  .pipe(tslint())
+  .pipe(tslint.report("verbose"))
+  ```
+  to
+  ```javascript
+  .pipe(tslint({
+      formatter: "verbose"
+  }))
+  .pipe(tslint.report())
+  ```
+- Custom gulp-tslint reporters will no longer work; instead users will have to make use of the TSLint equivalents.
+  For more information see [pull #66](https://github.com/panuhorsmalahti/gulp-tslint/pull/66).
+- **breaking change**: `tslintPlugin.ProseErrorFormat` is no longer exported.
+- **breaking change**: The options passed to tslintPlugin have changed. The PluginOptions interface is now:
+  ```
+  export interface PluginOptions {
+      configuration?: any;
+      formatter?: string;
+      formattersDirectory?: string;
+      rulesDirectory?: string;
+      tslint?: any;
+  }
+```
+- **breaking change**: "full" formatter was removed
+- Added "vso", "pmd" and "checkstyle" formatters
 
 <a name="5.0.0"></a>
 # 5.0.0 (2016-04-24)

@@ -52,6 +52,62 @@ gulp.task("invalid-emit", function() {
         }));
 });
 
+// Should throw an error about using a deprecated interface
+gulp.task("invalid-emit-deprecated", function() {
+    return gulp.src(["invalid.ts", "invalid2.ts"])
+    .pipe(tslint())
+    .pipe(tslint.report("verbose"));
+});
+
+// Should emit the error using the prose formatter
+gulp.task("invalid-emit-default-formatter", function() {
+    return gulp.src(["invalid.ts", "invalid2.ts"])
+        .pipe(tslint())
+        .pipe(tslint.report({
+            emitError: true
+        }));
+});
+
+gulp.task("invalid-emit-checkstyle-formatter", function() {
+    return gulp.src(["invalid.ts", "invalid2.ts"])
+        .pipe(tslint({
+            formatter: "checkstyle"
+        }))
+        .pipe(tslint.report({
+            emitError: true
+        }));
+});
+
+gulp.task("invalid-emit-vso-formatter", function() {
+    return gulp.src(["invalid.ts", "invalid2.ts"])
+        .pipe(tslint({
+            formatter: "vso"
+        }))
+        .pipe(tslint.report({
+            emitError: true
+        }));
+});
+
+gulp.task("invalid-emit-pmd-formatter", function() {
+    return gulp.src(["invalid.ts", "invalid2.ts"])
+        .pipe(tslint({
+            formatter: "pmd"
+        }))
+        .pipe(tslint.report({
+            emitError: true
+        }));
+});
+
+gulp.task("invalid-emit-checkstyle-formatter", function() {
+    return gulp.src(["invalid.ts", "invalid2.ts"])
+        .pipe(tslint({
+            formatter: "checkstyle"
+        }))
+        .pipe(tslint.report({
+            emitError: true
+        }));
+});
+
 gulp.task("invalid-relative", function() {
     return gulp.src(["relative/invalid.ts"], {
         base: __dirname

@@ -35,7 +35,7 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
-    "gulp-typescript": "^2.13.0",
+    "gulp-typescript": "^2.13.6",
     "tslint": "^3",
     "typescript": "latest"
   },
