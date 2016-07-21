@@ -1,6 +1,6 @@
 export interface PluginOptions {
     configuration?: any;
-    formatter?: string;
+    formatter?: string | any;
     formattersDirectory?: string;
     rulesDirectory?: string;
     tslint?: any;
