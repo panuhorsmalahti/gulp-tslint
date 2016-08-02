@@ -152,6 +152,20 @@ npm install tslint@next
 }));
 ```
 
+Type checked rules
+------------------
+
+Type checked rules require a TypeScript program object to be provided to the linter in the options. For more information see tslint documentation.
+
+```javascript
+var gulpTslint = require("gulp-tslint");
+var tslint = require("tslint");
+var program = tslint.createProgram("./tsconfig.json");
+
+// ...
+.pipe(gulpTslint({ program }))
+```
+
 All default tslint options
 --------------------------
 
@@ -161,7 +175,8 @@ const tslintOptions = {
     formatter: "prose",
     formattersDirectory: null,
     rulesDirectory: null,
-    tslint: null
+    tslint: null,
+    program: null
 };
 ```
 

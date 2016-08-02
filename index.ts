@@ -17,6 +17,9 @@ export interface PluginOptions {
     formattersDirectory?: string;
     rulesDirectory?: string;
     tslint?: any;
+
+    // ts.program, used for type checked rules
+    program?: any;
 }
 
 export interface ReportOptions {
@@ -137,6 +140,7 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
             configuration: pluginOptions.configuration,
             formatter: pluginOptions.formatter || "prose",
             formattersDirectory: pluginOptions.formattersDirectory || null,
+            program: pluginOptions.program || null,
             rulesDirectory: pluginOptions.rulesDirectory || null
         };
 
@@ -152,7 +156,7 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
             );
         }
 
-        tslint = new linter(file.relative, file.contents.toString("utf8"), options);
+        tslint = new linter(file.relative, file.contents.toString("utf8"), options, options.program);
         file.tslint = tslint.lint();
 
         // Pass file

@@ -90,6 +90,7 @@ var tslintPlugin = function (pluginOptions) {
             configuration: pluginOptions.configuration,
             formatter: pluginOptions.formatter || "prose",
             formattersDirectory: pluginOptions.formattersDirectory || null,
+            program: pluginOptions.program || null,
             rulesDirectory: pluginOptions.rulesDirectory || null
         };
         var linter = getTslint(pluginOptions);
@@ -99,7 +100,7 @@ var tslintPlugin = function (pluginOptions) {
             // configuration can be a file path or null, if it's unknown
             options.configuration = linter.findConfiguration(pluginOptions.configuration || null, file.path);
         }
-        tslint = new linter(file.relative, file.contents.toString("utf8"), options);
+        tslint = new linter(file.relative, file.contents.toString("utf8"), options, options.program);
         file.tslint = tslint.lint();
         // Pass file
         cb(null, file);

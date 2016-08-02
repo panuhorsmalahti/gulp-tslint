@@ -1,7 +1,7 @@
 {
   "name": "gulp-tslint",
   "preferGlobal": false,
-  "version": "6.0.3",
+  "version": "6.1.0",
   "author": "Panu Horsmalahti <panu.horsmalahti@iki.fi>",
   "description": "TypeScript linter Gulp plugin",
   "contributors": [

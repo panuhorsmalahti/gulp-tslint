@@ -1,9 +1,10 @@
 export interface PluginOptions {
     configuration?: any;
-    formatter?: string | Function;
+    formatter?: string;
     formattersDirectory?: string;
     rulesDirectory?: string;
     tslint?: any;
+    program?: any;
 }
 export interface ReportOptions {
     emitError?: boolean;
