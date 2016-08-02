@@ -13,34 +13,6 @@ declare module "vinyl" {
      * A virtual file format.
      */
     class File {
-        constructor(options?: {
-            /**
-            * Default: process.cwd()
-            */
-            cwd?: string;
-            /**
-             * Used for relative pathing. Typically where a glob starts.
-             */
-            base?: string;
-            /**
-             * Full path to the file.
-             */
-            path?: string;
-            /**
-             * Path history. Has no effect if options.path is passed.
-             */
-            history?: string[];
-            /**
-             * The result of an fs.stat call. See fs.Stats for more information.
-             */
-            stat?: fs.Stats;
-            /**
-             * File contents.
-             * Type: Buffer, Stream, or null
-             */
-            contents?: Buffer | NodeJS.ReadWriteStream;
-        });
-
         /**
          * Default: process.cwd()
          */
@@ -69,6 +41,34 @@ declare module "vinyl" {
          *  console.log(file.relative); // file.js
          */
         public relative: string;
+
+        constructor(options?: {
+            /**
+            * Default: process.cwd()
+            */
+            cwd?: string;
+            /**
+             * Used for relative pathing. Typically where a glob starts.
+             */
+            base?: string;
+            /**
+             * Full path to the file.
+             */
+            path?: string;
+            /**
+             * Path history. Has no effect if options.path is passed.
+             */
+            history?: string[];
+            /**
+             * The result of an fs.stat call. See fs.Stats for more information.
+             */
+            stat?: fs.Stats;
+            /**
+             * File contents.
+             * Type: Buffer, Stream, or null
+             */
+            contents?: Buffer | NodeJS.ReadWriteStream;
+        });
 
         public isBuffer(): boolean;
 
