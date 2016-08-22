@@ -1,5 +1,5 @@
 <a name="6.1.0"></a>
-# 6.0.3 (2016-07-29)
+# 6.1.0 (2016-07-29)
 
 - Allow custom formatter as a function [pull #68](https://github.com/panuhorsmalahti/gulp-tslint/pull/68).
 - Allow type checked rules
