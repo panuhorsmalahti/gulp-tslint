@@ -139,7 +139,9 @@ tslintPlugin.report = function (options) {
             errorFiles.push(file);
             Array.prototype.push.apply(allFailures, file.tslint.failures);
             if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
-                console.log(file.tslint.output);
+                if (file.tslint.output !== undefined) {
+                    console.log(file.tslint.output);
+                }
                 totalReported += failureCount;
                 if (options.reportLimit > 0 &&
                     options.reportLimit <= totalReported) {
