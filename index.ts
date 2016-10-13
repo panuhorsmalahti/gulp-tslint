@@ -26,6 +26,8 @@ export interface ReportOptions {
     emitError?: boolean;
     reportLimit?: number;
     summarizeFailureOutput?: boolean;
+    // callback for Gulp to let it know that gulp-tslint found an error
+    onReportCallback?: (info: {failureCount: number, output: string, path: string, totalReported: number}) => void;
 }
 
 export interface TslintFile /* extends vinyl.File */ {
@@ -208,6 +210,15 @@ tslintPlugin.report = function(options?: ReportOptions) {
                     console.log(file.tslint.output);
                 }
                 totalReported += failureCount;
+
+                if (options.onReportCallback) {
+                    options.onReportCallback({
+                        failureCount: failureCount,
+                        output: file.tslint.output,
+                        path: file.path,
+                        totalReported: totalReported
+                    });
+                }
 
                 if (options.reportLimit > 0 &&
                     options.reportLimit <= totalReported) {
