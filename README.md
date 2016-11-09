@@ -17,14 +17,19 @@ npm install --save-dev gulp-tslint
 The `tslint` module is a peer dependency of `gulp-tslint`, which allows you to update tslint independently from gulp-tslint.
 
 Usage:
+
 ```typescript
-// Importing in ES6
-import tslint from "gulp-tslint";
-
-// or requiring in ES5
-var tslint = require("gulp-tslint");
-
 gulp.task("tslint", () =>
+    // Note: Requiring/Importing gulp-tslint from within the gulp task ensures that that files are re-read
+    // so that is this is used in a 'watch' task the files do not appear to be cached. If this isn't the use-case
+    // the Require/Import statements below can be moved outside the gulp task.
+
+    // Importing in ES6
+    import tslint from "gulp-tslint";
+
+    // or requiring in ES5
+    var tslint = require("gulp-tslint");
+
     gulp.src("source.ts")
         .pipe(tslint({
             formatter: "verbose"
