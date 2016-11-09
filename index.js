@@ -2,6 +2,8 @@
 /*jshint nomen: true */
 "use strict";
 // Requires
+var fs = require("fs");
+var path = require("path");
 var TSLint = require("tslint");
 // import * as vinyl from "vinyl";
 var through = require("through");
@@ -126,6 +128,21 @@ tslintPlugin.report = function (options) {
     if (options.summarizeFailureOutput === undefined) {
         options.summarizeFailureOutput = false;
     }
+    // write report into file of out option is present
+    if (options.out !== undefined && isString(options.out)) {
+        if (fs.existsSync(options.out)) {
+            fs.unlinkSync(options.out);
+        }
+        else {
+            var dir = path.parse(options.out).dir;
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir);
+            }
+        }
+    }
+    else {
+        options.out = undefined;
+    }
     // Collect all files with errors
     var errorFiles = [];
     // Collect all failures
@@ -139,8 +156,13 @@ tslintPlugin.report = function (options) {
             errorFiles.push(file);
             Array.prototype.push.apply(allFailures, file.tslint.failures);
             if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
-                if (file.tslint.output !== undefined) {
-                    console.log(file.tslint.output);
+                if (file.tslint.output !== undefined && file.tslint.output.length > 0) {
+                    if (options.out) {
+                        fs.appendFileSync(options.out, file.tslint.output, "utf8");
+                    }
+                    else {
+                        console.log(file.tslint.output);
+                    }
                 }
                 totalReported += failureCount;
                 if (options.reportLimit > 0 &&

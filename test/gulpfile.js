@@ -149,8 +149,16 @@ gulp.task("invalid-noemit", function() {
         }));
 });
 
-// Example on output to file
 gulp.task("output-to-file", function() {
+    return gulp.src(["invalid.ts", "invalid2.ts"])
+        .pipe(tslint({
+            formatter: "checkstyle"
+        }))
+        .pipe(tslint.report({'emitError': false, 'out' : "target/checkstyle-report.xml"}));
+});
+
+// Example on output to file
+gulp.task("output-to-file-example", function() {
     return gulp.src(["invalid.ts", "invalid2.ts"])
         .pipe(tslint({
             formatter: "prose"

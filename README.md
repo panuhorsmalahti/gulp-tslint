@@ -137,6 +137,22 @@ gulp.task("tslint", () =>
 );
 ```
 
+Report output into a file
+--------------------------
+
+You can optionally specify a filename to redirect stdout into that file. If `options.out` is undefined or not of type string it is ignored and you get the output on stdout. 
+
+```javascript
+gulp.task("tslint", () =>
+    gulp.src(["input.ts",])
+        .pipe(tslint({
+            formatter: "checkstyle"
+        }))
+        .pipe(tslint.report({
+            out: "target/checkstyle-result.xml"
+        }))
+);
+```
 Specifying the tslint module
 ----------------------------
 
