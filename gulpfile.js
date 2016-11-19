@@ -5,7 +5,7 @@ var ts = require("gulp-typescript");
 var tsProject = ts.createProject("tsconfig.json");
 
 // To enable rules that work with the type checker
-var program = tslint.createProgram("./tsconfig.json");
+var program = tslint.Linter.createProgram("./tsconfig.json", ".");
 
 gulp.task("default", function() {
     var tsResult = tsProject.src()
@@ -16,7 +16,7 @@ gulp.task("default", function() {
         .pipe(gulpTslint.report({
             emitError: false
         }))
-        .pipe(ts(tsProject));
+        .pipe(tsProject());
 
     return tsResult.js.pipe(gulp.dest(__dirname));
 });

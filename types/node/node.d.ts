@@ -27,11 +27,11 @@ interface WeakSetConstructor {}
 *                   GLOBAL                      *
 *                                               *
 ************************************************/
-declare var process: NodeJS.Process;
-declare var global: NodeJS.Global;
+declare let process: NodeJS.Process;
+declare let global: NodeJS.Global;
 
-declare var __filename: string;
-declare var __dirname: string;
+declare let __filename: string;
+declare let __dirname: string;
 
 declare function setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): NodeJS.Timer;
 declare function clearTimeout(timeoutId: NodeJS.Timer): void;
@@ -51,7 +51,7 @@ interface NodeRequire extends NodeRequireFunction {
     resolve(id: string): string;
 }
 
-declare var require: NodeRequire;
+declare let require: NodeRequire;
 
 interface NodeModule {
     exports: any;
@@ -63,11 +63,11 @@ interface NodeModule {
     children: any[];
 }
 
-declare var module: NodeModule;
+declare let module: NodeModule;
 
 // Same as module.exports
-declare var exports: any;
-declare var SlowBuffer: {
+declare let exports: any;
+declare let SlowBuffer: {
     new (str: string, encoding?: string): Buffer;
     new (size: number): Buffer;
     new (size: Uint8Array): Buffer;
@@ -87,7 +87,7 @@ interface Buffer extends NodeBuffer {}
  * A Buffer is similar to an array of integers but corresponds to a raw memory allocation outside the V8 heap.  A Buffer cannot be resized.
  * Valid string encodings: 'ascii'|'utf8'|'utf16le'|'ucs2'(alias of 'utf16le')|'base64'|'binary'(deprecated)|'hex'
  */
-declare var Buffer: {
+declare let Buffer: {
     /**
      * Allocates a new buffer containing the given {str}.
      *
@@ -402,7 +402,7 @@ interface NodeBuffer {
 *                                               *
 ************************************************/
 declare module "buffer" {
-    export var INSPECT_MAX_BYTES: number;
+    export let INSPECT_MAX_BYTES: number;
 }
 
 declare module "querystring" {
@@ -585,9 +585,9 @@ declare module "http" {
         public destroy(): void;
     }
 
-    export var METHODS: string[];
+    export let METHODS: string[];
 
-    export var STATUS_CODES: {
+    export let STATUS_CODES: {
         [errorCode: number]: string;
         [errorCode: string]: string;
     };
@@ -595,7 +595,7 @@ declare module "http" {
     export function createClient(port?: number, host?: string): any;
     export function request(options: RequestOptions, callback?: (res: IncomingMessage) => void): ClientRequest;
     export function get(options: any, callback?: (res: IncomingMessage) => void): ClientRequest;
-    export var globalAgent: Agent;
+    export let globalAgent: Agent;
 }
 
 declare module "cluster" {
@@ -618,14 +618,14 @@ declare module "cluster" {
         public disconnect(): void;
     }
 
-    export var settings: ClusterSettings;
-    export var isMaster: boolean;
-    export var isWorker: boolean;
+    export let settings: ClusterSettings;
+    export let isMaster: boolean;
+    export let isWorker: boolean;
     export function setupMaster(settings?: ClusterSettings): void;
     export function fork(env?: any): Worker;
     export function disconnect(callback?: Function): void;
-    export var worker: Worker;
-    export var workers: Worker[];
+    export let worker: Worker;
+    export let workers: Worker[];
 
     // Event emitter
     export function addListener(event: string, listener: Function): void;
@@ -681,37 +681,37 @@ declare module "zlib" {
     export function unzipSync(buf: Buffer, options?: ZlibOptions): any;
 
     // Constants
-    export var Z_NO_FLUSH: number;
-    export var Z_PARTIAL_FLUSH: number;
-    export var Z_SYNC_FLUSH: number;
-    export var Z_FULL_FLUSH: number;
-    export var Z_FINISH: number;
-    export var Z_BLOCK: number;
-    export var Z_TREES: number;
-    export var Z_OK: number;
-    export var Z_STREAM_END: number;
-    export var Z_NEED_DICT: number;
-    export var Z_ERRNO: number;
-    export var Z_STREAM_ERROR: number;
-    export var Z_DATA_ERROR: number;
-    export var Z_MEM_ERROR: number;
-    export var Z_BUF_ERROR: number;
-    export var Z_VERSION_ERROR: number;
-    export var Z_NO_COMPRESSION: number;
-    export var Z_BEST_SPEED: number;
-    export var Z_BEST_COMPRESSION: number;
-    export var Z_DEFAULT_COMPRESSION: number;
-    export var Z_FILTERED: number;
-    export var Z_HUFFMAN_ONLY: number;
-    export var Z_RLE: number;
-    export var Z_FIXED: number;
-    export var Z_DEFAULT_STRATEGY: number;
-    export var Z_BINARY: number;
-    export var Z_TEXT: number;
-    export var Z_ASCII: number;
-    export var Z_UNKNOWN: number;
-    export var Z_DEFLATED: number;
-    export var Z_NULL: number;
+    export let Z_NO_FLUSH: number;
+    export let Z_PARTIAL_FLUSH: number;
+    export let Z_SYNC_FLUSH: number;
+    export let Z_FULL_FLUSH: number;
+    export let Z_FINISH: number;
+    export let Z_BLOCK: number;
+    export let Z_TREES: number;
+    export let Z_OK: number;
+    export let Z_STREAM_END: number;
+    export let Z_NEED_DICT: number;
+    export let Z_ERRNO: number;
+    export let Z_STREAM_ERROR: number;
+    export let Z_DATA_ERROR: number;
+    export let Z_MEM_ERROR: number;
+    export let Z_BUF_ERROR: number;
+    export let Z_VERSION_ERROR: number;
+    export let Z_NO_COMPRESSION: number;
+    export let Z_BEST_SPEED: number;
+    export let Z_BEST_COMPRESSION: number;
+    export let Z_DEFAULT_COMPRESSION: number;
+    export let Z_FILTERED: number;
+    export let Z_HUFFMAN_ONLY: number;
+    export let Z_RLE: number;
+    export let Z_FIXED: number;
+    export let Z_DEFAULT_STRATEGY: number;
+    export let Z_BINARY: number;
+    export let Z_TEXT: number;
+    export let Z_ASCII: number;
+    export let Z_UNKNOWN: number;
+    export let Z_DEFLATED: number;
+    export let Z_NULL: number;
 }
 
 declare module "os" {
@@ -749,7 +749,7 @@ declare module "os" {
     export function freemem(): number;
     export function cpus(): CpuInfo[];
     export function networkInterfaces(): {[index: string]: NetworkInterfaceInfo[]};
-    export var EOL: string;
+    export let EOL: string;
 }
 
 declare module "https" {
@@ -788,14 +788,14 @@ declare module "https" {
         sockets: any;
         requests: any;
     }
-    export var Agent: {
+    export let Agent: {
         new (options?: RequestOptions): Agent;
     };
     export interface Server extends tls.Server { }
     export function createServer(options: ServerOptions, requestListener?: Function): Server;
     export function request(options: RequestOptions, callback?: (res: http.IncomingMessage) => void ): http.ClientRequest;
     export function get(options: RequestOptions, callback?: (res: http.IncomingMessage) => void ): http.ClientRequest;
-    export var globalAgent: Agent;
+    export let globalAgent: Agent;
 }
 
 declare module "punycode" {
@@ -803,12 +803,12 @@ declare module "punycode" {
     export function encode(string: string): string;
     export function toUnicode(domain: string): string;
     export function toASCII(domain: string): string;
-    export var ucs2: Ucs2;
+    export let ucs2: Ucs2;
     interface Ucs2 {
         decode(string: string): number[];
         encode(codePoints: number[]): string;
     }
-    export var version: any;
+    export let version: any;
 }
 
 declare module "repl" {
@@ -1039,7 +1039,7 @@ declare module "net" {
         end(data?: any, encoding?: string): void;
     }
 
-    export var Socket: {
+    export let Socket: {
         new (options?: { fd?: string; type?: string; allowHalfOpen?: boolean; }): Socket;
     };
 
@@ -1393,13 +1393,13 @@ declare module "fs" {
     export function exists(path: string, callback?: (exists: boolean) => void): void;
     export function existsSync(path: string): boolean;
     /** Constant for fs.access(). File is visible to the calling process. */
-    export var F_OK: number;
+    export let F_OK: number;
     /** Constant for fs.access(). File can be read by the calling process. */
-    export var R_OK: number;
+    export let R_OK: number;
     /** Constant for fs.access(). File can be written by the calling process. */
-    export var W_OK: number;
+    export let W_OK: number;
     /** Constant for fs.access(). File can be executed by the calling process. */
-    export var X_OK: number;
+    export let X_OK: number;
     /** Tests a user's permissions for the file specified by path. */
     export function access(path: string, callback: (err: NodeJS.ErrnoException) => void): void;
     export function access(path: string, mode: number, callback: (err: NodeJS.ErrnoException) => void): void;
@@ -1525,11 +1525,11 @@ declare module "path" {
     /**
      * The platform-specific file separator. '\\' or '/'.
      */
-    export var sep: string;
+    export let sep: string;
     /**
      * The platform-specific file delimiter. ';' or ':'.
      */
-    export var delimiter: string;
+    export let delimiter: string;
     /**
      * Returns an object from a path string - the opposite of format().
      *
@@ -1552,8 +1552,8 @@ declare module "path" {
       export function dirname(p: string): string;
       export function basename(p: string, ext?: string): string;
       export function extname(p: string): string;
-      export var sep: string;
-      export var delimiter: string;
+      export let sep: string;
+      export let delimiter: string;
       export function parse(p: string): ParsedPath;
       export function format(pP: ParsedPath): string;
     }
@@ -1567,8 +1567,8 @@ declare module "path" {
       export function dirname(p: string): string;
       export function basename(p: string, ext?: string): string;
       export function extname(p: string): string;
-      export var sep: string;
-      export var delimiter: string;
+      export let sep: string;
+      export let delimiter: string;
       export function parse(p: string): ParsedPath;
       export function format(pP: ParsedPath): string;
     }
@@ -1579,7 +1579,7 @@ declare module "string_decoder" {
         write(buffer: Buffer): string;
         detectIncompleteChar(buffer: Buffer): number;
     }
-    export var StringDecoder: {
+    export let StringDecoder: {
         new (encoding: string): NodeStringDecoder;
     };
 }
@@ -1905,14 +1905,14 @@ declare module "assert" {
         export function notStrictEqual(actual: any, expected: any, message?: string): void;
         export function deepStrictEqual(actual: any, expected: any, message?: string): void;
         export function notDeepStrictEqual(actual: any, expected: any, message?: string): void;
-        export var throws: {
+        export let throws: {
             (block: Function, message?: string): void;
             (block: Function, error: Function, message?: string): void;
             (block: Function, error: RegExp, message?: string): void;
             (block: Function, error: (err: any) => boolean, message?: string): void;
         };
 
-        export var doesNotThrow: {
+        export let doesNotThrow: {
             (block: Function, message?: string): void;
             (block: Function, error: Function, message?: string): void;
             (block: Function, error: RegExp, message?: string): void;
@@ -1961,225 +1961,225 @@ declare module "domain" {
 }
 
 declare module "constants" {
-    export var E2BIG: number;
-    export var EACCES: number;
-    export var EADDRINUSE: number;
-    export var EADDRNOTAVAIL: number;
-    export var EAFNOSUPPORT: number;
-    export var EAGAIN: number;
-    export var EALREADY: number;
-    export var EBADF: number;
-    export var EBADMSG: number;
-    export var EBUSY: number;
-    export var ECANCELED: number;
-    export var ECHILD: number;
-    export var ECONNABORTED: number;
-    export var ECONNREFUSED: number;
-    export var ECONNRESET: number;
-    export var EDEADLK: number;
-    export var EDESTADDRREQ: number;
-    export var EDOM: number;
-    export var EEXIST: number;
-    export var EFAULT: number;
-    export var EFBIG: number;
-    export var EHOSTUNREACH: number;
-    export var EIDRM: number;
-    export var EILSEQ: number;
-    export var EINPROGRESS: number;
-    export var EINTR: number;
-    export var EINVAL: number;
-    export var EIO: number;
-    export var EISCONN: number;
-    export var EISDIR: number;
-    export var ELOOP: number;
-    export var EMFILE: number;
-    export var EMLINK: number;
-    export var EMSGSIZE: number;
-    export var ENAMETOOLONG: number;
-    export var ENETDOWN: number;
-    export var ENETRESET: number;
-    export var ENETUNREACH: number;
-    export var ENFILE: number;
-    export var ENOBUFS: number;
-    export var ENODATA: number;
-    export var ENODEV: number;
-    export var ENOENT: number;
-    export var ENOEXEC: number;
-    export var ENOLCK: number;
-    export var ENOLINK: number;
-    export var ENOMEM: number;
-    export var ENOMSG: number;
-    export var ENOPROTOOPT: number;
-    export var ENOSPC: number;
-    export var ENOSR: number;
-    export var ENOSTR: number;
-    export var ENOSYS: number;
-    export var ENOTCONN: number;
-    export var ENOTDIR: number;
-    export var ENOTEMPTY: number;
-    export var ENOTSOCK: number;
-    export var ENOTSUP: number;
-    export var ENOTTY: number;
-    export var ENXIO: number;
-    export var EOPNOTSUPP: number;
-    export var EOVERFLOW: number;
-    export var EPERM: number;
-    export var EPIPE: number;
-    export var EPROTO: number;
-    export var EPROTONOSUPPORT: number;
-    export var EPROTOTYPE: number;
-    export var ERANGE: number;
-    export var EROFS: number;
-    export var ESPIPE: number;
-    export var ESRCH: number;
-    export var ETIME: number;
-    export var ETIMEDOUT: number;
-    export var ETXTBSY: number;
-    export var EWOULDBLOCK: number;
-    export var EXDEV: number;
-    export var WSAEINTR: number;
-    export var WSAEBADF: number;
-    export var WSAEACCES: number;
-    export var WSAEFAULT: number;
-    export var WSAEINVAL: number;
-    export var WSAEMFILE: number;
-    export var WSAEWOULDBLOCK: number;
-    export var WSAEINPROGRESS: number;
-    export var WSAEALREADY: number;
-    export var WSAENOTSOCK: number;
-    export var WSAEDESTADDRREQ: number;
-    export var WSAEMSGSIZE: number;
-    export var WSAEPROTOTYPE: number;
-    export var WSAENOPROTOOPT: number;
-    export var WSAEPROTONOSUPPORT: number;
-    export var WSAESOCKTNOSUPPORT: number;
-    export var WSAEOPNOTSUPP: number;
-    export var WSAEPFNOSUPPORT: number;
-    export var WSAEAFNOSUPPORT: number;
-    export var WSAEADDRINUSE: number;
-    export var WSAEADDRNOTAVAIL: number;
-    export var WSAENETDOWN: number;
-    export var WSAENETUNREACH: number;
-    export var WSAENETRESET: number;
-    export var WSAECONNABORTED: number;
-    export var WSAECONNRESET: number;
-    export var WSAENOBUFS: number;
-    export var WSAEISCONN: number;
-    export var WSAENOTCONN: number;
-    export var WSAESHUTDOWN: number;
-    export var WSAETOOMANYREFS: number;
-    export var WSAETIMEDOUT: number;
-    export var WSAECONNREFUSED: number;
-    export var WSAELOOP: number;
-    export var WSAENAMETOOLONG: number;
-    export var WSAEHOSTDOWN: number;
-    export var WSAEHOSTUNREACH: number;
-    export var WSAENOTEMPTY: number;
-    export var WSAEPROCLIM: number;
-    export var WSAEUSERS: number;
-    export var WSAEDQUOT: number;
-    export var WSAESTALE: number;
-    export var WSAEREMOTE: number;
-    export var WSASYSNOTREADY: number;
-    export var WSAVERNOTSUPPORTED: number;
-    export var WSANOTINITIALISED: number;
-    export var WSAEDISCON: number;
-    export var WSAENOMORE: number;
-    export var WSAECANCELLED: number;
-    export var WSAEINVALIDPROCTABLE: number;
-    export var WSAEINVALIDPROVIDER: number;
-    export var WSAEPROVIDERFAILEDINIT: number;
-    export var WSASYSCALLFAILURE: number;
-    export var WSASERVICE_NOT_FOUND: number;
-    export var WSATYPE_NOT_FOUND: number;
-    export var WSA_E_NO_MORE: number;
-    export var WSA_E_CANCELLED: number;
-    export var WSAEREFUSED: number;
-    export var SIGHUP: number;
-    export var SIGINT: number;
-    export var SIGILL: number;
-    export var SIGABRT: number;
-    export var SIGFPE: number;
-    export var SIGKILL: number;
-    export var SIGSEGV: number;
-    export var SIGTERM: number;
-    export var SIGBREAK: number;
-    export var SIGWINCH: number;
-    export var SSL_OP_ALL: number;
-    export var SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION: number;
-    export var SSL_OP_CIPHER_SERVER_PREFERENCE: number;
-    export var SSL_OP_CISCO_ANYCONNECT: number;
-    export var SSL_OP_COOKIE_EXCHANGE: number;
-    export var SSL_OP_CRYPTOPRO_TLSEXT_BUG: number;
-    export var SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS: number;
-    export var SSL_OP_EPHEMERAL_RSA: number;
-    export var SSL_OP_LEGACY_SERVER_CONNECT: number;
-    export var SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER: number;
-    export var SSL_OP_MICROSOFT_SESS_ID_BUG: number;
-    export var SSL_OP_MSIE_SSLV2_RSA_PADDING: number;
-    export var SSL_OP_NETSCAPE_CA_DN_BUG: number;
-    export var SSL_OP_NETSCAPE_CHALLENGE_BUG: number;
-    export var SSL_OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG: number;
-    export var SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG: number;
-    export var SSL_OP_NO_COMPRESSION: number;
-    export var SSL_OP_NO_QUERY_MTU: number;
-    export var SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION: number;
-    export var SSL_OP_NO_SSLv2: number;
-    export var SSL_OP_NO_SSLv3: number;
-    export var SSL_OP_NO_TICKET: number;
-    export var SSL_OP_NO_TLSv1: number;
-    export var SSL_OP_NO_TLSv1_1: number;
-    export var SSL_OP_NO_TLSv1_2: number;
-    export var SSL_OP_PKCS1_CHECK_1: number;
-    export var SSL_OP_PKCS1_CHECK_2: number;
-    export var SSL_OP_SINGLE_DH_USE: number;
-    export var SSL_OP_SINGLE_ECDH_USE: number;
-    export var SSL_OP_SSLEAY_080_CLIENT_DH_BUG: number;
-    export var SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG: number;
-    export var SSL_OP_TLS_BLOCK_PADDING_BUG: number;
-    export var SSL_OP_TLS_D5_BUG: number;
-    export var SSL_OP_TLS_ROLLBACK_BUG: number;
-    export var ENGINE_METHOD_DSA: number;
-    export var ENGINE_METHOD_DH: number;
-    export var ENGINE_METHOD_RAND: number;
-    export var ENGINE_METHOD_ECDH: number;
-    export var ENGINE_METHOD_ECDSA: number;
-    export var ENGINE_METHOD_CIPHERS: number;
-    export var ENGINE_METHOD_DIGESTS: number;
-    export var ENGINE_METHOD_STORE: number;
-    export var ENGINE_METHOD_PKEY_METHS: number;
-    export var ENGINE_METHOD_PKEY_ASN1_METHS: number;
-    export var ENGINE_METHOD_ALL: number;
-    export var ENGINE_METHOD_NONE: number;
-    export var DH_CHECK_P_NOT_SAFE_PRIME: number;
-    export var DH_CHECK_P_NOT_PRIME: number;
-    export var DH_UNABLE_TO_CHECK_GENERATOR: number;
-    export var DH_NOT_SUITABLE_GENERATOR: number;
-    export var NPN_ENABLED: number;
-    export var RSA_PKCS1_PADDING: number;
-    export var RSA_SSLV23_PADDING: number;
-    export var RSA_NO_PADDING: number;
-    export var RSA_PKCS1_OAEP_PADDING: number;
-    export var RSA_X931_PADDING: number;
-    export var RSA_PKCS1_PSS_PADDING: number;
-    export var POINT_CONVERSION_COMPRESSED: number;
-    export var POINT_CONVERSION_UNCOMPRESSED: number;
-    export var POINT_CONVERSION_HYBRID: number;
-    export var O_RDONLY: number;
-    export var O_WRONLY: number;
-    export var O_RDWR: number;
-    export var S_IFMT: number;
-    export var S_IFREG: number;
-    export var S_IFDIR: number;
-    export var S_IFCHR: number;
-    export var S_IFLNK: number;
-    export var O_CREAT: number;
-    export var O_EXCL: number;
-    export var O_TRUNC: number;
-    export var O_APPEND: number;
-    export var F_OK: number;
-    export var R_OK: number;
-    export var W_OK: number;
-    export var X_OK: number;
-    export var UV_UDP_REUSEADDR: number;
+    export let E2BIG: number;
+    export let EACCES: number;
+    export let EADDRINUSE: number;
+    export let EADDRNOTAVAIL: number;
+    export let EAFNOSUPPORT: number;
+    export let EAGAIN: number;
+    export let EALREADY: number;
+    export let EBADF: number;
+    export let EBADMSG: number;
+    export let EBUSY: number;
+    export let ECANCELED: number;
+    export let ECHILD: number;
+    export let ECONNABORTED: number;
+    export let ECONNREFUSED: number;
+    export let ECONNRESET: number;
+    export let EDEADLK: number;
+    export let EDESTADDRREQ: number;
+    export let EDOM: number;
+    export let EEXIST: number;
+    export let EFAULT: number;
+    export let EFBIG: number;
+    export let EHOSTUNREACH: number;
+    export let EIDRM: number;
+    export let EILSEQ: number;
+    export let EINPROGRESS: number;
+    export let EINTR: number;
+    export let EINVAL: number;
+    export let EIO: number;
+    export let EISCONN: number;
+    export let EISDIR: number;
+    export let ELOOP: number;
+    export let EMFILE: number;
+    export let EMLINK: number;
+    export let EMSGSIZE: number;
+    export let ENAMETOOLONG: number;
+    export let ENETDOWN: number;
+    export let ENETRESET: number;
+    export let ENETUNREACH: number;
+    export let ENFILE: number;
+    export let ENOBUFS: number;
+    export let ENODATA: number;
+    export let ENODEV: number;
+    export let ENOENT: number;
+    export let ENOEXEC: number;
+    export let ENOLCK: number;
+    export let ENOLINK: number;
+    export let ENOMEM: number;
+    export let ENOMSG: number;
+    export let ENOPROTOOPT: number;
+    export let ENOSPC: number;
+    export let ENOSR: number;
+    export let ENOSTR: number;
+    export let ENOSYS: number;
+    export let ENOTCONN: number;
+    export let ENOTDIR: number;
+    export let ENOTEMPTY: number;
+    export let ENOTSOCK: number;
+    export let ENOTSUP: number;
+    export let ENOTTY: number;
+    export let ENXIO: number;
+    export let EOPNOTSUPP: number;
+    export let EOVERFLOW: number;
+    export let EPERM: number;
+    export let EPIPE: number;
+    export let EPROTO: number;
+    export let EPROTONOSUPPORT: number;
+    export let EPROTOTYPE: number;
+    export let ERANGE: number;
+    export let EROFS: number;
+    export let ESPIPE: number;
+    export let ESRCH: number;
+    export let ETIME: number;
+    export let ETIMEDOUT: number;
+    export let ETXTBSY: number;
+    export let EWOULDBLOCK: number;
+    export let EXDEV: number;
+    export let WSAEINTR: number;
+    export let WSAEBADF: number;
+    export let WSAEACCES: number;
+    export let WSAEFAULT: number;
+    export let WSAEINVAL: number;
+    export let WSAEMFILE: number;
+    export let WSAEWOULDBLOCK: number;
+    export let WSAEINPROGRESS: number;
+    export let WSAEALREADY: number;
+    export let WSAENOTSOCK: number;
+    export let WSAEDESTADDRREQ: number;
+    export let WSAEMSGSIZE: number;
+    export let WSAEPROTOTYPE: number;
+    export let WSAENOPROTOOPT: number;
+    export let WSAEPROTONOSUPPORT: number;
+    export let WSAESOCKTNOSUPPORT: number;
+    export let WSAEOPNOTSUPP: number;
+    export let WSAEPFNOSUPPORT: number;
+    export let WSAEAFNOSUPPORT: number;
+    export let WSAEADDRINUSE: number;
+    export let WSAEADDRNOTAVAIL: number;
+    export let WSAENETDOWN: number;
+    export let WSAENETUNREACH: number;
+    export let WSAENETRESET: number;
+    export let WSAECONNABORTED: number;
+    export let WSAECONNRESET: number;
+    export let WSAENOBUFS: number;
+    export let WSAEISCONN: number;
+    export let WSAENOTCONN: number;
+    export let WSAESHUTDOWN: number;
+    export let WSAETOOMANYREFS: number;
+    export let WSAETIMEDOUT: number;
+    export let WSAECONNREFUSED: number;
+    export let WSAELOOP: number;
+    export let WSAENAMETOOLONG: number;
+    export let WSAEHOSTDOWN: number;
+    export let WSAEHOSTUNREACH: number;
+    export let WSAENOTEMPTY: number;
+    export let WSAEPROCLIM: number;
+    export let WSAEUSERS: number;
+    export let WSAEDQUOT: number;
+    export let WSAESTALE: number;
+    export let WSAEREMOTE: number;
+    export let WSASYSNOTREADY: number;
+    export let WSAVERNOTSUPPORTED: number;
+    export let WSANOTINITIALISED: number;
+    export let WSAEDISCON: number;
+    export let WSAENOMORE: number;
+    export let WSAECANCELLED: number;
+    export let WSAEINVALIDPROCTABLE: number;
+    export let WSAEINVALIDPROVIDER: number;
+    export let WSAEPROVIDERFAILEDINIT: number;
+    export let WSASYSCALLFAILURE: number;
+    export let WSASERVICE_NOT_FOUND: number;
+    export let WSATYPE_NOT_FOUND: number;
+    export let WSA_E_NO_MORE: number;
+    export let WSA_E_CANCELLED: number;
+    export let WSAEREFUSED: number;
+    export let SIGHUP: number;
+    export let SIGINT: number;
+    export let SIGILL: number;
+    export let SIGABRT: number;
+    export let SIGFPE: number;
+    export let SIGKILL: number;
+    export let SIGSEGV: number;
+    export let SIGTERM: number;
+    export let SIGBREAK: number;
+    export let SIGWINCH: number;
+    export let SSL_OP_ALL: number;
+    export let SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION: number;
+    export let SSL_OP_CIPHER_SERVER_PREFERENCE: number;
+    export let SSL_OP_CISCO_ANYCONNECT: number;
+    export let SSL_OP_COOKIE_EXCHANGE: number;
+    export let SSL_OP_CRYPTOPRO_TLSEXT_BUG: number;
+    export let SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS: number;
+    export let SSL_OP_EPHEMERAL_RSA: number;
+    export let SSL_OP_LEGACY_SERVER_CONNECT: number;
+    export let SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER: number;
+    export let SSL_OP_MICROSOFT_SESS_ID_BUG: number;
+    export let SSL_OP_MSIE_SSLV2_RSA_PADDING: number;
+    export let SSL_OP_NETSCAPE_CA_DN_BUG: number;
+    export let SSL_OP_NETSCAPE_CHALLENGE_BUG: number;
+    export let SSL_OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG: number;
+    export let SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG: number;
+    export let SSL_OP_NO_COMPRESSION: number;
+    export let SSL_OP_NO_QUERY_MTU: number;
+    export let SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION: number;
+    export let SSL_OP_NO_SSLv2: number;
+    export let SSL_OP_NO_SSLv3: number;
+    export let SSL_OP_NO_TICKET: number;
+    export let SSL_OP_NO_TLSv1: number;
+    export let SSL_OP_NO_TLSv1_1: number;
+    export let SSL_OP_NO_TLSv1_2: number;
+    export let SSL_OP_PKCS1_CHECK_1: number;
+    export let SSL_OP_PKCS1_CHECK_2: number;
+    export let SSL_OP_SINGLE_DH_USE: number;
+    export let SSL_OP_SINGLE_ECDH_USE: number;
+    export let SSL_OP_SSLEAY_080_CLIENT_DH_BUG: number;
+    export let SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG: number;
+    export let SSL_OP_TLS_BLOCK_PADDING_BUG: number;
+    export let SSL_OP_TLS_D5_BUG: number;
+    export let SSL_OP_TLS_ROLLBACK_BUG: number;
+    export let ENGINE_METHOD_DSA: number;
+    export let ENGINE_METHOD_DH: number;
+    export let ENGINE_METHOD_RAND: number;
+    export let ENGINE_METHOD_ECDH: number;
+    export let ENGINE_METHOD_ECDSA: number;
+    export let ENGINE_METHOD_CIPHERS: number;
+    export let ENGINE_METHOD_DIGESTS: number;
+    export let ENGINE_METHOD_STORE: number;
+    export let ENGINE_METHOD_PKEY_METHS: number;
+    export let ENGINE_METHOD_PKEY_ASN1_METHS: number;
+    export let ENGINE_METHOD_ALL: number;
+    export let ENGINE_METHOD_NONE: number;
+    export let DH_CHECK_P_NOT_SAFE_PRIME: number;
+    export let DH_CHECK_P_NOT_PRIME: number;
+    export let DH_UNABLE_TO_CHECK_GENERATOR: number;
+    export let DH_NOT_SUITABLE_GENERATOR: number;
+    export let NPN_ENABLED: number;
+    export let RSA_PKCS1_PADDING: number;
+    export let RSA_SSLV23_PADDING: number;
+    export let RSA_NO_PADDING: number;
+    export let RSA_PKCS1_OAEP_PADDING: number;
+    export let RSA_X931_PADDING: number;
+    export let RSA_PKCS1_PSS_PADDING: number;
+    export let POINT_CONVERSION_COMPRESSED: number;
+    export let POINT_CONVERSION_UNCOMPRESSED: number;
+    export let POINT_CONVERSION_HYBRID: number;
+    export let O_RDONLY: number;
+    export let O_WRONLY: number;
+    export let O_RDWR: number;
+    export let S_IFMT: number;
+    export let S_IFREG: number;
+    export let S_IFDIR: number;
+    export let S_IFCHR: number;
+    export let S_IFLNK: number;
+    export let O_CREAT: number;
+    export let O_EXCL: number;
+    export let O_TRUNC: number;
+    export let O_APPEND: number;
+    export let F_OK: number;
+    export let R_OK: number;
+    export let W_OK: number;
+    export let X_OK: number;
+    export let UV_UDP_REUSEADDR: number;
 }

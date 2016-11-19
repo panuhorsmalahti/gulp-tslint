@@ -1,3 +1,8 @@
+<a name="7.0.0"></a>
+# 7.0.0 (2016-11-19)
+
+- Update tslint to 4.0.0. See tslint changelog for a list of breaking changes.
+
 <a name="6.1.3"></a>
 # 6.1.3 (2016-11-01)
 

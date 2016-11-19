@@ -219,7 +219,8 @@ gulp.task("custom-tslint-no-errors", function() {
 // Should emit errors
 gulp.task("custom-tslint-errors", function() {
     // A mocked tslint module
-    var mocked = function() {
+    var mocked = {};
+    mocked.Linter = function() {
         this.lint = function() {
             return {
                 output: JSON.stringify([{
@@ -232,9 +233,10 @@ gulp.task("custom-tslint-errors", function() {
                     failure: "failure"
                 }])
             }
-        }
+        };
     };
-    mocked.findConfiguration = function() { return {}; };
+    mocked.Configuration = {};
+    mocked.Configuration.findConfiguration = function() { return {}; };
 
     return gulp.src("invalid.ts")
         .pipe(tslint({

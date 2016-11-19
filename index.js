@@ -52,7 +52,7 @@ function log(message, level) {
 }
 /*
  * Convert a failure to the prose error format.
- * @param {Lint.RuleFailure} failure
+ * @param {RuleFailure} failure
  * @returns {string} The failure in the prose error formar.
  */
 var proseErrorFormat = function (failure) {
@@ -87,10 +87,8 @@ var tslintPlugin = function (pluginOptions) {
         }
         // TSLint default options
         var options = {
-            configuration: pluginOptions.configuration,
             formatter: pluginOptions.formatter || "prose",
             formattersDirectory: pluginOptions.formattersDirectory || null,
-            program: pluginOptions.program || null,
             rulesDirectory: pluginOptions.rulesDirectory || null
         };
         var linter = getTslint(pluginOptions);
@@ -98,10 +96,11 @@ var tslintPlugin = function (pluginOptions) {
             pluginOptions.configuration === undefined ||
             isString(pluginOptions.configuration)) {
             // configuration can be a file path or null, if it's unknown
-            options.configuration = linter.findConfiguration(pluginOptions.configuration || null, file.path);
+            pluginOptions.configuration = linter.Configuration.findConfiguration(pluginOptions.configuration || null, file.path).results;
         }
-        tslint = new linter(file.relative, file.contents.toString("utf8"), options, options.program);
-        file.tslint = tslint.lint();
+        tslint = new linter.Linter(options, pluginOptions.program);
+        tslint.lint(file.relative, file.contents.toString("utf8"), pluginOptions.configuration);
+        file.tslint = tslint.getResult();
         // Pass file
         cb(null, file);
     });

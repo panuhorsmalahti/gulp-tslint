@@ -4,7 +4,7 @@
 
 // Requires
 import * as TSLint from "tslint";
-import * as Lint from "tslint/lib/lint";
+import { RuleFailure } from "tslint/lib/language/rule/rule";
 // import * as vinyl from "vinyl";
 import * as through from "through";
 const gutil = require("gulp-util");
@@ -94,10 +94,10 @@ function log(message: string, level?: string) {
 
 /*
  * Convert a failure to the prose error format.
- * @param {Lint.RuleFailure} failure
+ * @param {RuleFailure} failure
  * @returns {string} The failure in the prose error formar.
  */
-const proseErrorFormat = function(failure: Lint.RuleFailure) {
+const proseErrorFormat = function(failure: RuleFailure) {
     const fileName = failure.getFileName();
     const failureString = failure.getFailure();
     const lineAndCharacter = failure.getStartPosition().getLineAndCharacter();
@@ -137,10 +137,8 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
 
         // TSLint default options
         const options = {
-            configuration: pluginOptions.configuration,
             formatter: pluginOptions.formatter || "prose",
             formattersDirectory: pluginOptions.formattersDirectory || null,
-            program: pluginOptions.program || null,
             rulesDirectory: pluginOptions.rulesDirectory || null
         };
 
@@ -150,14 +148,15 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
             isString(pluginOptions.configuration)) {
 
             // configuration can be a file path or null, if it's unknown
-            options.configuration = linter.findConfiguration(
+            pluginOptions.configuration = linter.Configuration.findConfiguration(
                 pluginOptions.configuration || null,
                 file.path
-            );
+            ).results;
         }
 
-        tslint = new linter(file.relative, file.contents.toString("utf8"), options, options.program);
-        file.tslint = tslint.lint();
+        tslint = new linter.Linter(options, pluginOptions.program);
+        tslint.lint(file.relative, file.contents.toString("utf8"), pluginOptions.configuration);
+        file.tslint = tslint.getResult();
 
         // Pass file
         cb(null, file);
@@ -190,7 +189,7 @@ tslintPlugin.report = function(options?: ReportOptions) {
     const errorFiles: TslintFile[] = [];
 
     // Collect all failures
-    const allFailures: Lint.RuleFailure[] = [];
+    const allFailures: RuleFailure[] = [];
 
     // Track how many errors have been reported
     let totalReported = 0;
