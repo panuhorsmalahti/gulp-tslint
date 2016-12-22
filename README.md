@@ -166,8 +166,8 @@ var tslint = require("tslint");
 gulp.task('lint', function() {
 var program = tslint.Linter.createProgram("./tsconfig.json");
 
-// ...
-.pipe(gulpTslint({ program }))
+gulp.src('src/**/*.ts', { base: '.' })
+  .pipe(gulpTslint({ program }))
 ```
 
 All default tslint options
