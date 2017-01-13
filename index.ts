@@ -13,6 +13,7 @@ const map = require("map-stream");
 
 export interface PluginOptions {
     configuration?: any;
+    fix?: boolean;
     formatter?: string | Function;
     formattersDirectory?: string;
     rulesDirectory?: string;
@@ -137,6 +138,7 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
 
         // TSLint default options
         const options = {
+            fix: pluginOptions.fix || false,
             formatter: pluginOptions.formatter || "prose",
             formattersDirectory: pluginOptions.formattersDirectory || null,
             rulesDirectory: pluginOptions.rulesDirectory || null
@@ -155,7 +157,7 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
         }
 
         tslint = new linter.Linter(options, pluginOptions.program);
-        tslint.lint(file.relative, file.contents.toString("utf8"), pluginOptions.configuration);
+        tslint.lint(file.path, file.contents.toString("utf8"), pluginOptions.configuration);
         file.tslint = tslint.getResult();
 
         // Pass file
