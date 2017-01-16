@@ -143,6 +143,14 @@ tslintPlugin.report = function (options) {
                     console.log(file.tslint.output);
                 }
                 totalReported += failureCount;
+                if (options.onReportCallback) {
+                    options.onReportCallback({
+                        failureCount: failureCount,
+                        output: file.tslint.output,
+                        path: file.path,
+                        totalReported: totalReported
+                    });
+                }
                 if (options.reportLimit > 0 &&
                     options.reportLimit <= totalReported) {
                     log("More than " + options.reportLimit
