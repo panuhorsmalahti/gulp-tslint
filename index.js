@@ -134,19 +134,21 @@ tslintPlugin.report = function (options) {
     var totalReported = 0;
     // Log formatted output for each file individually
     var reportFailures = function (file) {
-        var failureCount = file.tslint.failureCount;
-        if (failureCount > 0) {
-            errorFiles.push(file);
-            Array.prototype.push.apply(allFailures, file.tslint.failures);
-            if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
-                if (file.tslint.output !== undefined) {
-                    console.log(file.tslint.output);
-                }
-                totalReported += failureCount;
-                if (options.reportLimit > 0 &&
-                    options.reportLimit <= totalReported) {
-                    log("More than " + options.reportLimit
-                        + " failures reported. Turning off reporter.");
+        if (file.tslint) {
+            var failureCount = file.tslint.failureCount;
+            if (failureCount > 0) {
+                errorFiles.push(file);
+                Array.prototype.push.apply(allFailures, file.tslint.failures);
+                if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
+                    if (file.tslint.output !== undefined) {
+                        console.log(file.tslint.output);
+                    }
+                    totalReported += failureCount;
+                    if (options.reportLimit > 0 &&
+                        options.reportLimit <= totalReported) {
+                        log("More than " + options.reportLimit
+                            + " failures reported. Turning off reporter.");
+                    }
                 }
             }
         }
