@@ -1,3 +1,9 @@
+<a name="7.1.0"></a>
+# 7.1.0 (2017-2-3)
+
+- Add support for TSlint option 'fix' [pull #101](https://github.com/panuhorsmalahti/gulp-tslint/pull/101).
+- Skip directories while reporting errors [pull #107](https://github.com/panuhorsmalahti/gulp-tslint/pull/107).
+
 <a name="7.0.0"></a>
 # 7.0.0 (2016-11-19)
 
