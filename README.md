@@ -51,6 +51,7 @@ The available formatters include:
 * "vso" outputs failures in a format that can be integrated with Visual Studio Online.
 * "checkstyle" for the Checkstyle development tool
 * "pmd" for the PMD source code analyzer
+* "stylish" human-readable formatter which creates stylish messages.
 
 Custom [TSLint formatters](https://palantir.github.io/tslint/develop/custom-formatters/) may also be
 used by specifying the `formatter` and `formattersDirectory` properties on the options passed to
