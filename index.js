@@ -8,6 +8,7 @@ var through = require("through");
 var gutil = require("gulp-util");
 var PluginError = gutil.PluginError;
 var map = require("map-stream");
+var columnify = require("columnify");
 /**
  * Helper function to check if a value is a function
  * @param {any} value to check whether or not it is a function
@@ -126,6 +127,9 @@ tslintPlugin.report = function (options) {
     if (options.summarizeFailureOutput === undefined) {
         options.summarizeFailureOutput = false;
     }
+    if (options.useColors === undefined) {
+        options.useColors = false;
+    }
     // Collect all files with errors
     var errorFiles = [];
     // Collect all failures
@@ -140,15 +144,45 @@ tslintPlugin.report = function (options) {
                 errorFiles.push(file);
                 Array.prototype.push.apply(allFailures, file.tslint.failures);
                 if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
-                    if (file.tslint.output !== undefined) {
-                        console.log(file.tslint.output);
+                    var errors = options.useColors
+                        ? gutil.colors.red(file.tslint.failureCount) + " " + gutil.colors.red('errors')
+                        : file.tslint.failureCount + " errors";
+                    var fileName = options.useColors
+                        ? gutil.colors.cyan(file.history[0])
+                        : file.history[0];
+                    console.log("\n" + errors + " found in " + fileName);
+                    var columns = [];
+                    for (var _i = 0, _a = file.tslint.failures; _i < _a.length; _i++) {
+                        var failure = _a[_i];
+                        if (options.reportLimit > 0 &&
+                            options.reportLimit <= totalReported) {
+                            log("More than " + options.reportLimit + " failures reported. Turning off reporter.");
+                            break;
+                        }
+                        else {
+                            var lineAndCharacter = failure.getStartPosition().getLineAndCharacter();
+                            var line = lineAndCharacter.line + 1;
+                            var character = lineAndCharacter.character + 1;
+                            var description = failure.getFailure();
+                            var ruleName = failure.getRuleName();
+                            columns.push({
+                                line: options.useColors
+                                    ? gutil.colors.magenta(line)
+                                    : line,
+                                char: options.useColors
+                                    ? ":" + gutil.colors.magenta(character)
+                                    : character,
+                                description: "" + description,
+                                rule: options.useColors
+                                    ? gutil.colors.red(ruleName)
+                                    : ruleName
+                            });
+                            totalReported++;
+                        }
                     }
-                    totalReported += failureCount;
-                    if (options.reportLimit > 0 &&
-                        options.reportLimit <= totalReported) {
-                        log("More than " + options.reportLimit
-                            + " failures reported. Turning off reporter.");
-                    }
+                    console.log(columnify(columns, {
+                        showHeaders: false
+                    }));
                 }
             }
         }
@@ -196,8 +230,8 @@ tslintPlugin.report = function (options) {
     };
     return through(reportFailures, throwErrors);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = tslintPlugin;
+exports.__esModule = true;
+exports["default"] = tslintPlugin;
 // ES5/ES6 fallbacks
 module.exports = tslintPlugin;
-module.exports.default = tslintPlugin;
+module.exports["default"] = tslintPlugin;

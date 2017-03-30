@@ -10,6 +10,8 @@ import * as through from "through";
 const gutil = require("gulp-util");
 const PluginError = gutil.PluginError;
 const map = require("map-stream");
+import * as path from 'path';
+import * as columnify from 'columnify';
 
 export interface PluginOptions {
     configuration?: any;
@@ -27,6 +29,7 @@ export interface ReportOptions {
     emitError?: boolean;
     reportLimit?: number;
     summarizeFailureOutput?: boolean;
+    useColors?: boolean;
 }
 
 export interface TslintFile /* extends vinyl.File */ {
@@ -186,7 +189,9 @@ tslintPlugin.report = function(options?: ReportOptions) {
     if (options.summarizeFailureOutput === undefined) {
         options.summarizeFailureOutput = false;
     }
-
+    if (options.useColors === undefined) {
+        options.useColors = false;
+    }
     // Collect all files with errors
     const errorFiles: TslintFile[] = [];
 
@@ -205,18 +210,47 @@ tslintPlugin.report = function(options?: ReportOptions) {
             if (failureCount > 0) {
                 errorFiles.push(file);
                 Array.prototype.push.apply(allFailures, file.tslint.failures);
+                if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) { 
+                    const errors = options.useColors
+                        ? `${gutil.colors.red(file.tslint.failureCount)} ${gutil.colors.red('errors')}`
+                        : `${file.tslint.failureCount} errors`;
+                    const fileName = options.useColors
+                        ? gutil.colors.cyan(file.history[0])
+                        : file.history[0];
+                    console.log(`\n${errors} found in ${fileName}`);
 
-                if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
-                    if (file.tslint.output !== undefined) {
-                        console.log(file.tslint.output);
-                    }
-                    totalReported += failureCount;
+                    const columns = [];
 
-                    if (options.reportLimit > 0 &&
-                        options.reportLimit <= totalReported) {
-                        log("More than " + options.reportLimit
-                            + " failures reported. Turning off reporter.");
+                    for (let failure of file.tslint.failures) {
+                        if (options.reportLimit > 0 &&
+                            options.reportLimit <= totalReported) {
+                            log(`More than ${options.reportLimit} failures reported. Turning off reporter.`);
+                            break;
+                        } else {
+                            const lineAndCharacter = failure.getStartPosition().getLineAndCharacter();
+                            const line = lineAndCharacter.line + 1;
+                            const character = lineAndCharacter.character + 1;
+                            const description = failure.getFailure();
+                            const ruleName = failure.getRuleName();
+                            columns.push({
+                                line: options.useColors
+                                    ? gutil.colors.magenta(line)
+                                    : line,
+                                char: options.useColors
+                                    ? `:${gutil.colors.magenta(character)}`
+                                    : character,
+                                description: `${description}`,
+                                rule: options.useColors 
+                                    ? gutil.colors.red(ruleName) 
+                                    : ruleName,
+                            });
+                            totalReported++;
+                        }
                     }
+
+                    console.log(columnify(columns, {
+                        showHeaders: false,
+                    }));
                 }
             }
         }
