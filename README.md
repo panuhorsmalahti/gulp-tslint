@@ -17,7 +17,7 @@ npm install --save-dev gulp-tslint
 The `tslint` module is a peer dependency of `gulp-tslint`, which allows you to update tslint independently from gulp-tslint. gulp-tslint requires TypeScript version >=2 and tslint version >=4.
 
 Usage:
-```typescript
+```javascript
 // Importing in ES6
 import tslint from "gulp-tslint";
 
