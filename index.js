@@ -1,6 +1,7 @@
 /*jshint node:true */
 /*jshint nomen: true */
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // Requires
 var TSLint = require("tslint");
 // import * as vinyl from "vinyl";
@@ -198,7 +199,6 @@ tslintPlugin.report = function (options) {
     };
     return through(reportFailures, throwErrors);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = tslintPlugin;
 // ES5/ES6 fallbacks
 module.exports = tslintPlugin;
