@@ -202,7 +202,7 @@ tslintPlugin.report = function(options?: ReportOptions) {
         if (file.tslint) {
             // Version 5.0.0 of tslint no longer has a failureCount member
             // It was renamed to errorCount. See tslint issue #2439
-            const failureCount = file.tslint.failureCount || file.tslint.errorCount;
+            const failureCount = file.tslint.errorCount;
 
             if (failureCount > 0) {
                 errorFiles.push(file);
