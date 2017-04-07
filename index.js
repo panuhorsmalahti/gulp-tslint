@@ -1,6 +1,7 @@
 /*jshint node:true */
 /*jshint nomen: true */
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // Requires
 var TSLint = require("tslint");
 // import * as vinyl from "vinyl";
@@ -135,15 +136,17 @@ tslintPlugin.report = function (options) {
     // Log formatted output for each file individually
     var reportFailures = function (file) {
         if (file.tslint) {
-            var failureCount = file.tslint.failureCount;
-            if (failureCount > 0) {
+            // Version 5.0.0 of tslint no longer has a failureCount member
+            // It was renamed to errorCount. See tslint issue #2439
+            var errorCount = file.tslint.errorCount;
+            if (errorCount > 0) {
                 errorFiles.push(file);
                 Array.prototype.push.apply(allFailures, file.tslint.failures);
                 if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
                     if (file.tslint.output !== undefined) {
                         console.log(file.tslint.output);
                     }
-                    totalReported += failureCount;
+                    totalReported += errorCount;
                     if (options.reportLimit > 0 &&
                         options.reportLimit <= totalReported) {
                         log("More than " + options.reportLimit
@@ -196,7 +199,6 @@ tslintPlugin.report = function (options) {
     };
     return through(reportFailures, throwErrors);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = tslintPlugin;
 // ES5/ES6 fallbacks
 module.exports = tslintPlugin;

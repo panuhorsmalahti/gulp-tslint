@@ -11,7 +11,8 @@
         "outDir": ".",
         "rootDir": ".",
         "sourceMap": false,
-        "declaration": true
+        "declaration": true,
+        "lib" : ["es2015"]
     },
     "exclude": [
         "node_modules"

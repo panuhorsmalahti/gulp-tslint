@@ -1,5 +1,6 @@
 export interface PluginOptions {
     configuration?: any;
+    fix?: boolean;
     formatter?: string | Function;
     formattersDirectory?: string;
     rulesDirectory?: string;
