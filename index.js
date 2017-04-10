@@ -108,11 +108,6 @@ var tslintPlugin = function (pluginOptions) {
     });
 };
 tslintPlugin.report = function (options) {
-    // Notify the user that the old interface is used, this can be removed at some point
-    if (isString(options)) {
-        throw new Error("Deprecated interface used! See 6.0.0 changelog " +
-            "https://github.com/panuhorsmalahti/gulp-tslint/blob/master/CHANGELOG.md");
-    }
     // Default options
     if (!options) {
         options = {};
@@ -138,15 +133,15 @@ tslintPlugin.report = function (options) {
         if (file.tslint) {
             // Version 5.0.0 of tslint no longer has a failureCount member
             // It was renamed to errorCount. See tslint issue #2439
-            var errorCount = file.tslint.errorCount;
-            if (errorCount > 0) {
+            var failureCount = file.tslint.errorCount + file.tslint.warningCount;
+            if (failureCount > 0) {
                 errorFiles.push(file);
                 Array.prototype.push.apply(allFailures, file.tslint.failures);
                 if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
                     if (file.tslint.output !== undefined) {
                         console.log(file.tslint.output);
                     }
-                    totalReported += errorCount;
+                    totalReported += failureCount;
                     if (options.reportLimit > 0 &&
                         options.reportLimit <= totalReported) {
                         log("More than " + options.reportLimit

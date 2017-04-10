@@ -166,12 +166,6 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
 };
 
 tslintPlugin.report = function(options?: ReportOptions) {
-    // Notify the user that the old interface is used, this can be removed at some point
-    if (isString(options)) {
-        throw new Error("Deprecated interface used! See 6.0.0 changelog " +
-            "https://github.com/panuhorsmalahti/gulp-tslint/blob/master/CHANGELOG.md");
-    }
-
     // Default options
     if (!options) {
         options = {};
@@ -202,9 +196,9 @@ tslintPlugin.report = function(options?: ReportOptions) {
         if (file.tslint) {
             // Version 5.0.0 of tslint no longer has a failureCount member
             // It was renamed to errorCount. See tslint issue #2439
-            const errorCount = file.tslint.errorCount;
+            const failureCount = file.tslint.errorCount + file.tslint.warningCount;
 
-            if (errorCount > 0) {
+            if (failureCount > 0) {
                 errorFiles.push(file);
                 Array.prototype.push.apply(allFailures, file.tslint.failures);
 
@@ -212,7 +206,7 @@ tslintPlugin.report = function(options?: ReportOptions) {
                     if (file.tslint.output !== undefined) {
                         console.log(file.tslint.output);
                     }
-                    totalReported += errorCount;
+                    totalReported += failureCount;
 
                     if (options.reportLimit > 0 &&
                         options.reportLimit <= totalReported) {

@@ -1,7 +1,7 @@
 {
   "name": "gulp-tslint",
   "preferGlobal": false,
-  "version": "7.1.0",
+  "version": "8.0.0",
   "author": "Panu Horsmalahti <panu.horsmalahti@iki.fi>",
   "description": "TypeScript linter Gulp plugin",
   "contributors": [
@@ -35,7 +35,7 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
-    "gulp-typescript": "^3.1.4",
+    "gulp-typescript": "^3.1.6",
     "tslint": "^5",
     "typescript": "^2"
   },

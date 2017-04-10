@@ -1,3 +1,8 @@
+<a name="8.0.0"></a>
+# 8.0.0 (2017-4-10)
+
+- **breaking change**: Require tslint 5.x [pull #113](https://github.com/panuhorsmalahti/gulp-tslint/pull/113).
+
 <a name="7.1.0"></a>
 # 7.1.0 (2017-2-3)
 

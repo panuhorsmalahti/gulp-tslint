@@ -52,13 +52,6 @@ gulp.task("invalid-emit", function() {
         }));
 });
 
-// Should throw an error about using a deprecated interface
-gulp.task("invalid-emit-deprecated", function() {
-    return gulp.src(["invalid.ts", "invalid2.ts"])
-    .pipe(tslint())
-    .pipe(tslint.report("verbose"));
-});
-
 // Should emit the error using the prose formatter
 gulp.task("invalid-emit-default-formatter", function() {
     return gulp.src(["invalid.ts", "invalid2.ts"])

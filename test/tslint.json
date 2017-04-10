@@ -6,7 +6,10 @@
     "forin": true,
     "indent": [true, 4],
     "label-position": true,
-    "max-line-length": [true, 140],
+    "max-line-length":  {
+        "options": 140,
+        "severity": "warning"
+    },
     "no-arg": true,
     "no-bitwise": true,
     "no-console": [true,
