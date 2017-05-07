@@ -5,9 +5,8 @@
 // Requires
 import * as TSLint from "tslint";
 import { RuleFailure } from "tslint/lib/language/rule/rule";
-// import * as vinyl from "vinyl";
 import * as through from "through";
-const gutil = require("gulp-util");
+import * as gutil from "gulp-util";
 const PluginError = gutil.PluginError;
 const map = require("map-stream");
 

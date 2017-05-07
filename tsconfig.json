@@ -1,6 +1,5 @@
 {
     "filesGlob": [
-        "./types/**/*.d.ts",
         "./index.ts"
     ],
     "compilerOptions": {
@@ -18,10 +17,6 @@
         "node_modules"
     ],
     "files": [
-        "./types/node/node.d.ts",
-        "./types/rcloader/rcloader.d.ts",
-        "./types/through/through.d.ts",
-        "./types/vinyl/vinyl.d.ts",
         "./index.ts"
     ],
     "atom": {
