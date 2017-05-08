@@ -177,6 +177,7 @@ All default tslint options
 ```javascript
 const tslintOptions = {
     configuration: {},
+    fix: false,
     formatter: "prose",
     formattersDirectory: null,
     rulesDirectory: null,
