@@ -1,3 +1,4 @@
+/// <reference types="node" />
 export interface PluginOptions {
     configuration?: any;
     fix?: boolean;
