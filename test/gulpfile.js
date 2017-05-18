@@ -411,3 +411,36 @@ gulp.task("custom-rules-file", function() {
         }))
         .pipe(tslint.report());
 });
+
+
+// Should report warnings and succeed since warnings are allowed.
+gulp.task("warnings-allowed", function() {
+    return gulp.src("warnings/warnings.ts")
+        .pipe(tslint({
+            configuration: "warnings/tslint.json",
+            formatter: "verbose"
+        }))
+        .pipe(tslint.report({
+            allowWarnings: true
+        }));
+});
+
+// Should report warnings and fail since warnings aren't allowed.
+gulp.task("warnings-not-allowed", function() {
+    return gulp.src("warnings/warnings.ts")
+        .pipe(tslint({
+            configuration: "warnings/tslint.json",
+            formatter: "verbose"
+        }))
+        .pipe(tslint.report());
+});
+
+// Should report errors and warnings and fail since errors occur.
+gulp.task("warnings-and-errors", function() {
+    return gulp.src("warnings-and-errors/warnings-and-errors.ts")
+        .pipe(tslint({
+            configuration: "warnings-and-errors/tslint.json",
+            formatter: "verbose"
+        }))
+        .pipe(tslint.report());
+});

@@ -12,6 +12,7 @@ export interface ReportOptions {
     emitError?: boolean;
     reportLimit?: number;
     summarizeFailureOutput?: boolean;
+    allowWarnings?: boolean;
 }
 export interface TslintFile {
     tslint: any;
@@ -24,6 +25,7 @@ export interface TslintFile {
 export interface TslintPlugin {
     (pluginOptions?: PluginOptions): any;
     report: (options?: ReportOptions) => any;
+    pluginOptions: PluginOptions;
 }
 /**
  * Main plugin function

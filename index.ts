@@ -26,6 +26,7 @@ export interface ReportOptions {
     emitError?: boolean;
     reportLimit?: number;
     summarizeFailureOutput?: boolean;
+    allowWarnings?: boolean;
 }
 
 export interface TslintFile /* extends vinyl.File */ {
@@ -43,6 +44,7 @@ export interface TslintFile /* extends vinyl.File */ {
 export interface TslintPlugin {
     (pluginOptions?: PluginOptions): any;
     report: (options?: ReportOptions) => any;
+    pluginOptions: PluginOptions;
 }
 
 /**
@@ -115,12 +117,15 @@ const proseErrorFormat = function(failure: RuleFailure) {
  */
 const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
     let loader: any;
-    let tslint: any;
+    let tslint: TSLint.Linter;
 
     // If user options are undefined, set an empty options object
     if (!pluginOptions) {
         pluginOptions = {};
     }
+
+    // save off pluginOptions so we can get it in `report()`
+    tslintPlugin.pluginOptions = pluginOptions;
 
     return map(function(file: TslintFile,
             cb: (error: any, file?: TslintFile) => void) {
@@ -179,6 +184,9 @@ tslintPlugin.report = function(options?: ReportOptions) {
     if (options.summarizeFailureOutput === undefined) {
         options.summarizeFailureOutput = false;
     }
+    if (options.allowWarnings === undefined) {
+        options.allowWarnings = false;
+    }
 
     // Collect all files with errors
     const errorFiles: TslintFile[] = [];
@@ -195,7 +203,10 @@ tslintPlugin.report = function(options?: ReportOptions) {
         if (file.tslint) {
             // Version 5.0.0 of tslint no longer has a failureCount member
             // It was renamed to errorCount. See tslint issue #2439
-            const failureCount = file.tslint.errorCount + file.tslint.warningCount;
+            let failureCount = file.tslint.errorCount;
+            if (!options.allowWarnings) {
+                failureCount += file.tslint.warningCount;
+            }
 
             if (failureCount > 0) {
                 errorFiles.push(file);
@@ -203,6 +214,7 @@ tslintPlugin.report = function(options?: ReportOptions) {
 
                 if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
                     if (file.tslint.output !== undefined) {
+                        // if any errors were found, print all warnings and errors
                         console.log(file.tslint.output);
                     }
                     totalReported += failureCount;
@@ -212,6 +224,20 @@ tslintPlugin.report = function(options?: ReportOptions) {
                         log("More than " + options.reportLimit
                             + " failures reported. Turning off reporter.");
                     }
+                }
+            } else {
+                // if only warnings were emitted, format and print them
+                if (options.allowWarnings && file.tslint.warningCount > 0) {
+                    // figure out which formatter the user requested in `tslintPlugin()` and construct one
+                    const formatterConstructor = TSLint.findFormatter(tslintPlugin.pluginOptions.formatter as string);
+                    const formatter = new formatterConstructor();
+
+                    // get just the warnings
+                    const warnings = (file.tslint as TSLint.LintResult).failures.filter(
+                        failure => failure.getRuleSeverity() === "warning"
+                    );
+                    // print the output of those
+                    console.log(formatter.format(warnings));
                 }
             }
         }
