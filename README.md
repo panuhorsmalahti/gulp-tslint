@@ -138,6 +138,23 @@ gulp.task("tslint", () =>
 );
 ```
 
+Allowing Warnings
+-----------------
+
+TSLint 5.0 introduced support for a "warning" severity for linting errors.  By default, warnings cause `gulp-tslint` to emit an error to maintain backwards-compatibility with previous versions.  To let the build succeed in the presence of warnings, use the `allowWarnings` report option.
+
+```javascript
+gulp.task("tslint", () =>
+    gulp.src("input.ts")
+        .pipe(tslint({
+            formatter: "prose"
+        }))
+        .pipe(tslint.report({
+            allowWarnings: true
+        }))
+);
+```
+
 Specifying the tslint module
 ----------------------------
 
@@ -193,7 +210,8 @@ All default report options
 const reportOptions = {
     emitError: true,
     reportLimit: 0,
-    summarizeFailureOutput: false
+    summarizeFailureOutput: false,
+    allowWarnings: false
 };
 ```
 
