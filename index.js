@@ -76,7 +76,7 @@ var tslintPlugin = function (pluginOptions) {
     if (!pluginOptions) {
         pluginOptions = {};
     }
-    // save off pluginOptions so we can get it in `report()`
+    // Save off pluginOptions so we can get it in `report()`
     tslintPlugin.pluginOptions = pluginOptions;
     return map(function (file, cb) {
         // Skip
@@ -98,7 +98,7 @@ var tslintPlugin = function (pluginOptions) {
         if (pluginOptions.configuration === null ||
             pluginOptions.configuration === undefined ||
             isString(pluginOptions.configuration)) {
-            // configuration can be a file path or null, if it's unknown
+            // Configuration can be a file path or null, if it's unknown
             pluginOptions.configuration = linter.Configuration.findConfiguration(pluginOptions.configuration || null, file.path).results;
         }
         tslint = new linter.Linter(options, pluginOptions.program);
@@ -146,7 +146,7 @@ tslintPlugin.report = function (options) {
                 Array.prototype.push.apply(allFailures, file.tslint.failures);
                 if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
                     if (file.tslint.output !== undefined) {
-                        // if any errors were found, print all warnings and errors
+                        // If any errors were found, print all warnings and errors
                         console.log(file.tslint.output);
                     }
                     totalReported += failureCount;
@@ -157,17 +157,15 @@ tslintPlugin.report = function (options) {
                     }
                 }
             }
-            else {
-                // if only warnings were emitted, format and print them
-                if (options.allowWarnings && file.tslint.warningCount > 0) {
-                    // figure out which formatter the user requested in `tslintPlugin()` and construct one
-                    var formatterConstructor = TSLint.findFormatter(tslintPlugin.pluginOptions.formatter);
-                    var formatter = new formatterConstructor();
-                    // get just the warnings
-                    var warnings = file.tslint.failures.filter(function (failure) { return failure.getRuleSeverity() === "warning"; });
-                    // print the output of those
-                    console.log(formatter.format(warnings));
-                }
+            else if (options.allowWarnings && file.tslint.warningCount > 0) {
+                // Íf only warnings were emitted, format and print them
+                // Figure out which formatter the user requested in `tslintPlugin()` and construct one
+                var formatterConstructor = TSLint.findFormatter(tslintPlugin.pluginOptions.formatter);
+                var formatter = new formatterConstructor();
+                // Get just the warnings
+                var warnings = file.tslint.failures.filter(function (failure) { return failure.getRuleSeverity() === "warning"; });
+                // Print the output of those
+                console.log(formatter.format(warnings));
             }
         }
         // Pass file
@@ -199,8 +197,7 @@ tslintPlugin.report = function (options) {
                 errorOutput += failureOutput + ".";
             }
             if (ignoreFailureCount > 0) {
-                errorOutput += " (" + ignoreFailureCount
-                    + " other errors not shown.)";
+                errorOutput += " (" + ignoreFailureCount + " other errors not shown.)";
             }
             if (options.emitError === true) {
                 return this.emit("error", new PluginError("gulp-tslint", errorOutput));

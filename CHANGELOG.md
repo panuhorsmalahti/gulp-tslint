@@ -1,3 +1,8 @@
+<a name="8.1.0"></a>
+# 8.1.0 (2017-5-21)
+
+- Add allowWarnings gulp-tslint option [pull #122](https://github.com/panuhorsmalahti/gulp-tslint/pull/122).
+
 <a name="8.0.0"></a>
 # 8.0.0 (2017-4-10)
 

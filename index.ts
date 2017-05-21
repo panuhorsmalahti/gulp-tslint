@@ -124,7 +124,7 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
         pluginOptions = {};
     }
 
-    // save off pluginOptions so we can get it in `report()`
+    // Save off pluginOptions so we can get it in `report()`
     tslintPlugin.pluginOptions = pluginOptions;
 
     return map(function(file: TslintFile,
@@ -153,7 +153,7 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
             pluginOptions.configuration === undefined ||
             isString(pluginOptions.configuration)) {
 
-            // configuration can be a file path or null, if it's unknown
+            // Configuration can be a file path or null, if it's unknown
             pluginOptions.configuration = linter.Configuration.findConfiguration(
                 pluginOptions.configuration || null,
                 file.path
@@ -214,9 +214,10 @@ tslintPlugin.report = function(options?: ReportOptions) {
 
                 if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
                     if (file.tslint.output !== undefined) {
-                        // if any errors were found, print all warnings and errors
+                        // If any errors were found, print all warnings and errors
                         console.log(file.tslint.output);
                     }
+
                     totalReported += failureCount;
 
                     if (options.reportLimit > 0 &&
@@ -225,20 +226,19 @@ tslintPlugin.report = function(options?: ReportOptions) {
                             + " failures reported. Turning off reporter.");
                     }
                 }
-            } else {
-                // if only warnings were emitted, format and print them
-                if (options.allowWarnings && file.tslint.warningCount > 0) {
-                    // figure out which formatter the user requested in `tslintPlugin()` and construct one
-                    const formatterConstructor = TSLint.findFormatter(tslintPlugin.pluginOptions.formatter as string);
-                    const formatter = new formatterConstructor();
+            } else if (options.allowWarnings && file.tslint.warningCount > 0) {
+                // Íf only warnings were emitted, format and print them
 
-                    // get just the warnings
-                    const warnings = (file.tslint as TSLint.LintResult).failures.filter(
-                        failure => failure.getRuleSeverity() === "warning"
-                    );
-                    // print the output of those
-                    console.log(formatter.format(warnings));
-                }
+                // Figure out which formatter the user requested in `tslintPlugin()` and construct one
+                const formatterConstructor = TSLint.findFormatter(tslintPlugin.pluginOptions.formatter as string);
+                const formatter = new formatterConstructor();
+
+                // Get just the warnings
+                const warnings = (file.tslint as TSLint.LintResult).failures.filter(
+                    failure => failure.getRuleSeverity() === "warning"
+                );
+                // Print the output of those
+                console.log(formatter.format(warnings));
             }
         }
 
@@ -268,19 +268,19 @@ tslintPlugin.report = function(options?: ReportOptions) {
             }).join(", ");
 
             let errorOutput = "Failed to lint: ";
+
             if (options.summarizeFailureOutput) {
                 errorOutput += failuresToOutput.length + " errors.";
             } else {
                 errorOutput += failureOutput + ".";
             }
+
             if (ignoreFailureCount > 0) {
-                errorOutput += " (" + ignoreFailureCount
-                    + " other errors not shown.)";
+                errorOutput += " (" + ignoreFailureCount  + " other errors not shown.)";
             }
 
             if (options.emitError === true) {
-                return this.emit("error", new PluginError("gulp-tslint",
-                    errorOutput));
+                return this.emit("error", new PluginError("gulp-tslint", errorOutput));
             } else if (options.summarizeFailureOutput) {
                 log(errorOutput);
             }
