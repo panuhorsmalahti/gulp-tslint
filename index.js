@@ -1,6 +1,7 @@
 /*jshint node:true */
 /*jshint nomen: true */
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // Requires
 var TSLint = require("tslint");
 var through = require("through");
@@ -75,6 +76,8 @@ var tslintPlugin = function (pluginOptions) {
     if (!pluginOptions) {
         pluginOptions = {};
     }
+    // save off pluginOptions so we can get it in `report()`
+    tslintPlugin.pluginOptions = pluginOptions;
     return map(function (file, cb) {
         // Skip
         if (file.isNull()) {
@@ -120,6 +123,9 @@ tslintPlugin.report = function (options) {
     if (options.summarizeFailureOutput === undefined) {
         options.summarizeFailureOutput = false;
     }
+    if (options.allowWarnings === undefined) {
+        options.allowWarnings = false;
+    }
     // Collect all files with errors
     var errorFiles = [];
     // Collect all failures
@@ -131,12 +137,16 @@ tslintPlugin.report = function (options) {
         if (file.tslint) {
             // Version 5.0.0 of tslint no longer has a failureCount member
             // It was renamed to errorCount. See tslint issue #2439
-            var failureCount = file.tslint.errorCount + file.tslint.warningCount;
+            var failureCount = file.tslint.errorCount;
+            if (!options.allowWarnings) {
+                failureCount += file.tslint.warningCount;
+            }
             if (failureCount > 0) {
                 errorFiles.push(file);
                 Array.prototype.push.apply(allFailures, file.tslint.failures);
                 if (options.reportLimit <= 0 || (options.reportLimit && options.reportLimit > totalReported)) {
                     if (file.tslint.output !== undefined) {
+                        // if any errors were found, print all warnings and errors
                         console.log(file.tslint.output);
                     }
                     totalReported += failureCount;
@@ -145,6 +155,18 @@ tslintPlugin.report = function (options) {
                         log("More than " + options.reportLimit
                             + " failures reported. Turning off reporter.");
                     }
+                }
+            }
+            else {
+                // if only warnings were emitted, format and print them
+                if (options.allowWarnings && file.tslint.warningCount > 0) {
+                    // figure out which formatter the user requested in `tslintPlugin()` and construct one
+                    var formatterConstructor = TSLint.findFormatter(tslintPlugin.pluginOptions.formatter);
+                    var formatter = new formatterConstructor();
+                    // get just the warnings
+                    var warnings = file.tslint.failures.filter(function (failure) { return failure.getRuleSeverity() === "warning"; });
+                    // print the output of those
+                    console.log(formatter.format(warnings));
                 }
             }
         }
@@ -192,7 +214,6 @@ tslintPlugin.report = function (options) {
     };
     return through(reportFailures, throwErrors);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = tslintPlugin;
 // ES5/ES6 fallbacks
 module.exports = tslintPlugin;

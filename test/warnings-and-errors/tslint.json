@@ -1,0 +1,6 @@
+{
+  "rules": {
+      "semicolon": { "severity": "warn" },
+      "no-eval": true
+  }
+}
