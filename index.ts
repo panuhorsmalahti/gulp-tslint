@@ -116,8 +116,6 @@ const proseErrorFormat = function(failure: RuleFailure) {
  * @returns {any}
  */
 const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
-    let loader: any;
-
     // If user options are undefined, set an empty options object
     if (!pluginOptions) {
         pluginOptions = {};
