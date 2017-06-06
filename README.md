@@ -155,6 +155,11 @@ gulp.task("tslint", () =>
 );
 ```
 
+Third party reporter
+--------------------
+
+[gulp-reporter](https://github.com/gucong3000/gulp-reporter) used in team project, it fails only when error belongs to the current author of git.
+
 Specifying the tslint module
 ----------------------------
 
