@@ -70,14 +70,21 @@ var proseErrorFormat = function (failure) {
  * @returns {any}
  */
 var tslintPlugin = function (pluginOptions) {
-    var loader;
-    var tslint;
     // If user options are undefined, set an empty options object
     if (!pluginOptions) {
         pluginOptions = {};
     }
     // Save off pluginOptions so we can get it in `report()`
     tslintPlugin.pluginOptions = pluginOptions;
+    // TSLint default options
+    var options = {
+        fix: pluginOptions.fix || false,
+        formatter: pluginOptions.formatter || "prose",
+        formattersDirectory: pluginOptions.formattersDirectory || null,
+        rulesDirectory: pluginOptions.rulesDirectory || null
+    };
+    var linter = getTslint(pluginOptions);
+    var tslint = new linter.Linter(options, pluginOptions.program);
     return map(function (file, cb) {
         // Skip
         if (file.isNull()) {
@@ -87,23 +94,16 @@ var tslintPlugin = function (pluginOptions) {
         if (file.isStream()) {
             return cb(new PluginError("gulp-tslint", "Streaming not supported"));
         }
-        // TSLint default options
-        var options = {
-            fix: pluginOptions.fix || false,
-            formatter: pluginOptions.formatter || "prose",
-            formattersDirectory: pluginOptions.formattersDirectory || null,
-            rulesDirectory: pluginOptions.rulesDirectory || null
-        };
-        var linter = getTslint(pluginOptions);
         if (pluginOptions.configuration === null ||
             pluginOptions.configuration === undefined ||
             isString(pluginOptions.configuration)) {
             // Configuration can be a file path or null, if it's unknown
             pluginOptions.configuration = linter.Configuration.findConfiguration(pluginOptions.configuration || null, file.path).results;
         }
-        tslint = new linter.Linter(options, pluginOptions.program);
         tslint.lint(file.path, file.contents.toString("utf8"), pluginOptions.configuration);
         file.tslint = tslint.getResult();
+        tslint.failures = [];
+        tslint.fixes = [];
         // Pass file
         cb(null, file);
     });

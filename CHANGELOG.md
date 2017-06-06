@@ -1,15 +1,21 @@
+<a name="8.1.1"></a>
+# 8.1.1 (2017-06-05)
+
+- Improve gulp-tslint performance [pull #127](https://github.com/panuhorsmalahti/gulp-tslint/pull/127).
+- Types should be devDependencies  [pull #129](https://github.com/panuhorsmalahti/gulp-tslint/pull/129).
+
 <a name="8.1.0"></a>
-# 8.1.0 (2017-5-21)
+# 8.1.0 (2017-05-21)
 
 - Add allowWarnings gulp-tslint option [pull #122](https://github.com/panuhorsmalahti/gulp-tslint/pull/122).
 
 <a name="8.0.0"></a>
-# 8.0.0 (2017-4-10)
+# 8.0.0 (2017-04-10)
 
 - **breaking change**: Require tslint 5.x [pull #113](https://github.com/panuhorsmalahti/gulp-tslint/pull/113).
 
 <a name="7.1.0"></a>
-# 7.1.0 (2017-2-3)
+# 7.1.0 (2017-02-3)
 
 - Add support for TSlint option 'fix' [pull #101](https://github.com/panuhorsmalahti/gulp-tslint/pull/101).
 - Skip directories while reporting errors [pull #107](https://github.com/panuhorsmalahti/gulp-tslint/pull/107).

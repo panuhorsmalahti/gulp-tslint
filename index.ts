@@ -116,9 +116,6 @@ const proseErrorFormat = function(failure: RuleFailure) {
  * @returns {any}
  */
 const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
-    let loader: any;
-    let tslint: TSLint.Linter;
-
     // If user options are undefined, set an empty options object
     if (!pluginOptions) {
         pluginOptions = {};
@@ -126,6 +123,17 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
 
     // Save off pluginOptions so we can get it in `report()`
     tslintPlugin.pluginOptions = pluginOptions;
+
+    // TSLint default options
+    const options = {
+        fix: pluginOptions.fix || false,
+        formatter: pluginOptions.formatter || "prose",
+        formattersDirectory: pluginOptions.formattersDirectory || null,
+        rulesDirectory: pluginOptions.rulesDirectory || null
+    };
+
+    const linter = getTslint(pluginOptions);
+    const tslint = new linter.Linter(options, pluginOptions.program);
 
     return map(function(file: TslintFile,
             cb: (error: any, file?: TslintFile) => void) {
@@ -140,15 +148,6 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
             return cb(new PluginError("gulp-tslint", "Streaming not supported"));
         }
 
-        // TSLint default options
-        const options = {
-            fix: pluginOptions.fix || false,
-            formatter: pluginOptions.formatter || "prose",
-            formattersDirectory: pluginOptions.formattersDirectory || null,
-            rulesDirectory: pluginOptions.rulesDirectory || null
-        };
-
-        const linter = getTslint(pluginOptions);
         if (pluginOptions.configuration === null ||
             pluginOptions.configuration === undefined ||
             isString(pluginOptions.configuration)) {
@@ -160,9 +159,12 @@ const tslintPlugin = <TslintPlugin> function(pluginOptions?: PluginOptions) {
             ).results;
         }
 
-        tslint = new linter.Linter(options, pluginOptions.program);
         tslint.lint(file.path, file.contents.toString("utf8"), pluginOptions.configuration);
         file.tslint = tslint.getResult();
+
+        // Clear all results for current file from tslint
+        tslint.failures = [];
+        tslint.fixes = [];
 
         // Pass file
         cb(null, file);
