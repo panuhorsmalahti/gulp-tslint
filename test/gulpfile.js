@@ -444,3 +444,48 @@ gulp.task("warnings-and-errors", function() {
         }))
         .pipe(tslint.report());
 });
+
+// Should report triple-equals error for override/source.ts
+// 
+// Should ignore triple-equals rule for override/suboverride1/subsource.ts
+// (because of override in override/suboverride1/tslint.json)
+//
+// Should report semicolon error for override/suboverride1/subsource1.ts
+// (from the semicolon rule in override/tslint.json via the extends in
+// override/suboverride/tslint.json)
+//
+// Should ignore semicolon error for override/suboverride2/subsource2.ts
+// (because no extends in override/suboverride2/tslint.json)
+gulp.task("override", function() {
+    return gulp.src([
+            "override/source.ts", 
+            "override/suboverride1/subsource1.ts",
+            "override/suboverride2/subsource2.ts",
+        ])
+        .pipe(tslint({
+            formatter: "prose"
+        }))
+        .pipe(tslint.report());
+});
+
+// Should report triple-equals error for override/source.ts
+// 
+// Should report triple-equals error for override/suboverride1/subsource.ts
+// (ignoring override in tslint.json in override/suboverride1 because of
+// the config file path provided in the options configuration property)
+//
+// Should report semicolon error for override/suboverride1/subsource1.ts
+//
+// Should report semicolon error for override/suboverride2/subsource2.ts
+gulp.task("no-override", function() {
+    return gulp.src([
+            "override/source.ts", 
+            "override/suboverride1/subsource1.ts",
+            "override/suboverride2/subsource2.ts",
+        ])
+        .pipe(tslint({
+            configuration: "tslint.json",
+            formatter: "prose"
+        }))
+        .pipe(tslint.report());
+});

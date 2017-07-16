@@ -1,0 +1,6 @@
+{
+  "extends": "../../tslint.json",
+  "rules": {
+    "triple-equals": [false, "allow-null-check"]
+  }
+}
