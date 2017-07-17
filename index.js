@@ -94,14 +94,14 @@ var tslintPlugin = function (pluginOptions) {
         if (file.isStream()) {
             return cb(new PluginError("gulp-tslint", "Streaming not supported"));
         }
-        if (pluginOptions.configuration === null ||
+        var configuration = (pluginOptions.configuration === null ||
             pluginOptions.configuration === undefined ||
-            isString(pluginOptions.configuration)) {
-            // Configuration can be a file path or null, if it's unknown
-            pluginOptions.configuration = linter.Configuration.findConfiguration(pluginOptions.configuration || null, file.path).results;
-        }
-        tslint.lint(file.path, file.contents.toString("utf8"), pluginOptions.configuration);
+            isString(pluginOptions.configuration))
+            ? linter.Configuration.findConfiguration(pluginOptions.configuration || null, file.path).results
+            : pluginOptions.configuration;
+        tslint.lint(file.path, file.contents.toString("utf8"), configuration);
         file.tslint = tslint.getResult();
+        // Clear all results for current file from tslint
         tslint.failures = [];
         tslint.fixes = [];
         // Pass file
