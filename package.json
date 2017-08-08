@@ -38,7 +38,7 @@
     "@types/through": "0.0.28",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
-    "gulp-typescript": "^3.1.6",
+    "gulp-typescript": "^3.2.1",
     "tslint": "^5",
     "typescript": "^2"
   },
