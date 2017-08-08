@@ -1,3 +1,8 @@
+<a name="8.1.2"></a>
+# 8.1.2 (2017-08-08)
+
+- Determine configuration separately for each source file [pull #134](https://github.com/panuhorsmalahti/gulp-tslint/pull/134).
+
 <a name="8.1.1"></a>
 # 8.1.1 (2017-06-05)
 
