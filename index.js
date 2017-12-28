@@ -3,10 +3,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // Requires
+var chalk_1 = require("chalk");
+var fancyLog = require("fancy-log");
 var TSLint = require("tslint");
 var through = require("through");
-var gutil = require("gulp-util");
-var PluginError = gutil.PluginError;
+var PluginError = require("plugin-error");
 var map = require("map-stream");
 /**
  * Helper function to check if a value is a function
@@ -42,12 +43,12 @@ function getTslint(options) {
  * Leave empty for the default logging type.
  */
 function log(message, level) {
-    var prefix = "[" + gutil.colors.cyan("gulp-tslint") + "]";
+    var prefix = "[" + chalk_1.default.cyan("gulp-tslint") + "]";
     if (level === "error") {
-        gutil.log(prefix, gutil.colors.red("error"), message);
+        fancyLog(prefix, chalk_1.default.red("error"), message);
     }
     else {
-        gutil.log(prefix, message);
+        fancyLog(prefix, message);
     }
 }
 /*

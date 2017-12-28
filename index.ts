@@ -3,11 +3,12 @@
 "use strict";
 
 // Requires
+import chalk from "chalk";
+import * as fancyLog from "fancy-log";
 import * as TSLint from "tslint";
 import { RuleFailure } from "tslint/lib/language/rule/rule";
 import * as through from "through";
-import * as gutil from "gulp-util";
-const PluginError = gutil.PluginError;
+import PluginError = require("plugin-error");
 const map = require("map-stream");
 
 export interface PluginOptions {
@@ -85,12 +86,12 @@ function getTslint(options: PluginOptions) {
  * Leave empty for the default logging type.
  */
 function log(message: string, level?: string) {
-    const prefix = "[" + gutil.colors.cyan("gulp-tslint") + "]";
+    const prefix = "[" + chalk.cyan("gulp-tslint") + "]";
 
     if (level === "error") {
-        gutil.log(prefix, gutil.colors.red("error"), message);
+      fancyLog(prefix, chalk.red("error"), message);
     } else {
-        gutil.log(prefix, message);
+      fancyLog(prefix, message);
     }
 }
 
