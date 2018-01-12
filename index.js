@@ -5,8 +5,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Requires
 var TSLint = require("tslint");
 var through = require("through");
-var gutil = require("gulp-util");
-var PluginError = gutil.PluginError;
+var PluginError = require("plugin-error");
+var chalk_1 = require("chalk");
+var fancyLog = require("fancy-log");
 var map = require("map-stream");
 /**
  * Helper function to check if a value is a function
@@ -36,18 +37,18 @@ function getTslint(options) {
     return TSLint;
 }
 /**
- * Log an event or error using gutil.log.
+ * Log an event or error using fancy-log.
  * @param {string} message the log message.
  * @param {string} level can be "error". Optional.
  * Leave empty for the default logging type.
  */
 function log(message, level) {
-    var prefix = "[" + gutil.colors.cyan("gulp-tslint") + "]";
+    var prefix = "[" + chalk_1.default.cyan("gulp-tslint") + "]";
     if (level === "error") {
-        gutil.log(prefix, gutil.colors.red("error"), message);
+        fancyLog.error(prefix, chalk_1.default.red("error"), message);
     }
     else {
-        gutil.log(prefix, message);
+        fancyLog(prefix, message);
     }
 }
 /*
@@ -97,6 +98,7 @@ var tslintPlugin = function (pluginOptions) {
         var configuration = (pluginOptions.configuration === null ||
             pluginOptions.configuration === undefined ||
             isString(pluginOptions.configuration))
+            // Configuration can be a file path or null, if it's unknown
             ? linter.Configuration.findConfiguration(pluginOptions.configuration || null, file.path).results
             : pluginOptions.configuration;
         tslint.lint(file.path, file.contents.toString("utf8"), configuration);
