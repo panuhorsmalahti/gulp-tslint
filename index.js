@@ -6,8 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var TSLint = require("tslint");
 var through = require("through");
 var PluginError = require("plugin-error");
-var cyan = require("ansi-cyan");
-var red = require("ansi-red");
+var chalk_1 = require("chalk");
 var fancyLog = require("fancy-log");
 var map = require("map-stream");
 /**
@@ -44,9 +43,9 @@ function getTslint(options) {
  * Leave empty for the default logging type.
  */
 function log(message, level) {
-    var prefix = "[" + cyan("gulp-tslint") + "]";
+    var prefix = "[" + chalk_1.default.cyan("gulp-tslint") + "]";
     if (level === "error") {
-        fancyLog(prefix, red("error"), message);
+        fancyLog.error(prefix, chalk_1.default.red("error"), message);
     }
     else {
         fancyLog(prefix, message);
