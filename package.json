@@ -27,17 +27,17 @@
     "lint"
   ],
   "dependencies": {
-    "@types/fancy-log": "^1.3.0",
-    "chalk": "^2.3.0",
-    "fancy-log": "^1.3.2",
+    "@types/fancy-log": "1.3.0",
+    "chalk": "2.3.1",
+    "fancy-log": "1.3.2",
     "map-stream": "~0.0.7",
-    "plugin-error": "^1.0.0",
+    "plugin-error": "1.0.1",
     "through": "~2.3.8"
   },
   "analyze": true,
   "devDependencies": {
     "@types/node": "^7.0.18",
-    "@types/through": "0.0.28",
+    "@types/through": "0.0.29",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-typescript": "^3.2.1",
