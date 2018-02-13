@@ -1,3 +1,8 @@
+<a name="8.1.3"></a>
+# 8.1.3 (2018-02-13)
+
+- Drop dependency on deprecated gulp-util [pull #140](https://github.com/panuhorsmalahti/gulp-tslint/pull/140).
+
 <a name="8.1.2"></a>
 # 8.1.2 (2017-08-08)
 
