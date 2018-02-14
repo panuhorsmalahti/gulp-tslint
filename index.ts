@@ -3,7 +3,7 @@
 "use strict";
 
 // Requires
-import chalk from "chalk";
+import * as colors from "ansi-colors";
 import * as fancyLog from "fancy-log";
 import * as TSLint from "tslint";
 import { RuleFailure } from "tslint/lib/language/rule/rule";
@@ -86,10 +86,10 @@ function getTslint(options: PluginOptions) {
  * Leave empty for the default logging type.
  */
 function log(message: string, level?: string) {
-    const prefix = "[" + chalk.cyan("gulp-tslint") + "]";
+    const prefix = "[" + colors.cyan("gulp-tslint") + "]";
 
     if (level === "error") {
-      fancyLog(prefix, chalk.red("error"), message);
+      fancyLog(prefix, colors.red("error"), message);
     } else {
       fancyLog(prefix, message);
     }
