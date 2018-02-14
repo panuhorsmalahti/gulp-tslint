@@ -3,7 +3,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // Requires
-var chalk_1 = require("chalk");
+var colors = require("ansi-colors");
 var fancyLog = require("fancy-log");
 var TSLint = require("tslint");
 var through = require("through");
@@ -43,9 +43,9 @@ function getTslint(options) {
  * Leave empty for the default logging type.
  */
 function log(message, level) {
-    var prefix = "[" + chalk_1.default.cyan("gulp-tslint") + "]";
+    var prefix = "[" + colors.cyan("gulp-tslint") + "]";
     if (level === "error") {
-        fancyLog(prefix, chalk_1.default.red("error"), message);
+        fancyLog(prefix, colors.red("error"), message);
     }
     else {
         fancyLog(prefix, message);
@@ -98,6 +98,7 @@ var tslintPlugin = function (pluginOptions) {
         var configuration = (pluginOptions.configuration === null ||
             pluginOptions.configuration === undefined ||
             isString(pluginOptions.configuration))
+            // Configuration can be a file path or null, if it's unknown
             ? linter.Configuration.findConfiguration(pluginOptions.configuration || null, file.path).results
             : pluginOptions.configuration;
         tslint.lint(file.path, file.contents.toString("utf8"), configuration);
