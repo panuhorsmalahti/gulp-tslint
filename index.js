@@ -162,7 +162,7 @@ tslintPlugin.report = function (options) {
             else if (options.allowWarnings && file.tslint.warningCount > 0) {
                 // Íf only warnings were emitted, format and print them
                 // Figure out which formatter the user requested in `tslintPlugin()` and construct one
-                var formatterConstructor = TSLint.findFormatter(tslintPlugin.pluginOptions.formatter);
+                var formatterConstructor = TSLint.findFormatter(tslintPlugin.pluginOptions.formatter, tslintPlugin.pluginOptions.formattersDirectory);
                 var formatter = new formatterConstructor();
                 // Get just the warnings
                 var warnings = file.tslint.failures.filter(function (failure) { return failure.getRuleSeverity() === "warning"; });
