@@ -182,10 +182,11 @@ var tslint = require("tslint");
 // NOTE: Ensure 'Linter.createProgram' is called inside the gulp task else the contents of the files will be cached
 // if this tasks is called again (eg. as part of a 'watch' task).
 gulp.task('lint', function() {
-var program = tslint.Linter.createProgram("./tsconfig.json");
+    var program = tslint.Linter.createProgram("./tsconfig.json");
 
-gulp.src('src/**/*.ts', { base: '.' })
-  .pipe(gulpTslint({ program }))
+    return gulp.src('src/**/*.ts', { base: '.' })
+        .pipe(gulpTslint({ program }));
+}
 ```
 
 All default tslint options
