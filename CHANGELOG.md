@@ -1,3 +1,8 @@
+<a name="8.1.4"></a>
+# 8.1.4 (2019-02-21)
+
+- Fix plugin return type [pull #150](https://github.com/panuhorsmalahti/gulp-tslint/pull/150).
+
 <a name="8.1.3"></a>
 # 8.1.3 (2018-02-13)
 
