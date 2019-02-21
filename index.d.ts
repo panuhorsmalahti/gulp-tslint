@@ -23,8 +23,8 @@ export interface TslintFile {
     isNull(): boolean;
 }
 export interface TslintPlugin {
-    (pluginOptions?: PluginOptions): any;
-    report: (options?: ReportOptions) => any;
+    (pluginOptions?: PluginOptions): NodeJS.ReadWriteStream;
+    report: (options?: ReportOptions) => NodeJS.ReadWriteStream;
     pluginOptions: PluginOptions;
 }
 /**
