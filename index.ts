@@ -43,8 +43,8 @@ export interface TslintFile /* extends vinyl.File */ {
 }
 
 export interface TslintPlugin {
-    (pluginOptions?: PluginOptions): any;
-    report: (options?: ReportOptions) => any;
+    (pluginOptions?: PluginOptions): NodeJS.ReadWriteStream;
+    report: (options?: ReportOptions) => NodeJS.ReadWriteStream;
     pluginOptions: PluginOptions;
 }
 
