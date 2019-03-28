@@ -232,7 +232,10 @@ tslintPlugin.report = function(options?: ReportOptions) {
                 // Íf only warnings were emitted, format and print them
 
                 // Figure out which formatter the user requested in `tslintPlugin()` and construct one
-                const formatterConstructor = TSLint.findFormatter(tslintPlugin.pluginOptions.formatter as string);
+                const formatterConstructor = TSLint.findFormatter(
+                    tslintPlugin.pluginOptions.formatter as string,
+                    tslintPlugin.pluginOptions.formattersDirectory as string,
+                );
                 const formatter = new formatterConstructor();
 
                 // Get just the warnings
