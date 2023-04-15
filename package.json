@@ -39,7 +39,7 @@
     "@types/ansi-colors": "^1.0.0",
     "@types/node": "^11.9.4",
     "@types/through": "0.0.29",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-typescript": "^3.2.1",
     "tslint": "^5",
